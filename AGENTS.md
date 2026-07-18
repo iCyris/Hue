@@ -17,7 +17,8 @@ installable as-is into agentskills-compatible hosts (`~/.kimi-code/skills/hue/`,
 - `templates/demos/*.html` — self-contained interactive blocks, one file per demo.
 - `scripts/check.py` / `check.sh` — the quality gate (Python stdlib only).
 - `examples/` — generated documents kept as the visual acceptance baseline.
-- `assets/` — the logo and nothing else; generated documents never reference it.
+- `assets/` — the logo plus `screenshots/` (README previews of the examples);
+  generated documents never reference it.
 
 ## Editing rules
 
