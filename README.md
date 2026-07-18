@@ -19,10 +19,11 @@ many hues; one design system, many documents.
 - **A real design system, not generated styling.** Warm paper canvas, serif-led
   typography (Chinese and English stacks), one hydrangea-blue accent, tokenized
   spacing and motion. The AI fills a template; it never writes CSS.
-- **Fifteen demo blocks.** Buttons, forms, toggles, sliders, tabs, dialogs,
+- **Sixteen demo blocks.** Buttons, forms, toggles, sliders, tabs, dialogs,
   toasts, steppers, skeletons, spring-motion comparisons, static wireframe
-  schematics and more — each a self-contained block that matches the page and
-  can be placed anywhere.
+  schematics, static relationship diagrams (flow, sequence, and state) and
+  more — each a self-contained block that matches the page and can be placed
+  anywhere.
 - **Bilingual by design.** Chinese and English documents each get their own font
   stack, letter-spacing, punctuation rules, and prose-quality gate.
 
@@ -62,7 +63,7 @@ until it prints `check: ok`.
 
 - `SKILL.md` — agent entrypoint: contract, workflow, language routing
 - `references/` — design system, demo contract, per-language writing rules
-- `templates/` — `document.html` plus the fifteen demo blocks
+- `templates/` — `document.html` plus the sixteen demo blocks
 - `scripts/` — the stdlib-only quality gate
 - `examples/` — generated documents kept as the visual baseline
 

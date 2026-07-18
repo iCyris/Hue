@@ -87,9 +87,9 @@ no duplicate ids).
 
 ## Demo System
 
-Fifteen blocks live in `templates/demos/` (button-states, form-validation, toggle,
+Sixteen blocks live in `templates/demos/` (button-states, form-validation, toggle,
 slider, segmented-control, tabs, accordion, stepper, dialog, toast, progress, skeleton,
-card-list, spring-motion, wireframe). The contract and per-block guidance:
+card-list, spring-motion, wireframe, diagram). The contract and per-block guidance:
 `references/demos.md`.
 
 - Use blocks verbatim. If a needed component is not in the catalog, compose it from
@@ -100,6 +100,19 @@ card-list, spring-motion, wireframe). The contract and per-block guidance:
   and the drawing rules in `references/demos.md`. Preserve every user-supplied UI label,
   value, action, and status as real SVG text; use skeleton bars only for unspecified
   content. Apply the rectangle-based layout and collision checks before inserting it.
+- `diagram` is the second static exception: its `<style>` is pasted as-is, but its
+  `<svg>` is drawn bespoke for the document's relationships, using only the primitive
+  classes and drawing rules in `references/demos.md`. Every known step, participant,
+  message, condition, state, and result stays real SVG text, and every visible string
+  is translated into the document language. Use `wireframe` when the requirement is
+  about screen structure and spatial arrangement; use `diagram` when it is about
+  flows, dependencies, communication, conditions, or state changes. When a short
+  paragraph or list already expresses the relationship clearly, add no diagram.
+  Diagrams count toward the default cap of 3 demos per document.
+- Quick mapping: screen or region layout → `wireframe`; ordered business flow →
+  `diagram` (flowchart); messages between actors or systems → `diagram` (sequence);
+  lifecycle and transitions → `diagram` (state); interactive control behavior → the
+  matching interactive demo.
 - The same block may be pasted multiple times; it is scoped to its own root.
 
 ## Hard Rules

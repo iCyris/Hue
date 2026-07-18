@@ -432,14 +432,198 @@ footer a:hover { color: var(--ink-2); text-decoration-color: currentColor; }
     <rect class="wf-card" x="368" y="158" width="216" height="48" rx="6"/>
     <rect class="wf-line-soft" x="380" y="172" width="80" height="6" rx="3"/>
     <rect class="wf-line" x="380" y="188" width="148" height="6" rx="3"/>
-    <rect class="wf-control" x="368" y="218" width="88" height="24" rx="4"/>
-    <text class="wf-copy-strong" x="389" y="235">Review</text>
+    <rect class="wf-control" x="368" y="218" width="64" height="24" rx="4"/>
+    <text class="wf-copy-strong" x="400" y="235" text-anchor="middle">Review</text>
     <text class="wf-label" x="16" y="274">SIDEBAR</text>
     <text class="wf-label" x="160" y="274">LIST</text>
     <text class="wf-label" x="368" y="274">DETAIL</text>
   </svg>
 </section>
       <figcaption>A wireframe preserves known interface copy, uses bars only for unspecified content, and keeps labels in a collision-free band.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>Diagrams</h2>
+    <p>A diagram shows relationships without interaction: flows, message exchanges, and state changes. Each drawing is bespoke SVG built from the diagram block's primitives, so the same block can appear several times in one document:</p>
+    <figure class="demo">
+<section data-demo="diagram">
+  <style>
+    [data-demo="diagram"] { margin: 0; }
+    [data-demo="diagram"] .dg-canvas { display: block; width: 100%; height: auto; }
+    [data-demo="diagram"] .dg-node { fill: var(--surface); stroke: var(--border-strong); }
+    [data-demo="diagram"] .dg-node-soft { fill: var(--sand); stroke: var(--border); }
+    [data-demo="diagram"] .dg-node-accent { fill: var(--accent-tint); stroke: var(--accent-tint-3); }
+    [data-demo="diagram"] .dg-group { fill: none; stroke: var(--border); stroke-dasharray: 4 4; }
+    [data-demo="diagram"] .dg-edge { fill: none; stroke: var(--border-strong); }
+    [data-demo="diagram"] .dg-edge-accent { fill: none; stroke: var(--accent); }
+    [data-demo="diagram"] .dg-edge-muted { fill: none; stroke: var(--border-strong); stroke-dasharray: 4 4; }
+    [data-demo="diagram"] .dg-arrow { fill: var(--border-strong); }
+    [data-demo="diagram"] .dg-arrow-accent { fill: var(--accent); }
+    [data-demo="diagram"] .dg-copy {
+      fill: var(--ink-2);
+      font-family: var(--serif);
+      font-size: 12.5px;
+    }
+    [data-demo="diagram"] .dg-copy-strong {
+      fill: var(--ink);
+      font-family: var(--serif);
+      font-size: 12.5px;
+      font-weight: 500;
+    }
+    [data-demo="diagram"] .dg-copy-muted {
+      fill: var(--ink-3);
+      font-family: var(--serif);
+      font-size: 12px;
+    }
+    [data-demo="diagram"] .dg-label {
+      fill: var(--ink-3);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.4px;
+    }
+  </style>
+  <svg class="dg-canvas" viewBox="0 0 640 200" role="img" aria-label="Flowchart: after a requirement is submitted, complete information leads to ready for review, otherwise more details are requested">
+    <rect class="dg-node" x="8" y="44" width="164" height="40" rx="6"/>
+    <text class="dg-copy" x="90" y="68" text-anchor="middle">Submit requirement</text>
+    <line class="dg-edge-accent" x1="172" y1="64" x2="218" y2="64"/>
+    <polygon class="dg-arrow-accent" points="218,60 226,64 218,68"/>
+    <polygon class="dg-node" points="330,28 434,64 330,100 226,64"/>
+    <text class="dg-copy" x="330" y="68" text-anchor="middle">Information complete?</text>
+    <text class="dg-label" x="447" y="56">Yes</text>
+    <line class="dg-edge-accent" x1="434" y1="64" x2="474" y2="64"/>
+    <polygon class="dg-arrow-accent" points="474,60 482,64 474,68"/>
+    <rect class="dg-node" x="482" y="44" width="148" height="40" rx="6"/>
+    <text class="dg-copy" x="556" y="68" text-anchor="middle">Ready for review</text>
+    <text class="dg-label" x="338" y="126">No</text>
+    <line class="dg-edge-muted" x1="330" y1="100" x2="330" y2="144"/>
+    <polygon class="dg-arrow" points="326,144 334,144 330,152"/>
+    <rect class="dg-node-soft" x="240" y="152" width="180" height="40" rx="6"/>
+    <text class="dg-copy" x="330" y="176" text-anchor="middle">Request more details</text>
+  </svg>
+</section>
+      <figcaption>The flowchart keeps the success path as one continuous accent line and gives the incomplete-information branch a quiet dashed path.</figcaption>
+    </figure>
+    <figure class="demo">
+<section data-demo="diagram">
+  <style>
+    [data-demo="diagram"] { margin: 0; }
+    [data-demo="diagram"] .dg-canvas { display: block; width: 100%; height: auto; }
+    [data-demo="diagram"] .dg-node { fill: var(--surface); stroke: var(--border-strong); }
+    [data-demo="diagram"] .dg-node-soft { fill: var(--sand); stroke: var(--border); }
+    [data-demo="diagram"] .dg-node-accent { fill: var(--accent-tint); stroke: var(--accent-tint-3); }
+    [data-demo="diagram"] .dg-group { fill: none; stroke: var(--border); stroke-dasharray: 4 4; }
+    [data-demo="diagram"] .dg-edge { fill: none; stroke: var(--border-strong); }
+    [data-demo="diagram"] .dg-edge-accent { fill: none; stroke: var(--accent); }
+    [data-demo="diagram"] .dg-edge-muted { fill: none; stroke: var(--border-strong); stroke-dasharray: 4 4; }
+    [data-demo="diagram"] .dg-arrow { fill: var(--border-strong); }
+    [data-demo="diagram"] .dg-arrow-accent { fill: var(--accent); }
+    [data-demo="diagram"] .dg-copy {
+      fill: var(--ink-2);
+      font-family: var(--serif);
+      font-size: 12.5px;
+    }
+    [data-demo="diagram"] .dg-copy-strong {
+      fill: var(--ink);
+      font-family: var(--serif);
+      font-size: 12.5px;
+      font-weight: 500;
+    }
+    [data-demo="diagram"] .dg-copy-muted {
+      fill: var(--ink-3);
+      font-family: var(--serif);
+      font-size: 12px;
+    }
+    [data-demo="diagram"] .dg-label {
+      fill: var(--ink-3);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.4px;
+    }
+  </style>
+  <svg class="dg-canvas" viewBox="0 0 640 300" role="img" aria-label="Sequence diagram: the reader describes a requirement to Hue, Hue validates the document with the quality gate, the gate returns findings, and Hue delivers the checked HTML">
+    <rect class="dg-node" x="62" y="16" width="76" height="32" rx="6"/>
+    <text class="dg-copy-strong" x="100" y="36" text-anchor="middle">Reader</text>
+    <rect class="dg-node" x="292" y="16" width="56" height="32" rx="6"/>
+    <text class="dg-copy-strong" x="320" y="36" text-anchor="middle">Hue</text>
+    <rect class="dg-node" x="480" y="16" width="120" height="32" rx="6"/>
+    <text class="dg-copy-strong" x="540" y="36" text-anchor="middle">Quality gate</text>
+    <line class="dg-edge-muted" x1="100" y1="48" x2="100" y2="272"/>
+    <line class="dg-edge-muted" x1="320" y1="48" x2="320" y2="272"/>
+    <line class="dg-edge-muted" x1="540" y1="48" x2="540" y2="272"/>
+    <text class="dg-copy" x="207" y="80" text-anchor="middle">Describe requirement</text>
+    <line class="dg-edge" x1="100" y1="88" x2="306" y2="88"/>
+    <polygon class="dg-arrow" points="306,84 314,88 306,92"/>
+    <text class="dg-copy" x="427" y="128" text-anchor="middle">Validate document</text>
+    <line class="dg-edge" x1="320" y1="136" x2="526" y2="136"/>
+    <polygon class="dg-arrow" points="526,132 534,136 526,140"/>
+    <text class="dg-copy" x="430" y="176" text-anchor="middle">Findings</text>
+    <line class="dg-edge-muted" x1="540" y1="184" x2="334" y2="184"/>
+    <polygon class="dg-arrow" points="334,180 326,184 334,188"/>
+    <text class="dg-copy" x="213" y="224" text-anchor="middle">Deliver checked HTML</text>
+    <line class="dg-edge" x1="320" y1="232" x2="114" y2="232"/>
+    <polygon class="dg-arrow" points="114,228 106,232 114,236"/>
+  </svg>
+</section>
+      <figcaption>The sequence diagram orders the messages between the reader, Hue, and the quality gate from top to bottom, with requests solid and returns dashed.</figcaption>
+    </figure>
+    <figure class="demo">
+<section data-demo="diagram">
+  <style>
+    [data-demo="diagram"] { margin: 0; }
+    [data-demo="diagram"] .dg-canvas { display: block; width: 100%; height: auto; }
+    [data-demo="diagram"] .dg-node { fill: var(--surface); stroke: var(--border-strong); }
+    [data-demo="diagram"] .dg-node-soft { fill: var(--sand); stroke: var(--border); }
+    [data-demo="diagram"] .dg-node-accent { fill: var(--accent-tint); stroke: var(--accent-tint-3); }
+    [data-demo="diagram"] .dg-group { fill: none; stroke: var(--border); stroke-dasharray: 4 4; }
+    [data-demo="diagram"] .dg-edge { fill: none; stroke: var(--border-strong); }
+    [data-demo="diagram"] .dg-edge-accent { fill: none; stroke: var(--accent); }
+    [data-demo="diagram"] .dg-edge-muted { fill: none; stroke: var(--border-strong); stroke-dasharray: 4 4; }
+    [data-demo="diagram"] .dg-arrow { fill: var(--border-strong); }
+    [data-demo="diagram"] .dg-arrow-accent { fill: var(--accent); }
+    [data-demo="diagram"] .dg-copy {
+      fill: var(--ink-2);
+      font-family: var(--serif);
+      font-size: 12.5px;
+    }
+    [data-demo="diagram"] .dg-copy-strong {
+      fill: var(--ink);
+      font-family: var(--serif);
+      font-size: 12.5px;
+      font-weight: 500;
+    }
+    [data-demo="diagram"] .dg-copy-muted {
+      fill: var(--ink-3);
+      font-family: var(--serif);
+      font-size: 12px;
+    }
+    [data-demo="diagram"] .dg-label {
+      fill: var(--ink-3);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.4px;
+    }
+  </style>
+  <svg class="dg-canvas" viewBox="0 0 640 200" role="img" aria-label="State diagram: Draft moves to In review, then to Approved, while requested changes send it to Rework and back to Draft">
+    <rect class="dg-node" x="16" y="56" width="64" height="36" rx="6"/>
+    <text class="dg-copy" x="48" y="78" text-anchor="middle">Draft</text>
+    <rect class="dg-node-accent" x="232" y="56" width="96" height="36" rx="6"/>
+    <text class="dg-copy-strong" x="280" y="78" text-anchor="middle">In review</text>
+    <rect class="dg-node" x="496" y="56" width="88" height="36" rx="6"/>
+    <text class="dg-copy" x="540" y="78" text-anchor="middle">Approved</text>
+    <rect class="dg-node-soft" x="244" y="140" width="72" height="36" rx="6"/>
+    <text class="dg-copy" x="280" y="162" text-anchor="middle">Rework</text>
+    <line class="dg-edge" x1="80" y1="74" x2="224" y2="74"/>
+    <polygon class="dg-arrow" points="224,70 232,74 224,78"/>
+    <line class="dg-edge" x1="328" y1="74" x2="488" y2="74"/>
+    <polygon class="dg-arrow" points="488,70 496,74 488,78"/>
+    <line class="dg-edge-muted" x1="280" y1="92" x2="280" y2="132"/>
+    <polygon class="dg-arrow" points="276,132 284,132 280,140"/>
+    <path class="dg-edge-muted" d="M244,158 H48 V100"/>
+    <polygon class="dg-arrow" points="48,92 44,100 52,100"/>
+  </svg>
+</section>
+      <figcaption>The state diagram keeps the normal approval path on one axis and routes the rework loop back to Draft outside it.</figcaption>
     </figure>
   </section>
 </main>

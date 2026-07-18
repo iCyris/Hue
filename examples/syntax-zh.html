@@ -432,14 +432,198 @@ footer a:hover { color: var(--ink-2); text-decoration-color: currentColor; }
     <rect class="wf-card" x="368" y="158" width="216" height="48" rx="6"/>
     <rect class="wf-line-soft" x="380" y="172" width="80" height="6" rx="3"/>
     <rect class="wf-line" x="380" y="188" width="148" height="6" rx="3"/>
-    <rect class="wf-control" x="368" y="218" width="88" height="24" rx="4"/>
-    <text class="wf-copy-strong" x="389" y="235">查看</text>
+    <rect class="wf-control" x="368" y="218" width="44" height="24" rx="4"/>
+    <text class="wf-copy-strong" x="390" y="235" text-anchor="middle">查看</text>
     <text class="wf-label" x="16" y="274">侧栏</text>
     <text class="wf-label" x="160" y="274">列表</text>
     <text class="wf-label" x="368" y="274">详情</text>
   </svg>
 </section>
       <figcaption>示意图会保留已知界面文案，只在内容未明确时使用占位条，并为区域标签预留无碰撞的独立空间。</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>关系图</h2>
+    <p>关系图用于展示流程、消息交换与状态变化，不提供交互。每张图都使用关系图的图元类按内容手工绘制，同一个块可以在一份文档中重复出现：</p>
+    <figure class="demo">
+<section data-demo="diagram">
+  <style>
+    [data-demo="diagram"] { margin: 0; }
+    [data-demo="diagram"] .dg-canvas { display: block; width: 100%; height: auto; }
+    [data-demo="diagram"] .dg-node { fill: var(--surface); stroke: var(--border-strong); }
+    [data-demo="diagram"] .dg-node-soft { fill: var(--sand); stroke: var(--border); }
+    [data-demo="diagram"] .dg-node-accent { fill: var(--accent-tint); stroke: var(--accent-tint-3); }
+    [data-demo="diagram"] .dg-group { fill: none; stroke: var(--border); stroke-dasharray: 4 4; }
+    [data-demo="diagram"] .dg-edge { fill: none; stroke: var(--border-strong); }
+    [data-demo="diagram"] .dg-edge-accent { fill: none; stroke: var(--accent); }
+    [data-demo="diagram"] .dg-edge-muted { fill: none; stroke: var(--border-strong); stroke-dasharray: 4 4; }
+    [data-demo="diagram"] .dg-arrow { fill: var(--border-strong); }
+    [data-demo="diagram"] .dg-arrow-accent { fill: var(--accent); }
+    [data-demo="diagram"] .dg-copy {
+      fill: var(--ink-2);
+      font-family: var(--serif);
+      font-size: 12.5px;
+    }
+    [data-demo="diagram"] .dg-copy-strong {
+      fill: var(--ink);
+      font-family: var(--serif);
+      font-size: 12.5px;
+      font-weight: 500;
+    }
+    [data-demo="diagram"] .dg-copy-muted {
+      fill: var(--ink-3);
+      font-family: var(--serif);
+      font-size: 12px;
+    }
+    [data-demo="diagram"] .dg-label {
+      fill: var(--ink-3);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.4px;
+    }
+  </style>
+  <svg class="dg-canvas" viewBox="0 0 640 200" role="img" aria-label="流程图：提交需求后，信息完整则可以评审，否则需要补充">
+    <rect class="dg-node" x="100" y="44" width="80" height="40" rx="6"/>
+    <text class="dg-copy" x="140" y="68" text-anchor="middle">提交需求</text>
+    <line class="dg-edge-accent" x1="180" y1="64" x2="236" y2="64"/>
+    <polygon class="dg-arrow-accent" points="236,60 244,64 236,68"/>
+    <polygon class="dg-node" points="320,28 396,64 320,100 244,64"/>
+    <text class="dg-copy" x="320" y="68" text-anchor="middle">信息是否完整？</text>
+    <text class="dg-label" x="407" y="56">是</text>
+    <line class="dg-edge-accent" x1="396" y1="64" x2="452" y2="64"/>
+    <polygon class="dg-arrow-accent" points="452,60 460,64 452,68"/>
+    <rect class="dg-node" x="460" y="44" width="80" height="40" rx="6"/>
+    <text class="dg-copy" x="500" y="68" text-anchor="middle">可以评审</text>
+    <text class="dg-label" x="328" y="126">否</text>
+    <line class="dg-edge-muted" x1="320" y1="100" x2="320" y2="144"/>
+    <polygon class="dg-arrow" points="316,144 324,144 320,152"/>
+    <rect class="dg-node-soft" x="280" y="152" width="80" height="40" rx="6"/>
+    <text class="dg-copy" x="320" y="176" text-anchor="middle">需要补充</text>
+  </svg>
+</section>
+      <figcaption>流程图将成功路径绘为一条连续的强调线，信息不完整的分支使用安静的虚线。</figcaption>
+    </figure>
+    <figure class="demo">
+<section data-demo="diagram">
+  <style>
+    [data-demo="diagram"] { margin: 0; }
+    [data-demo="diagram"] .dg-canvas { display: block; width: 100%; height: auto; }
+    [data-demo="diagram"] .dg-node { fill: var(--surface); stroke: var(--border-strong); }
+    [data-demo="diagram"] .dg-node-soft { fill: var(--sand); stroke: var(--border); }
+    [data-demo="diagram"] .dg-node-accent { fill: var(--accent-tint); stroke: var(--accent-tint-3); }
+    [data-demo="diagram"] .dg-group { fill: none; stroke: var(--border); stroke-dasharray: 4 4; }
+    [data-demo="diagram"] .dg-edge { fill: none; stroke: var(--border-strong); }
+    [data-demo="diagram"] .dg-edge-accent { fill: none; stroke: var(--accent); }
+    [data-demo="diagram"] .dg-edge-muted { fill: none; stroke: var(--border-strong); stroke-dasharray: 4 4; }
+    [data-demo="diagram"] .dg-arrow { fill: var(--border-strong); }
+    [data-demo="diagram"] .dg-arrow-accent { fill: var(--accent); }
+    [data-demo="diagram"] .dg-copy {
+      fill: var(--ink-2);
+      font-family: var(--serif);
+      font-size: 12.5px;
+    }
+    [data-demo="diagram"] .dg-copy-strong {
+      fill: var(--ink);
+      font-family: var(--serif);
+      font-size: 12.5px;
+      font-weight: 500;
+    }
+    [data-demo="diagram"] .dg-copy-muted {
+      fill: var(--ink-3);
+      font-family: var(--serif);
+      font-size: 12px;
+    }
+    [data-demo="diagram"] .dg-label {
+      fill: var(--ink-3);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.4px;
+    }
+  </style>
+  <svg class="dg-canvas" viewBox="0 0 640 300" role="img" aria-label="时序图：读者向 Hue 描述需求，Hue 将文档交给质量门禁检查，门禁返回问题，Hue 交付已检查的 HTML">
+    <rect class="dg-node" x="92" y="16" width="56" height="32" rx="6"/>
+    <text class="dg-copy-strong" x="120" y="36" text-anchor="middle">读者</text>
+    <rect class="dg-node" x="292" y="16" width="56" height="32" rx="6"/>
+    <text class="dg-copy-strong" x="320" y="36" text-anchor="middle">Hue</text>
+    <rect class="dg-node" x="480" y="16" width="80" height="32" rx="6"/>
+    <text class="dg-copy-strong" x="520" y="36" text-anchor="middle">质量门禁</text>
+    <line class="dg-edge-muted" x1="120" y1="48" x2="120" y2="272"/>
+    <line class="dg-edge-muted" x1="320" y1="48" x2="320" y2="272"/>
+    <line class="dg-edge-muted" x1="520" y1="48" x2="520" y2="272"/>
+    <text class="dg-copy" x="220" y="80" text-anchor="middle">描述需求</text>
+    <line class="dg-edge" x1="120" y1="88" x2="306" y2="88"/>
+    <polygon class="dg-arrow" points="306,84 314,88 306,92"/>
+    <text class="dg-copy" x="420" y="128" text-anchor="middle">检查文档</text>
+    <line class="dg-edge" x1="320" y1="136" x2="506" y2="136"/>
+    <polygon class="dg-arrow" points="506,132 514,136 506,140"/>
+    <text class="dg-copy" x="420" y="176" text-anchor="middle">返回问题</text>
+    <line class="dg-edge-muted" x1="520" y1="184" x2="334" y2="184"/>
+    <polygon class="dg-arrow" points="334,180 326,184 334,188"/>
+    <text class="dg-copy" x="220" y="224" text-anchor="middle">交付已检查的 HTML</text>
+    <line class="dg-edge" x1="320" y1="232" x2="134" y2="232"/>
+    <polygon class="dg-arrow" points="134,228 126,232 134,236"/>
+  </svg>
+</section>
+      <figcaption>时序图按时间从上到下图示读者、Hue 与质量门禁之间的消息，请求用实线，返回用虚线。</figcaption>
+    </figure>
+    <figure class="demo">
+<section data-demo="diagram">
+  <style>
+    [data-demo="diagram"] { margin: 0; }
+    [data-demo="diagram"] .dg-canvas { display: block; width: 100%; height: auto; }
+    [data-demo="diagram"] .dg-node { fill: var(--surface); stroke: var(--border-strong); }
+    [data-demo="diagram"] .dg-node-soft { fill: var(--sand); stroke: var(--border); }
+    [data-demo="diagram"] .dg-node-accent { fill: var(--accent-tint); stroke: var(--accent-tint-3); }
+    [data-demo="diagram"] .dg-group { fill: none; stroke: var(--border); stroke-dasharray: 4 4; }
+    [data-demo="diagram"] .dg-edge { fill: none; stroke: var(--border-strong); }
+    [data-demo="diagram"] .dg-edge-accent { fill: none; stroke: var(--accent); }
+    [data-demo="diagram"] .dg-edge-muted { fill: none; stroke: var(--border-strong); stroke-dasharray: 4 4; }
+    [data-demo="diagram"] .dg-arrow { fill: var(--border-strong); }
+    [data-demo="diagram"] .dg-arrow-accent { fill: var(--accent); }
+    [data-demo="diagram"] .dg-copy {
+      fill: var(--ink-2);
+      font-family: var(--serif);
+      font-size: 12.5px;
+    }
+    [data-demo="diagram"] .dg-copy-strong {
+      fill: var(--ink);
+      font-family: var(--serif);
+      font-size: 12.5px;
+      font-weight: 500;
+    }
+    [data-demo="diagram"] .dg-copy-muted {
+      fill: var(--ink-3);
+      font-family: var(--serif);
+      font-size: 12px;
+    }
+    [data-demo="diagram"] .dg-label {
+      fill: var(--ink-3);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.4px;
+    }
+  </style>
+  <svg class="dg-canvas" viewBox="0 0 640 200" role="img" aria-label="状态图：草稿进入评审中，随后通过；需要修改时进入返工，再回到草稿">
+    <rect class="dg-node" x="104" y="56" width="56" height="36" rx="6"/>
+    <text class="dg-copy" x="132" y="78" text-anchor="middle">草稿</text>
+    <rect class="dg-node-accent" x="280" y="56" width="64" height="36" rx="6"/>
+    <text class="dg-copy-strong" x="312" y="78" text-anchor="middle">评审中</text>
+    <rect class="dg-node" x="504" y="56" width="64" height="36" rx="6"/>
+    <text class="dg-copy" x="536" y="78" text-anchor="middle">已通过</text>
+    <rect class="dg-node-soft" x="284" y="140" width="56" height="36" rx="6"/>
+    <text class="dg-copy" x="312" y="162" text-anchor="middle">返工</text>
+    <line class="dg-edge" x1="160" y1="74" x2="272" y2="74"/>
+    <polygon class="dg-arrow" points="272,70 280,74 272,78"/>
+    <line class="dg-edge" x1="344" y1="74" x2="496" y2="74"/>
+    <polygon class="dg-arrow" points="496,70 504,74 496,78"/>
+    <line class="dg-edge-muted" x1="312" y1="92" x2="312" y2="132"/>
+    <polygon class="dg-arrow" points="308,132 316,132 312,140"/>
+    <path class="dg-edge-muted" d="M284,158 H132 V100"/>
+    <polygon class="dg-arrow" points="132,92 128,100 136,100"/>
+  </svg>
+</section>
+      <figcaption>状态图将正常审批路径保持在主轴上，返工循环在主轴之外回到草稿。</figcaption>
     </figure>
   </section>
 </main>

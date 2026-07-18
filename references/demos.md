@@ -49,7 +49,11 @@ Quality bar (judgment, not gated):
 - Real interaction, not a static picture: hover, focus, pressed, and disabled states
   where the control has them; keyboard operation for anything activatable
   (`<button>`, `role="switch"` with Space/Enter, arrow keys for tabs/slider).
-  The one exception is `wireframe`, which is deliberately static (see below).
+  The two exceptions are `wireframe` and `diagram`, which are deliberately
+  static (see below): `wireframe` shows page and interface region layout, while
+  `diagram` shows flows, messages, dependencies, and state changes. Neither has
+  a script or interaction; for both, the `<style>` is pasted verbatim and the
+  `<svg>` is redrawn for each document.
 - Accessible by default: native elements first; `aria-*` where semantics are missing;
   visible focus via the document's `:focus-visible` rule.
 - Motion uses `--dur-*` and `--ease-*` tokens, animates `transform`/`opacity` only,
@@ -78,6 +82,7 @@ Quality bar (judgment, not gated):
 | `card-list.html` | List of cards with hover and selected state | Feeds, pick-one lists, collections |
 | `spring-motion.html` | Same element animated with ease-out vs spring on click | Motion specs, transition feel, animation vocabulary |
 | `wireframe.html` | Static SVG schematic of an interface layout; no interaction | Showing a screen's structure, region layout, or before/after arrangement |
+| `diagram.html` | Static SVG relationship diagram using Hue primitives; no interaction | Showing flows, system messages, dependencies, or state changes |
 
 ## Toggle sizing rules
 
@@ -147,6 +152,139 @@ use 6px corners; 48-96px filled areas are reserved for media, previews, or genui
 content regions. Vary width and height according to content, and do not stack three or more
 identical filled rectangles when bordered rows or real copy can express the structure more
 precisely.
+
+## Diagram drawing rules
+
+`diagram` is the second static exception: it shows how things relate, such as
+flows, messages, dependencies, and state changes, so it has no script and no
+interaction. The block's `<style>` is pasted verbatim; the `<svg>` markup is
+drawn bespoke for each document, using only the primitive classes it defines:
+
+- `.dg-canvas` — responsive SVG canvas: `display: block`, `width: 100%`,
+  `height: auto`.
+- `.dg-node` — a regular step, participant, or state: `--surface` fill,
+  `--border-strong` stroke.
+- `.dg-node-soft` — a secondary outcome, note, rework, or exception state:
+  `--sand` fill, `--border` stroke.
+- `.dg-node-accent` — the decision point or core state under discussion:
+  `--accent-tint` fill, `--accent-tint-3` stroke.
+- `.dg-group` — a subsystem, phase, or scope boundary: no fill, dashed
+  `--border` stroke.
+- `.dg-edge` — a regular relation, synchronous message, or transition line:
+  `--border-strong`.
+- `.dg-edge-accent` — the current main flow: `--accent`. One continuous accent
+  path per drawing.
+- `.dg-edge-muted` — an asynchronous, return, exception, conditional, or rework
+  path: dashed `--border-strong`.
+- `.dg-arrow` — a regular arrow head, drawn as a standalone `<path>` or
+  `<polygon>`: `--border-strong` fill.
+- `.dg-arrow-accent` — the accent path's arrow head: `--accent` fill.
+- `.dg-copy` — regular node text: `--ink-2`, `--serif`.
+- `.dg-copy-strong` — primary node or participant names: `--ink`, `--serif`,
+  weight 500.
+- `.dg-copy-muted` — secondary notes, return values, state annotations:
+  `--ink-3`, `--serif`.
+- `.dg-label` — branch conditions, message numbers, phase tags: `--ink-3`,
+  `--mono`.
+
+SVG constraints: `viewBox` only, never fixed width or height; no ids; no
+`<marker>`, gradient, filter, mask, clipPath, or image; no inline `style`
+attributes; no raw hex colors; no invented tokens; font size never below 12px.
+Diagrams in one document share the same `viewBox` width, so they render at the
+same scale.
+The `<svg>` carries `role="img"` and an `aria-label` in the document language
+that summarizes the relationships. Every known step, participant, message,
+condition, state, and result stays real SVG `<text>`; wrap long text with
+explicit `<tspan>` lines; never replace known content with anonymous
+placeholder bars.
+
+### Node and edge geometry
+
+Node shapes are as fixed as their colors; do not invent new ones:
+
+- Steps, participants, and states are rounded rectangles: `rx="6"`, 1px stroke,
+  height 32-40px derived from the text plus padding. Single-line nodes use one
+  consistent height within a drawing.
+- Decision points are diamonds drawn as a `<polygon>` with four points; the
+  text must fit inside the diamond's inner width at its midline.
+- Participant headers in a sequence diagram are 32px-high nodes with
+  `.dg-copy-strong`; lifelines drop from their bottom edge.
+- Node text is centered both ways (`text-anchor="middle"`, baseline at the
+  node's vertical center plus roughly one third of the font size).
+- Edges run strictly horizontal or vertical, turning only at 90 degrees, at 1px
+  stroke width. They start and end at node borders, never inside nodes.
+- Arrow heads are 8×8px filled triangles drawn as a standalone `<polygon>`;
+  the tip touches the target node's border without overlapping it, and the
+  tail end of the edge stops at the arrow's base.
+
+### Flowchart
+
+- The main flow reads left to right by default.
+- Alternative and exception branches sit above or below the decision node.
+- The success path stays continuous.
+- Decision nodes may use a diamond shape.
+- Branch labels sit close to their edge but never cover the line or its arrow.
+- Edges never pass through nodes.
+
+### Sequence diagram
+
+- Participants are arranged in columns; time advances top to bottom.
+- Lifelines use `.dg-edge-muted`.
+- Request messages use `.dg-edge`, or `.dg-edge-accent` for the main exchange.
+- Return and asynchronous messages use `.dg-edge-muted`.
+- Message labels never overlap; two messages whose labels would collide never
+  share the same vertical position.
+- Participant names are real text.
+
+### State diagram
+
+- The normal lifecycle follows one dominant direction.
+- Exception, cancel, rework, and recovery paths sit off the main axis.
+- The normal path must read more easily than the exception paths.
+- `.dg-node-accent` marks the single state under discussion; `.dg-edge-muted`
+  marks rollback or rework.
+- Avoid meaningless cycles and duplicated states.
+
+### Diagram layout algorithm
+
+Compute the drawing on paper before writing SVG, in this fixed order:
+
+1. List every node and edge.
+2. Drop implementation details that do not help the requirement's reader
+   understand or decide.
+3. Estimate text rectangles first: Latin width ≈ characters × font-size × 0.62,
+   CJK width ≈ characters × font-size.
+4. Size nodes from those rectangles, with at least 12px horizontal and 8px
+   vertical padding around the text.
+5. Place nodes, keeping at least 24px between unrelated nodes.
+6. Route edges and arrows last, keeping at least 8px between a branch label and
+   any line or arrow.
+7. Run collision checks across text, nodes, edges, and arrows.
+8. Resolve collisions in this order: move the later node along the flow or time
+   axis, wrap the text explicitly, enlarge the node, enlarge the `viewBox`.
+9. Never resolve a collision by deleting user-supplied text, shrinking type
+   below 12px, routing a line through text, letting an arrow cover a node
+   border, or clipping content.
+
+### Diagram color rules
+
+- One drawing carries either a single accent node or one continuous accent
+  path, never several accent nodes plus several accent edges.
+- Neutral structure dominates the drawing.
+- No diagram-only colors, and no rainbow assignment of colors to participants
+  or states.
+
+### Scope and complexity limits
+
+The diagram vocabulary is inspired by familiar Mermaid diagram categories, but
+Hue output does not embed Mermaid source or a Mermaid runtime. Generated
+documents stay offline, self-contained, and governed by Hue's visual tokens.
+
+Only flowcharts, sequence diagrams, and state diagrams are supported. The agent
+computes and draws the SVG by hand; nothing interprets or executes diagram
+source. When a drawing would exceed 8 nodes, 12 edges, 5 sequence participants,
+or 2 nested subsystem groups, split it into smaller diagrams or fall back to a
+table or list.
 
 ## Adding a new demo
 

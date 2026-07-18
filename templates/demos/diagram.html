@@ -1,0 +1,55 @@
+<section data-demo="diagram">
+  <style>
+    [data-demo="diagram"] { margin: 0; }
+    [data-demo="diagram"] .dg-canvas { display: block; width: 100%; height: auto; }
+    [data-demo="diagram"] .dg-node { fill: var(--surface); stroke: var(--border-strong); }
+    [data-demo="diagram"] .dg-node-soft { fill: var(--sand); stroke: var(--border); }
+    [data-demo="diagram"] .dg-node-accent { fill: var(--accent-tint); stroke: var(--accent-tint-3); }
+    [data-demo="diagram"] .dg-group { fill: none; stroke: var(--border); stroke-dasharray: 4 4; }
+    [data-demo="diagram"] .dg-edge { fill: none; stroke: var(--border-strong); }
+    [data-demo="diagram"] .dg-edge-accent { fill: none; stroke: var(--accent); }
+    [data-demo="diagram"] .dg-edge-muted { fill: none; stroke: var(--border-strong); stroke-dasharray: 4 4; }
+    [data-demo="diagram"] .dg-arrow { fill: var(--border-strong); }
+    [data-demo="diagram"] .dg-arrow-accent { fill: var(--accent); }
+    [data-demo="diagram"] .dg-copy {
+      fill: var(--ink-2);
+      font-family: var(--serif);
+      font-size: 12.5px;
+    }
+    [data-demo="diagram"] .dg-copy-strong {
+      fill: var(--ink);
+      font-family: var(--serif);
+      font-size: 12.5px;
+      font-weight: 500;
+    }
+    [data-demo="diagram"] .dg-copy-muted {
+      fill: var(--ink-3);
+      font-family: var(--serif);
+      font-size: 12px;
+    }
+    [data-demo="diagram"] .dg-label {
+      fill: var(--ink-3);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.4px;
+    }
+  </style>
+  <svg class="dg-canvas" viewBox="0 0 640 200" role="img" aria-label="Flowchart: after a requirement is submitted, complete information leads to ready for review, otherwise more details are requested">
+    <rect class="dg-node" x="8" y="44" width="164" height="40" rx="6"/>
+    <text class="dg-copy" x="90" y="68" text-anchor="middle">Submit requirement</text>
+    <line class="dg-edge-accent" x1="172" y1="64" x2="218" y2="64"/>
+    <polygon class="dg-arrow-accent" points="218,60 226,64 218,68"/>
+    <polygon class="dg-node" points="330,28 434,64 330,100 226,64"/>
+    <text class="dg-copy" x="330" y="68" text-anchor="middle">Information complete?</text>
+    <text class="dg-label" x="447" y="56">Yes</text>
+    <line class="dg-edge-accent" x1="434" y1="64" x2="474" y2="64"/>
+    <polygon class="dg-arrow-accent" points="474,60 482,64 474,68"/>
+    <rect class="dg-node" x="482" y="44" width="148" height="40" rx="6"/>
+    <text class="dg-copy" x="556" y="68" text-anchor="middle">Ready for review</text>
+    <text class="dg-label" x="338" y="126">No</text>
+    <line class="dg-edge-muted" x1="330" y1="100" x2="330" y2="144"/>
+    <polygon class="dg-arrow" points="326,144 334,144 330,152"/>
+    <rect class="dg-node-soft" x="240" y="152" width="180" height="40" rx="6"/>
+    <text class="dg-copy" x="330" y="176" text-anchor="middle">Request more details</text>
+  </svg>
+</section>
