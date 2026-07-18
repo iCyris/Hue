@@ -92,6 +92,6 @@ Typography and editorial discipline are informed by
 
 ## License
 
-Hue is [MIT-licensed](LICENSE) © 2026 Cyris — free to use, modify, and
-distribute in personal or commercial projects. Attribution is appreciated but
-not required by the license terms.
+Hue is [MIT-licensed](LICENSE) — free to use, modify, and distribute in
+personal or commercial projects. Attribution is appreciated but not required
+by the license terms.
