@@ -79,6 +79,15 @@ Quality bar (judgment, not gated):
 | `spring-motion.html` | Same element animated with ease-out vs spring on click | Motion specs, transition feel, animation vocabulary |
 | `wireframe.html` | Static SVG schematic of an interface layout; no interaction | Showing a screen's structure, region layout, or before/after arrangement |
 
+## Toggle sizing rules
+
+The toggle is an inline settings control, not a hero object. Keep the visible track at
+36×20px with a 12px knob inset by 4px. Preserve a forgiving click target with an invisible
+44×44px pseudo-element rather than enlarging the painted control. Setting rows use 8px
+vertical padding and a 12px text-to-control gap. The knob gets a hairline and one small
+shadow only; large ambient shadows make the control look inflated. Track color, ring,
+opacity, and knob position transition with the motion tokens.
+
 ## Wireframe drawing rules
 
 `wireframe` is the static exception: it shows what an interface looks like, so it has no
@@ -86,10 +95,16 @@ script and no interaction. The block's `<style>` is pasted verbatim; the `<svg>`
 inside is drawn bespoke for each document, using only the primitive classes it defines:
 
 - `.wf-frame` — outer containers: `--surface` fill, 1px `--border` stroke.
-- `.wf-block` — content regions (cards, media, panels): `--sand` fill.
+- `.wf-block` — substantial unspecified regions such as media and panels: `--sand` fill.
+- `.wf-block-soft` — quiet structural placeholders: `--border-soft` fill.
+- `.wf-card` — compact rows or cards: `--surface` fill with a `--border` stroke.
+- `.wf-control` — explicit controls: `--surface` fill with a `--border-strong` stroke.
 - `.wf-line`, `.wf-line-soft` — text stand-ins: rounded bars in `--border` /
-  `--border-soft`, never real body copy. `.wf-text` marks the one primary heading bar
-  (`--ink-2`).
+  `--border-soft`, used only where the source leaves content unspecified.
+- `.wf-copy`, `.wf-copy-strong`, `.wf-copy-muted` — real interface copy in the document
+  language, set in `--serif` at the document's quiet ink levels. Preserve wording the
+  user supplied, including labels, values, actions, statuses, and short explanatory text.
+  Do not replace known copy with anonymous bars.
 - `.wf-accent` — the single element being discussed: `--accent-tint` fill with
   `--accent-tint-3` stroke. At most one per drawing.
 - `.wf-label` — region names in `--mono` 12px caps, `--ink-3`, below the regions.
@@ -97,6 +112,41 @@ inside is drawn bespoke for each document, using only the primitive classes it d
 Drawing discipline: `viewBox` only (no fixed pixel size, the canvas scales to the stage);
 corner radii 4-8px; strokes 1px; no ids, gradients, filters, or images; label strings are
 placeholders in English and get translated on insert like any other visible string.
+
+### Wireframe layout algorithm
+
+Treat every shape and text run as a rectangle before writing SVG. Use this sequence so
+the finished drawing does not depend on visual guesswork:
+
+1. **Partition first.** Reserve the outer frame, a 16px inner gutter, and a dedicated
+   28-36px label band when region labels sit below content. Divide the remaining content
+   area into non-overlapping regions before placing children.
+2. **Place known copy before placeholders.** Estimate each single-line text box as
+   `characters × font-size × 0.62` for Latin and `characters × font-size` for CJK, then
+   add at least 8px clearance on every side. Wrap user-supplied copy into explicit
+   `<tspan>` lines when it exceeds the region width. Skeleton bars fill only the space
+   left after those boxes are placed.
+3. **Check rectangle intersections.** Expand every text box by 4px and every shape box by
+   2px. Two expanded boxes may not intersect unless the text intentionally belongs inside
+   that shape. Labels, highlights, and content blocks are separate collision groups.
+4. **Resolve in a fixed order.** On collision, first move the later item on the dominant
+   flow axis, then shorten an unspecified skeleton bar, then wrap known copy, then enlarge
+   the `viewBox`. Never cover, clip, shrink below 12px, or silently delete user-supplied
+   text to make the drawing fit.
+5. **Run boundary checks.** Every expanded box must remain inside its assigned region and
+   above the label band. Keep at least 8px between sibling blocks and at least 12px between
+   real copy and an unrelated block edge.
+
+The result may mix literal UI copy, subdued structural blocks, and text stand-ins. Fidelity
+follows the input: explicit areas are drawn with real labels and suitable Hue styling;
+unspecified areas remain schematic.
+
+Color blocks must express hierarchy instead of repeating one card shape. Compact rows and
+controls are normally 24-36px high with 4px corner radii; selected rows may reach 44px and
+use 6px corners; 48-96px filled areas are reserved for media, previews, or genuinely large
+content regions. Vary width and height according to content, and do not stack three or more
+identical filled rectangles when bordered rows or real copy can express the structure more
+precisely.
 
 ## Adding a new demo
 

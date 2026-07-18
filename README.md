@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/fleur-hydrangea-logo.png" alt="Hue logo" width="200" height="200">
+  <img src="assets/fleur-hydrangea-logo.png" alt="Hue logo" width="180" height="180">
 </p>
 
 <h1 align="center">Hue</h1>

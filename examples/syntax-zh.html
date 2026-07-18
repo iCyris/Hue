@@ -13,6 +13,7 @@
   --ink-2: #4B4A44;
   --ink-3: #76756E;
   --border: #E8E5DA;
+  --border-strong: #D4D0C3;
   --border-soft: #EEECE2;
   --accent: #4E5FA0;
   --accent-strong: #3D4C85;
@@ -56,8 +57,15 @@ html[lang^="zh"] body { letter-spacing: 0.35px; }
 main, header { max-width: 680px; margin-left: auto; margin-right: auto; }
 
 strong { font-weight: 500; }
-a { color: var(--accent); text-decoration: none; }
-a:hover { color: var(--accent-strong); text-decoration: underline; }
+a {
+  color: var(--accent);
+  text-decoration-line: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: var(--s1);
+  transition: color var(--dur-1) var(--ease-out), text-decoration-color var(--dur-1) var(--ease-out);
+}
+a:hover { color: var(--accent-strong); text-decoration-color: currentColor; }
 a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
   outline: 2px solid var(--accent); outline-offset: 2px;
 }
@@ -109,7 +117,7 @@ li { margin-bottom: var(--s1); }
 li::marker { color: var(--ink-3); }
 blockquote {
   margin: 0 0 var(--s4); padding-left: var(--s4);
-  border-left: 2px solid var(--border); color: var(--ink-2);
+  border-left: 2px solid var(--border-strong); color: var(--ink-2);
 }
 hr { border: 0; border-top: 1px solid var(--border); margin: var(--s6) 0; }
 
@@ -131,9 +139,9 @@ hr { border: 0; border-top: 1px solid var(--border); margin: var(--s6) 0; }
   font-variant-numeric: tabular-nums;
 }
 .table th {
-  font-size: 12.5px; font-weight: 500; color: var(--ink-3);
+  font-size: 12.5px; font-weight: 500; color: var(--ink-2);
   text-align: left; padding: var(--s2) var(--s3);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-strong);
 }
 .table td { padding: var(--s2) var(--s3); border-bottom: 1px solid var(--border-soft); }
 .table tr:last-child td { border-bottom: 0; }
@@ -170,6 +178,13 @@ footer {
   padding-top: var(--s4); border-top: 1px solid var(--border);
   font-size: 12.5px; color: var(--ink-3);
 }
+footer a {
+  color: inherit; text-decoration: underline;
+  text-decoration-color: transparent;
+  cursor: pointer;
+  transition: color var(--dur-1) var(--ease-out), text-decoration-color var(--dur-1) var(--ease-out);
+}
+footer a:hover { color: var(--ink-2); text-decoration-color: currentColor; }
 
 @media (max-width: 720px) {
   .page { padding: var(--s6) var(--s4); }
@@ -226,7 +241,7 @@ footer {
   <section>
     <h2>引用与分隔</h2>
     <p>引用块用于转述决定、原话或外部材料：</p>
-    <blockquote>引用块的左侧有一条浅色竖线，文字使用次级墨色，不使用斜体。这段文字足够长时会自然折行，用于检查行高与左内边距的配合。</blockquote>
+    <blockquote>引用块的左侧有一条清晰但克制的暖灰竖线，文字使用次级墨色，不使用斜体。这段文字足够长时会自然折行，用于检查行高与左内边距的配合。</blockquote>
     <p>分隔线用于章节内的强停顿，前后留白一致：</p>
     <hr>
     <p>分隔线之后的段落，确认间距恢复常态。</p>
@@ -275,8 +290,8 @@ footer {
   <style>
     [data-demo="toggle"] { margin: 0; }
     [data-demo="toggle"] .setting {
-      display: flex; align-items: center; justify-content: space-between; gap: var(--s4);
-      padding: var(--s3) 0;
+      display: flex; align-items: center; justify-content: space-between; gap: var(--s3);
+      padding: var(--s2) 0;
     }
     [data-demo="toggle"] .setting:first-child { padding-top: 0; }
     [data-demo="toggle"] .setting:last-child { padding-bottom: 0; }
@@ -292,16 +307,20 @@ footer {
     }
     [data-demo="toggle"] .switch {
       flex: none; position: relative;
-      width: 40px; height: 24px; padding: 0; border: 0;
+      width: 36px; height: 20px; padding: 0; border: 0;
       border-radius: var(--r3); background: var(--sand);
       box-shadow: 0 0 0 1px var(--border); cursor: pointer;
-      transition: opacity var(--dur-1) var(--ease-out);
+      transition: background-color var(--dur-1) var(--ease-out), box-shadow var(--dur-1) var(--ease-out), opacity var(--dur-1) var(--ease-out);
+    }
+    [data-demo="toggle"] .switch::before {
+      content: ""; position: absolute;
+      inset: calc(var(--s3) * -1) calc(var(--s1) * -1);
     }
     [data-demo="toggle"] .knob {
       position: absolute; top: var(--s1); left: var(--s1);
-      width: 16px; height: 16px; border-radius: 50%;
+      width: 12px; height: 12px; border-radius: 50%;
       background: var(--surface);
-      box-shadow: 0 0 0 1px var(--border), 0 1px 2px rgba(27, 27, 24, .04), 0 4px 24px rgba(27, 27, 24, .05);
+      box-shadow: 0 0 0 1px var(--border), 0 1px 2px rgba(27, 27, 24, .08);
       transition: transform var(--dur-2) var(--ease-out);
     }
     [data-demo="toggle"] .switch[aria-checked="true"] {
@@ -355,9 +374,28 @@ footer {
     [data-demo="wireframe"] .wf-canvas { display: block; width: 100%; height: auto; }
     [data-demo="wireframe"] .wf-frame { fill: var(--surface); stroke: var(--border); }
     [data-demo="wireframe"] .wf-block { fill: var(--sand); }
+    [data-demo="wireframe"] .wf-block-soft { fill: var(--border-soft); }
+    [data-demo="wireframe"] .wf-card { fill: var(--surface); stroke: var(--border); }
+    [data-demo="wireframe"] .wf-control { fill: var(--surface); stroke: var(--border-strong); }
     [data-demo="wireframe"] .wf-line { fill: var(--border); }
     [data-demo="wireframe"] .wf-line-soft { fill: var(--border-soft); }
     [data-demo="wireframe"] .wf-text { fill: var(--ink-2); }
+    [data-demo="wireframe"] .wf-copy {
+      fill: var(--ink-2);
+      font-family: var(--serif);
+      font-size: 12.5px;
+    }
+    [data-demo="wireframe"] .wf-copy-strong {
+      fill: var(--ink);
+      font-family: var(--serif);
+      font-size: 12.5px;
+      font-weight: 500;
+    }
+    [data-demo="wireframe"] .wf-copy-muted {
+      fill: var(--ink-3);
+      font-family: var(--serif);
+      font-size: 12px;
+    }
     [data-demo="wireframe"] .wf-label {
       fill: var(--ink-3);
       font-family: var(--mono);
@@ -366,40 +404,48 @@ footer {
     }
     [data-demo="wireframe"] .wf-accent { fill: var(--accent-tint); stroke: var(--accent-tint-3); }
   </style>
-  <svg class="wf-canvas" viewBox="0 0 600 340" role="img" aria-label="界面示意：包含侧栏、列表与详情三栏的布局，列表中有一项高亮">
-    <rect class="wf-frame" x="1" y="1" width="598" height="338" rx="8"/>
-    <rect class="wf-block" x="1" y="1" width="598" height="36" rx="8"/>
-    <rect class="wf-block" x="1" y="25" width="598" height="12"/>
-    <rect class="wf-line" x="16" y="15" width="72" height="8" rx="4"/>
-    <rect class="wf-line" x="512" y="14" width="72" height="10" rx="5"/>
-    <rect class="wf-line-soft" x="16" y="57" width="120" height="10" rx="5"/>
-    <rect class="wf-block" x="16" y="83" width="120" height="44" rx="6"/>
-    <rect class="wf-block" x="16" y="139" width="120" height="44" rx="6"/>
-    <rect class="wf-block" x="16" y="195" width="120" height="44" rx="6"/>
-    <rect class="wf-line-soft" x="160" y="57" width="160" height="10" rx="5"/>
-    <rect class="wf-accent" x="160" y="83" width="184" height="52" rx="6"/>
-    <rect class="wf-block" x="160" y="147" width="184" height="52" rx="6"/>
-    <rect class="wf-block" x="160" y="211" width="184" height="52" rx="6"/>
-    <rect class="wf-block" x="160" y="275" width="184" height="52" rx="6"/>
-    <rect class="wf-line-soft" x="368" y="57" width="200" height="10" rx="5"/>
-    <rect class="wf-text" x="368" y="87" width="140" height="12" rx="6"/>
-    <rect class="wf-line" x="368" y="115" width="200" height="7" rx="3.5"/>
-    <rect class="wf-line" x="368" y="130" width="200" height="7" rx="3.5"/>
-    <rect class="wf-line" x="368" y="145" width="152" height="7" rx="3.5"/>
-    <rect class="wf-block" x="368" y="177" width="200" height="96" rx="6"/>
-    <rect class="wf-accent" x="368" y="293" width="96" height="28" rx="6"/>
-    <text class="wf-label" x="16" y="330">侧栏</text>
-    <text class="wf-label" x="160" y="330">列表</text>
-    <text class="wf-label" x="368" y="330">详情</text>
+  <svg class="wf-canvas" viewBox="0 0 600 290" role="img" aria-label="界面示意：包含侧栏、列表与详情三栏的布局，列表中有一项高亮">
+    <rect class="wf-frame" x="1" y="1" width="598" height="288" rx="8"/>
+    <rect class="wf-block" x="1" y="1" width="598" height="32" rx="8"/>
+    <rect class="wf-block" x="1" y="23" width="598" height="10"/>
+    <text class="wf-copy-strong" x="16" y="21">工作区</text>
+    <text class="wf-copy-muted" x="550" y="21">草稿</text>
+    <text class="wf-copy-muted" x="16" y="58">导航</text>
+    <rect class="wf-card" x="16" y="72" width="120" height="32" rx="4"/>
+    <text class="wf-copy" x="28" y="93">概览</text>
+    <rect class="wf-card" x="16" y="112" width="120" height="32" rx="4"/>
+    <text class="wf-copy" x="28" y="133">动态</text>
+    <rect class="wf-card" x="16" y="152" width="120" height="32" rx="4"/>
+    <text class="wf-copy" x="28" y="173">设置</text>
+    <text class="wf-copy-muted" x="160" y="58">项目</text>
+    <rect class="wf-accent" x="160" y="72" width="184" height="44" rx="6"/>
+    <text class="wf-copy-strong" x="172" y="92">价格计算器</text>
+    <text class="wf-copy-muted" x="172" y="108">当前选中项</text>
+    <rect class="wf-block-soft" x="160" y="128" width="184" height="32" rx="4"/>
+    <rect class="wf-line" x="172" y="141" width="96" height="6" rx="3"/>
+    <rect class="wf-block-soft" x="160" y="172" width="184" height="32" rx="4"/>
+    <rect class="wf-line" x="172" y="185" width="124" height="6" rx="3"/>
+    <text class="wf-copy-muted" x="368" y="58">当前选中项</text>
+    <text class="wf-copy-strong" x="368" y="84">价格计算器</text>
+    <text class="wf-copy" x="368" y="108"><tspan x="368">根据预期用量</tspan><tspan x="368" dy="16">估算费用。</tspan></text>
+    <text class="wf-copy-muted" x="368" y="146">用量阈值与结果预览</text>
+    <rect class="wf-card" x="368" y="158" width="216" height="48" rx="6"/>
+    <rect class="wf-line-soft" x="380" y="172" width="80" height="6" rx="3"/>
+    <rect class="wf-line" x="380" y="188" width="148" height="6" rx="3"/>
+    <rect class="wf-control" x="368" y="218" width="88" height="24" rx="4"/>
+    <text class="wf-copy-strong" x="389" y="235">查看</text>
+    <text class="wf-label" x="16" y="274">侧栏</text>
+    <text class="wf-label" x="160" y="274">列表</text>
+    <text class="wf-label" x="368" y="274">详情</text>
   </svg>
 </section>
-      <figcaption>示意图只表达结构：圆角条代表文字，色块代表内容区，一张图至多一个高亮元素。</figcaption>
+      <figcaption>示意图会保留已知界面文案，只在内容未明确时使用占位条，并为区域标签预留无碰撞的独立空间。</figcaption>
     </figure>
   </section>
 </main>
 
 <footer>
-  由 Hue 生成。
+  由 <a href="https://github.com/iCyris/Hue" target="_blank" rel="noopener noreferrer">Hue</a> 生成。
 </footer>
 
 </div>

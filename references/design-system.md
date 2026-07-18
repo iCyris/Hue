@@ -46,6 +46,7 @@ that — a warm paper canvas, a warm gray text ramp, and one living accent used 
 | `--ink-2` | `#4B4A44` | Secondary text |
 | `--ink-3` | `#76756E` | Tertiary text, metadata, captions |
 | `--border` | `#E8E5DA` | Hairlines, rings |
+| `--border-strong` | `#D4D0C3` | Emphasized rules that must remain visible on paper |
 | `--border-soft` | `#EEECE2` | Dividers inside components |
 | `--accent` | `#4E5FA0` | Links, focus rings, h2 bar, primary demo controls, tags |
 | `--accent-strong` | `#3D4C85` | Link hover, pressed primary controls |
@@ -123,14 +124,18 @@ Implemented in `templates/document.html`; the AI selects and fills, never restyl
   `--ink` plain text, 12.5px, `tabular-nums`, 24px between fields, wrapping as needed.
   Values never use tag chips; the eyebrow tag is the header's only accent.
 - **H2 section**: 2.5px `--accent` left bar. H3 is plain, no bar.
-- **Prose**: `p`, `ul`/`ol` (markers in `--ink-3`), `blockquote` (2px `--border` left bar,
+- **Prose**: `p`, `ul`/`ol` (markers in `--ink-3`), `blockquote` (2px `--border-strong` left bar,
   `--ink-2`, no italic), `hr` (hairline).
+- **Links**: `--accent` text with no visible underline at rest. On hover, the text changes
+  to `--accent-strong` while a 1px underline appears at a 4px offset. Color and underline
+  transition together with `--dur-1` and `--ease-out`, without moving the text.
 - **Tags** (`.tag`): 12.5px/500, `--accent-tint` background, `--accent` text, `--r1`
   radius, 2px/8px padding. Solid token colors only.
 - **Callouts** (`.callout`, `.callout--warn`): `--sand` (or `--danger-tint`) surface,
   `--r2`, 12px/16px padding, title row 500 weight. For notes, risks, decisions.
 - **Tables** (`.table`): full-width within measure, hairline row borders, header row in
-  `--ink-3` 12.5px labels, `tabular-nums`, 8px/12px cell padding.
+  `--ink-2` 12.5px/500 labels over a `--border-strong` rule, `tabular-nums`, 8px/12px
+  cell padding.
 - **Code**: inline `code` — `--mono` at 0.92em, `--sand` background, 4px radius.
   `pre` blocks — `--surface` + ring, `--mono` 13px/1.6, 16px padding, horizontal scroll.
 - **Demo stage** (`figure.demo`): `--surface` card, ring, `--r3`, 24px padding; the demo
@@ -150,8 +155,10 @@ Implemented in `templates/document.html`; the AI selects and fills, never restyl
 
 - UI state changes (hover, focus, toggle): `--dur-1`–`--dur-2`, `--ease-out`.
 - Entrances and spring demos: `--dur-3`, `--ease-spring`. Nothing exceeds 480ms.
-- Animate `transform` and `opacity` only; never layout properties. Sanctioned
-  exceptions: progress-fill `width`, accordion `grid-template-rows`.
+- Entrances and spatial motion animate `transform` and `opacity` only. Hover and focus
+  state transitions may animate paint-only properties such as `color`, `background-color`,
+  `border-color`, and `text-decoration-color`; never animate layout properties. Sanctioned
+  layout exceptions: progress-fill `width`, accordion `grid-template-rows`.
 - The global escape lives in the document template, not in demo blocks:
   `@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }`
   Demos must never re-enable motion; ambient loops simply stop. Explicitly user-triggered

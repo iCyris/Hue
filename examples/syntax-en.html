@@ -13,6 +13,7 @@
   --ink-2: #4B4A44;
   --ink-3: #76756E;
   --border: #E8E5DA;
+  --border-strong: #D4D0C3;
   --border-soft: #EEECE2;
   --accent: #4E5FA0;
   --accent-strong: #3D4C85;
@@ -56,8 +57,15 @@ html[lang^="zh"] body { letter-spacing: 0.35px; }
 main, header { max-width: 680px; margin-left: auto; margin-right: auto; }
 
 strong { font-weight: 500; }
-a { color: var(--accent); text-decoration: none; }
-a:hover { color: var(--accent-strong); text-decoration: underline; }
+a {
+  color: var(--accent);
+  text-decoration-line: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: var(--s1);
+  transition: color var(--dur-1) var(--ease-out), text-decoration-color var(--dur-1) var(--ease-out);
+}
+a:hover { color: var(--accent-strong); text-decoration-color: currentColor; }
 a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
   outline: 2px solid var(--accent); outline-offset: 2px;
 }
@@ -109,7 +117,7 @@ li { margin-bottom: var(--s1); }
 li::marker { color: var(--ink-3); }
 blockquote {
   margin: 0 0 var(--s4); padding-left: var(--s4);
-  border-left: 2px solid var(--border); color: var(--ink-2);
+  border-left: 2px solid var(--border-strong); color: var(--ink-2);
 }
 hr { border: 0; border-top: 1px solid var(--border); margin: var(--s6) 0; }
 
@@ -131,9 +139,9 @@ hr { border: 0; border-top: 1px solid var(--border); margin: var(--s6) 0; }
   font-variant-numeric: tabular-nums;
 }
 .table th {
-  font-size: 12.5px; font-weight: 500; color: var(--ink-3);
+  font-size: 12.5px; font-weight: 500; color: var(--ink-2);
   text-align: left; padding: var(--s2) var(--s3);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-strong);
 }
 .table td { padding: var(--s2) var(--s3); border-bottom: 1px solid var(--border-soft); }
 .table tr:last-child td { border-bottom: 0; }
@@ -170,6 +178,13 @@ footer {
   padding-top: var(--s4); border-top: 1px solid var(--border);
   font-size: 12.5px; color: var(--ink-3);
 }
+footer a {
+  color: inherit; text-decoration: underline;
+  text-decoration-color: transparent;
+  cursor: pointer;
+  transition: color var(--dur-1) var(--ease-out), text-decoration-color var(--dur-1) var(--ease-out);
+}
+footer a:hover { color: var(--ink-2); text-decoration-color: currentColor; }
 
 @media (max-width: 720px) {
   .page { padding: var(--s6) var(--s4); }
@@ -226,7 +241,7 @@ footer {
   <section>
     <h2>Quotes and dividers</h2>
     <p>A blockquote carries decisions, quotations, or external material:</p>
-    <blockquote>The quote has a pale rule on the left, secondary ink, and no italics. This sentence is long enough to wrap, which checks line height against the left padding.</blockquote>
+    <blockquote>The quote has a visible warm-neutral rule on the left, secondary ink, and no italics. This sentence is long enough to wrap, which checks line height against the left padding.</blockquote>
     <p>A divider marks a strong pause inside a section, with even space on both sides:</p>
     <hr>
     <p>The paragraph after the divider, confirming the rhythm returns to normal.</p>
@@ -275,8 +290,8 @@ footer {
   <style>
     [data-demo="toggle"] { margin: 0; }
     [data-demo="toggle"] .setting {
-      display: flex; align-items: center; justify-content: space-between; gap: var(--s4);
-      padding: var(--s3) 0;
+      display: flex; align-items: center; justify-content: space-between; gap: var(--s3);
+      padding: var(--s2) 0;
     }
     [data-demo="toggle"] .setting:first-child { padding-top: 0; }
     [data-demo="toggle"] .setting:last-child { padding-bottom: 0; }
@@ -292,16 +307,20 @@ footer {
     }
     [data-demo="toggle"] .switch {
       flex: none; position: relative;
-      width: 40px; height: 24px; padding: 0; border: 0;
+      width: 36px; height: 20px; padding: 0; border: 0;
       border-radius: var(--r3); background: var(--sand);
       box-shadow: 0 0 0 1px var(--border); cursor: pointer;
-      transition: opacity var(--dur-1) var(--ease-out);
+      transition: background-color var(--dur-1) var(--ease-out), box-shadow var(--dur-1) var(--ease-out), opacity var(--dur-1) var(--ease-out);
+    }
+    [data-demo="toggle"] .switch::before {
+      content: ""; position: absolute;
+      inset: calc(var(--s3) * -1) calc(var(--s1) * -1);
     }
     [data-demo="toggle"] .knob {
       position: absolute; top: var(--s1); left: var(--s1);
-      width: 16px; height: 16px; border-radius: 50%;
+      width: 12px; height: 12px; border-radius: 50%;
       background: var(--surface);
-      box-shadow: 0 0 0 1px var(--border), 0 1px 2px rgba(27, 27, 24, .04), 0 4px 24px rgba(27, 27, 24, .05);
+      box-shadow: 0 0 0 1px var(--border), 0 1px 2px rgba(27, 27, 24, .08);
       transition: transform var(--dur-2) var(--ease-out);
     }
     [data-demo="toggle"] .switch[aria-checked="true"] {
@@ -355,9 +374,28 @@ footer {
     [data-demo="wireframe"] .wf-canvas { display: block; width: 100%; height: auto; }
     [data-demo="wireframe"] .wf-frame { fill: var(--surface); stroke: var(--border); }
     [data-demo="wireframe"] .wf-block { fill: var(--sand); }
+    [data-demo="wireframe"] .wf-block-soft { fill: var(--border-soft); }
+    [data-demo="wireframe"] .wf-card { fill: var(--surface); stroke: var(--border); }
+    [data-demo="wireframe"] .wf-control { fill: var(--surface); stroke: var(--border-strong); }
     [data-demo="wireframe"] .wf-line { fill: var(--border); }
     [data-demo="wireframe"] .wf-line-soft { fill: var(--border-soft); }
     [data-demo="wireframe"] .wf-text { fill: var(--ink-2); }
+    [data-demo="wireframe"] .wf-copy {
+      fill: var(--ink-2);
+      font-family: var(--serif);
+      font-size: 12.5px;
+    }
+    [data-demo="wireframe"] .wf-copy-strong {
+      fill: var(--ink);
+      font-family: var(--serif);
+      font-size: 12.5px;
+      font-weight: 500;
+    }
+    [data-demo="wireframe"] .wf-copy-muted {
+      fill: var(--ink-3);
+      font-family: var(--serif);
+      font-size: 12px;
+    }
     [data-demo="wireframe"] .wf-label {
       fill: var(--ink-3);
       font-family: var(--mono);
@@ -366,40 +404,48 @@ footer {
     }
     [data-demo="wireframe"] .wf-accent { fill: var(--accent-tint); stroke: var(--accent-tint-3); }
   </style>
-  <svg class="wf-canvas" viewBox="0 0 600 340" role="img" aria-label="Wireframe: list-detail layout with a sidebar, a list pane, and a detail pane">
-    <rect class="wf-frame" x="1" y="1" width="598" height="338" rx="8"/>
-    <rect class="wf-block" x="1" y="1" width="598" height="36" rx="8"/>
-    <rect class="wf-block" x="1" y="25" width="598" height="12"/>
-    <rect class="wf-line" x="16" y="15" width="72" height="8" rx="4"/>
-    <rect class="wf-line" x="512" y="14" width="72" height="10" rx="5"/>
-    <rect class="wf-line-soft" x="16" y="57" width="120" height="10" rx="5"/>
-    <rect class="wf-block" x="16" y="83" width="120" height="44" rx="6"/>
-    <rect class="wf-block" x="16" y="139" width="120" height="44" rx="6"/>
-    <rect class="wf-block" x="16" y="195" width="120" height="44" rx="6"/>
-    <rect class="wf-line-soft" x="160" y="57" width="160" height="10" rx="5"/>
-    <rect class="wf-accent" x="160" y="83" width="184" height="52" rx="6"/>
-    <rect class="wf-block" x="160" y="147" width="184" height="52" rx="6"/>
-    <rect class="wf-block" x="160" y="211" width="184" height="52" rx="6"/>
-    <rect class="wf-block" x="160" y="275" width="184" height="52" rx="6"/>
-    <rect class="wf-line-soft" x="368" y="57" width="200" height="10" rx="5"/>
-    <rect class="wf-text" x="368" y="87" width="140" height="12" rx="6"/>
-    <rect class="wf-line" x="368" y="115" width="200" height="7" rx="3.5"/>
-    <rect class="wf-line" x="368" y="130" width="200" height="7" rx="3.5"/>
-    <rect class="wf-line" x="368" y="145" width="152" height="7" rx="3.5"/>
-    <rect class="wf-block" x="368" y="177" width="200" height="96" rx="6"/>
-    <rect class="wf-accent" x="368" y="293" width="96" height="28" rx="6"/>
-    <text class="wf-label" x="16" y="330">SIDEBAR</text>
-    <text class="wf-label" x="160" y="330">LIST</text>
-    <text class="wf-label" x="368" y="330">DETAIL</text>
+  <svg class="wf-canvas" viewBox="0 0 600 290" role="img" aria-label="Wireframe: list-detail layout with a sidebar, a list pane, and a detail pane">
+    <rect class="wf-frame" x="1" y="1" width="598" height="288" rx="8"/>
+    <rect class="wf-block" x="1" y="1" width="598" height="32" rx="8"/>
+    <rect class="wf-block" x="1" y="23" width="598" height="10"/>
+    <text class="wf-copy-strong" x="16" y="21">Workspace</text>
+    <text class="wf-copy-muted" x="550" y="21">Draft</text>
+    <text class="wf-copy-muted" x="16" y="58">Navigation</text>
+    <rect class="wf-card" x="16" y="72" width="120" height="32" rx="4"/>
+    <text class="wf-copy" x="28" y="93">Overview</text>
+    <rect class="wf-card" x="16" y="112" width="120" height="32" rx="4"/>
+    <text class="wf-copy" x="28" y="133">Activity</text>
+    <rect class="wf-card" x="16" y="152" width="120" height="32" rx="4"/>
+    <text class="wf-copy" x="28" y="173">Settings</text>
+    <text class="wf-copy-muted" x="160" y="58">Items</text>
+    <rect class="wf-accent" x="160" y="72" width="184" height="44" rx="6"/>
+    <text class="wf-copy-strong" x="172" y="92">Pricing calculator</text>
+    <text class="wf-copy-muted" x="172" y="108">Selected item</text>
+    <rect class="wf-block-soft" x="160" y="128" width="184" height="32" rx="4"/>
+    <rect class="wf-line" x="172" y="141" width="96" height="6" rx="3"/>
+    <rect class="wf-block-soft" x="160" y="172" width="184" height="32" rx="4"/>
+    <rect class="wf-line" x="172" y="185" width="124" height="6" rx="3"/>
+    <text class="wf-copy-muted" x="368" y="58">Selected item</text>
+    <text class="wf-copy-strong" x="368" y="84">Pricing calculator</text>
+    <text class="wf-copy" x="368" y="108"><tspan x="368">Estimate cost from</tspan><tspan x="368" dy="16">expected usage.</tspan></text>
+    <text class="wf-copy-muted" x="368" y="146">Threshold and preview</text>
+    <rect class="wf-card" x="368" y="158" width="216" height="48" rx="6"/>
+    <rect class="wf-line-soft" x="380" y="172" width="80" height="6" rx="3"/>
+    <rect class="wf-line" x="380" y="188" width="148" height="6" rx="3"/>
+    <rect class="wf-control" x="368" y="218" width="88" height="24" rx="4"/>
+    <text class="wf-copy-strong" x="389" y="235">Review</text>
+    <text class="wf-label" x="16" y="274">SIDEBAR</text>
+    <text class="wf-label" x="160" y="274">LIST</text>
+    <text class="wf-label" x="368" y="274">DETAIL</text>
   </svg>
 </section>
-      <figcaption>A wireframe states structure only: bars stand in for text, blocks for content, and one drawing has at most one highlight.</figcaption>
+      <figcaption>A wireframe preserves known interface copy, uses bars only for unspecified content, and keeps labels in a collision-free band.</figcaption>
     </figure>
   </section>
 </main>
 
 <footer>
-Generated with Hue.
+Generated with <a href="https://github.com/iCyris/Hue" target="_blank" rel="noopener noreferrer">Hue</a>.
 </footer>
 
 </div>

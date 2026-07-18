@@ -97,7 +97,9 @@ card-list, spring-motion, wireframe). The contract and per-block guidance:
   new block. Never hand-roll a styled widget inline.
 - `wireframe` is the exception to verbatim use: its `<style>` is pasted as-is, but its
   `<svg>` is drawn bespoke for the document, using only the block's primitive classes
-  and the drawing rules in `references/demos.md`.
+  and the drawing rules in `references/demos.md`. Preserve every user-supplied UI label,
+  value, action, and status as real SVG text; use skeleton bars only for unspecified
+  content. Apply the rectangle-based layout and collision checks before inserting it.
 - The same block may be pasted multiple times; it is scoped to its own root.
 
 ## Hard Rules
