@@ -1,0 +1,117 @@
+<section data-demo="form-validation">
+  <style>
+    [data-demo="form-validation"] { margin: 0; }
+    [data-demo="form-validation"] .form { max-width: 280px; }
+    [data-demo="form-validation"] .label {
+      display: block;
+      font-size: 13.5px; font-weight: 500; line-height: 1.4;
+      color: var(--ink);
+    }
+    [data-demo="form-validation"] .input {
+      display: block;
+      width: 100%;
+      height: 34px;
+      margin-top: var(--s1);
+      padding: 0 var(--s3);
+      font-family: var(--serif);
+      font-size: 15px; font-weight: 400;
+      color: var(--ink);
+      background: var(--surface);
+      border: 0;
+      border-radius: var(--r1);
+      box-shadow: 0 0 0 1px var(--border);
+    }
+    [data-demo="form-validation"] .input::placeholder { color: var(--ink-3); }
+    [data-demo="form-validation"] .input.is-error { box-shadow: 0 0 0 1px var(--danger); }
+    [data-demo="form-validation"] .input.is-success { box-shadow: 0 0 0 1px var(--accent); }
+    [data-demo="form-validation"] .hint {
+      margin: var(--s1) 0 0;
+      font-size: 12.5px; line-height: 1.5;
+      color: var(--ink-3);
+    }
+    [data-demo="form-validation"] .hint.is-error { color: var(--danger); }
+    [data-demo="form-validation"] .hint.is-error,
+    [data-demo="form-validation"] .hint.is-success {
+      animation: form-validation-hint-in var(--dur-2) var(--ease-out);
+    }
+    @keyframes form-validation-hint-in {
+      from { opacity: 0; transform: translateY(-2px); }
+    }
+    [data-demo="form-validation"] .button {
+      margin-top: var(--s3);
+      height: 32px;
+      padding: 0 var(--s3);
+      font-family: var(--serif);
+      font-size: 13.5px; font-weight: 500;
+      color: var(--surface);
+      background: var(--accent);
+      border: 0;
+      border-radius: var(--r1);
+      cursor: pointer;
+      transition: opacity var(--dur-1) var(--ease-out);
+    }
+    [data-demo="form-validation"] .button:hover { background: var(--accent-strong); }
+    [data-demo="form-validation"] .button:disabled { opacity: .7; cursor: default; }
+  </style>
+  <div class="stage">
+    <form class="form" novalidate>
+      <label class="label">Email <input class="input" type="email" name="email" placeholder="you@example.com" autocomplete="off"></label>
+      <p class="hint" aria-live="polite">Used only for account notifications.</p>
+      <button class="button" type="submit">Submit</button>
+    </form>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="form-validation"]');
+      var form = root.querySelector('.form');
+      var input = root.querySelector('.input');
+      var hint = root.querySelector('.hint');
+      var button = root.querySelector('.button');
+      var defaultHint = hint.textContent;
+      var EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      var timer = null;
+
+      function setState(state) {
+        input.classList.toggle('is-error', state === 'error');
+        input.classList.toggle('is-success', state === 'success');
+        hint.classList.toggle('is-error', state === 'error');
+        hint.classList.toggle('is-success', state === 'success');
+        if (state === 'error') {
+          input.setAttribute('aria-invalid', 'true');
+          hint.textContent = 'Enter a valid email address';
+        } else if (state === 'success') {
+          input.removeAttribute('aria-invalid');
+          hint.textContent = 'Looks good';
+        } else {
+          input.removeAttribute('aria-invalid');
+          hint.textContent = defaultHint;
+        }
+      }
+
+      function validate() {
+        var value = input.value.trim();
+        if (!value || !EMAIL.test(value)) {
+          setState('error');
+          return false;
+        }
+        setState('success');
+        return true;
+      }
+
+      input.addEventListener('blur', validate);
+
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        if (!validate()) { return; }
+        button.disabled = true;
+        button.textContent = 'Submitted';
+        timer = setTimeout(function () {
+          button.disabled = false;
+          button.textContent = 'Submit';
+          form.reset();
+          setState(null);
+        }, 1400);
+      });
+    })();
+  </script>
+</section>

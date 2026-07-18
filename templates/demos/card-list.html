@@ -1,0 +1,123 @@
+<section data-demo="card-list">
+  <style>
+    [data-demo="card-list"] { margin-top: 0; }
+    [data-demo="card-list"] .list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--s2);
+    }
+    [data-demo="card-list"] .card {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      padding: var(--s3) var(--s4);
+      border: 0;
+      border-radius: var(--r2);
+      background: var(--surface);
+      box-shadow: 0 0 0 1px var(--border);
+      cursor: pointer;
+      text-align: left;
+      font-family: var(--serif);
+      transition: transform var(--dur-1) var(--ease-out);
+    }
+    [data-demo="card-list"] .card:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 0 1px var(--border), 0 1px 2px rgba(27, 27, 24, 0.04), 0 4px 24px rgba(27, 27, 24, 0.05);
+    }
+    [data-demo="card-list"] .card.is-selected {
+      background: var(--accent-tint);
+      box-shadow: 0 0 0 1px var(--accent-tint-3);
+    }
+    [data-demo="card-list"] .card.is-selected:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 0 1px var(--accent-tint-3), 0 1px 2px rgba(27, 27, 24, 0.04), 0 4px 24px rgba(27, 27, 24, 0.05);
+    }
+    [data-demo="card-list"] .card-main {
+      flex: 1;
+      min-width: 0;
+    }
+    [data-demo="card-list"] .card-title {
+      display: block;
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.4;
+      color: var(--ink);
+    }
+    [data-demo="card-list"] .card-desc {
+      display: block;
+      margin-top: var(--s1);
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--ink-2);
+    }
+    [data-demo="card-list"] .card-meta {
+      flex: none;
+      margin-left: var(--s4);
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--ink-3);
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+    [data-demo="card-list"] .card-dot {
+      position: absolute;
+      top: var(--s2);
+      right: var(--s2);
+      width: 6px;
+      height: 6px;
+      border-radius: var(--r1);
+      background: var(--accent);
+      opacity: 0;
+      transform: scale(0.5);
+      transition: transform var(--dur-1) var(--ease-out), opacity var(--dur-1) var(--ease-out);
+    }
+    [data-demo="card-list"] .card.is-selected .card-dot {
+      opacity: 1;
+      transform: none;
+    }
+  </style>
+  <div class="stage">
+    <div class="list">
+      <button class="card" type="button" aria-pressed="false">
+        <span class="card-main">
+          <span class="card-title">Quarterly report</span>
+          <span class="card-desc">Revenue summary and open questions.</span>
+        </span>
+        <span class="card-meta">2h ago</span>
+        <span class="card-dot" aria-hidden="true"></span>
+      </button>
+      <button class="card" type="button" aria-pressed="false">
+        <span class="card-main">
+          <span class="card-title">Design review</span>
+          <span class="card-desc">Notes from the latest walkthrough.</span>
+        </span>
+        <span class="card-meta">Yesterday</span>
+        <span class="card-dot" aria-hidden="true"></span>
+      </button>
+      <button class="card" type="button" aria-pressed="false">
+        <span class="card-main">
+          <span class="card-title">Release plan</span>
+          <span class="card-desc">Milestones for the next cycle.</span>
+        </span>
+        <span class="card-meta">Mar 4</span>
+        <span class="card-dot" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="card-list"]');
+      var cards = Array.prototype.slice.call(root.querySelectorAll('.card'));
+      cards.forEach(function (card) {
+        card.addEventListener('click', function () {
+          cards.forEach(function (other) {
+            var on = other === card;
+            other.classList.toggle('is-selected', on);
+            other.setAttribute('aria-pressed', on ? 'true' : 'false');
+          });
+        });
+      });
+    })();
+  </script>
+</section>

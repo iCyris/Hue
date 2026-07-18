@@ -1,0 +1,133 @@
+<section data-demo="skeleton">
+  <style>
+    [data-demo="skeleton"] { margin: 0; }
+
+    [data-demo="skeleton"] .card {
+      display: grid;
+      padding: var(--s4);
+      border-radius: var(--r2);
+      box-shadow: 0 0 0 1px var(--border);
+    }
+    [data-demo="skeleton"] .view {
+      grid-area: 1 / 1;
+      min-width: 0;
+      transition: opacity var(--dur-2) var(--ease-out);
+    }
+    [data-demo="skeleton"] .view-real { opacity: 0; pointer-events: none; }
+    [data-demo="skeleton"] .card.is-loaded .view-skel { opacity: 0; pointer-events: none; }
+    [data-demo="skeleton"] .card.is-loaded .view-real { opacity: 1; pointer-events: auto; }
+
+    [data-demo="skeleton"] .row { display: flex; align-items: center; gap: var(--s3); }
+    [data-demo="skeleton"] .lines {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--s2);
+    }
+
+    [data-demo="skeleton"] .ph {
+      position: relative;
+      overflow: hidden;
+      background: var(--sand);
+    }
+    [data-demo="skeleton"] .ph::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      transform: translateX(-100%);
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .55) 50%, rgba(255, 255, 255, 0) 100%);
+      animation: skeleton-sweep 1.4s linear infinite;
+    }
+    @keyframes skeleton-sweep {
+      to { transform: translateX(100%); }
+    }
+
+    [data-demo="skeleton"] .avatar { flex: none; width: var(--s6); height: var(--s6); border-radius: 50%; }
+    [data-demo="skeleton"] .line { height: var(--s3); border-radius: var(--r1); }
+    [data-demo="skeleton"] .line-a { width: 55%; }
+    [data-demo="skeleton"] .line-b { width: 35%; }
+    [data-demo="skeleton"] .media { margin-top: var(--s4); aspect-ratio: 16 / 9; border-radius: var(--r2); }
+
+    [data-demo="skeleton"] .avatar-real {
+      flex: none;
+      width: var(--s6);
+      height: var(--s6);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-tint);
+      color: var(--accent);
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1;
+    }
+    [data-demo="skeleton"] .name { margin: 0; font-size: 15px; font-weight: 500; line-height: 1.4; color: var(--ink); }
+    [data-demo="skeleton"] .meta { margin: 0; font-size: 12.5px; line-height: 1.5; color: var(--ink-3); }
+    [data-demo="skeleton"] .media-real { margin-top: var(--s4); aspect-ratio: 16 / 9; border-radius: var(--r2); background: var(--accent-tint); }
+
+    [data-demo="skeleton"] .controls { margin-top: var(--s4); }
+    [data-demo="skeleton"] .btn {
+      appearance: none;
+      margin: 0;
+      height: 32px;
+      padding: 0 var(--s3);
+      border: 0;
+      border-radius: var(--r1);
+      background: transparent;
+      box-shadow: 0 0 0 1px var(--border);
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: 13.5px;
+      font-weight: 500;
+      line-height: 1.4;
+      cursor: pointer;
+      transition: background var(--dur-1) var(--ease-out), transform var(--dur-1) var(--ease-out);
+    }
+    [data-demo="skeleton"] .btn:hover { background: var(--sand); }
+    [data-demo="skeleton"] .btn:active { transform: translateY(1px); }
+  </style>
+  <div class="stage">
+    <div class="card" aria-live="polite">
+      <div class="view view-skel" aria-hidden="false">
+        <div class="row">
+          <div class="ph avatar"></div>
+          <div class="lines">
+            <div class="ph line line-a"></div>
+            <div class="ph line line-b"></div>
+          </div>
+        </div>
+        <div class="ph media"></div>
+      </div>
+      <div class="view view-real" aria-hidden="true">
+        <div class="row">
+          <div class="avatar-real">A</div>
+          <div class="lines">
+            <p class="name">Ava Chen</p>
+            <p class="meta">Product update · 2 min read</p>
+          </div>
+        </div>
+        <div class="media-real"></div>
+      </div>
+    </div>
+    <div class="controls">
+      <button type="button" class="btn" aria-pressed="false">Toggle content</button>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="skeleton"]');
+      var card = root.querySelector('.card');
+      var skel = root.querySelector('.view-skel');
+      var real = root.querySelector('.view-real');
+      var btn = root.querySelector('.btn');
+      btn.addEventListener('click', function () {
+        var loaded = card.classList.toggle('is-loaded');
+        btn.setAttribute('aria-pressed', loaded ? 'true' : 'false');
+        skel.setAttribute('aria-hidden', loaded ? 'true' : 'false');
+        real.setAttribute('aria-hidden', loaded ? 'false' : 'true');
+      });
+    })();
+  </script>
+</section>

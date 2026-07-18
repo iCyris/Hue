@@ -1,0 +1,130 @@
+<section data-demo="dialog">
+  <style>
+    [data-demo="dialog"] { margin: 0; position: relative; }
+    [data-demo="dialog"] .stage {
+      min-height: 240px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    [data-demo="dialog"] .trigger {
+      height: 32px;
+      padding: 0 var(--s3);
+      font-family: var(--serif);
+      font-size: 13.5px; font-weight: 500;
+      color: var(--danger);
+      background: transparent;
+      border: 0;
+      border-radius: var(--r1);
+      box-shadow: 0 0 0 1px var(--border);
+      cursor: pointer;
+    }
+    [data-demo="dialog"] .trigger:hover { background: var(--danger-tint); }
+    [data-demo="dialog"] .overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--s5);
+      background: rgba(27, 27, 24, .28);
+      animation: dialog-fade var(--dur-2) var(--ease-out);
+    }
+    [data-demo="dialog"] .overlay[hidden] { display: none; }
+    @keyframes dialog-fade {
+      from { opacity: 0; }
+    }
+    [data-demo="dialog"] .dialog {
+      width: 100%;
+      max-width: 320px;
+      padding: var(--s4);
+      background: var(--surface);
+      border-radius: var(--r2);
+      box-shadow: 0 0 0 1px var(--border), 0 1px 2px rgba(27, 27, 24, .04), 0 4px 24px rgba(27, 27, 24, .05);
+      animation: dialog-in var(--dur-2) var(--ease-out);
+    }
+    @keyframes dialog-in {
+      from { opacity: 0; transform: scale(.96); }
+    }
+    [data-demo="dialog"] .title {
+      margin: 0 0 var(--s2);
+      font-size: 15px; font-weight: 500; line-height: 1.35;
+      color: var(--ink);
+    }
+    [data-demo="dialog"] .copy {
+      margin: 0;
+      font-size: 15px; line-height: 1.65;
+      color: var(--ink-2);
+    }
+    [data-demo="dialog"] .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: var(--s2);
+      margin-top: var(--s4);
+    }
+    [data-demo="dialog"] .cancel,
+    [data-demo="dialog"] .delete {
+      height: 32px;
+      padding: 0 var(--s3);
+      font-family: var(--serif);
+      font-size: 13.5px; font-weight: 500;
+      border: 0;
+      border-radius: var(--r1);
+      cursor: pointer;
+    }
+    [data-demo="dialog"] .cancel {
+      color: var(--ink);
+      background: transparent;
+      box-shadow: 0 0 0 1px var(--border);
+    }
+    [data-demo="dialog"] .cancel:hover { background: var(--sand); }
+    [data-demo="dialog"] .delete {
+      color: var(--surface);
+      background: var(--danger);
+      transition: opacity var(--dur-1) var(--ease-out);
+    }
+    [data-demo="dialog"] .delete:hover { opacity: .88; }
+  </style>
+  <div class="stage">
+    <button class="trigger" type="button" aria-haspopup="dialog">Delete project</button>
+    <div class="overlay" hidden>
+      <div class="dialog" role="dialog" aria-modal="true" aria-label="Delete project">
+        <p class="title">Delete project?</p>
+        <p class="copy">This permanently removes the project and all of its files.</p>
+        <div class="actions">
+          <button class="cancel" type="button">Cancel</button>
+          <button class="delete" type="button">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="dialog"]');
+      var trigger = root.querySelector('.trigger');
+      var overlay = root.querySelector('.overlay');
+      var cancel = root.querySelector('.cancel');
+      var confirmDelete = root.querySelector('.delete');
+
+      function openDialog() {
+        overlay.hidden = false;
+        cancel.focus();
+      }
+
+      function closeDialog() {
+        overlay.hidden = true;
+        trigger.focus();
+      }
+
+      trigger.addEventListener('click', openDialog);
+      cancel.addEventListener('click', closeDialog);
+      confirmDelete.addEventListener('click', closeDialog);
+      overlay.addEventListener('click', function (event) {
+        if (event.target === overlay) { closeDialog(); }
+      });
+      overlay.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') { closeDialog(); }
+      });
+    })();
+  </script>
+</section>

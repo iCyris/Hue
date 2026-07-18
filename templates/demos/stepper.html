@@ -1,0 +1,197 @@
+<section data-demo="stepper">
+  <style>
+    [data-demo="stepper"] { margin-top: 0; }
+    [data-demo="stepper"] [hidden] { display: none !important; }
+    [data-demo="stepper"] .steps {
+      display: flex;
+      align-items: center;
+      gap: var(--s2);
+      max-width: 240px;
+      margin: 0 auto;
+    }
+    [data-demo="stepper"] .step {
+      flex: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: var(--s5);
+      height: var(--s5);
+      border-radius: var(--r3);
+      background: var(--surface);
+      box-shadow: 0 0 0 1px var(--border);
+      color: var(--ink-3);
+      font-size: 12.5px;
+      font-weight: 500;
+      line-height: 1.05;
+      font-variant-numeric: tabular-nums;
+    }
+    [data-demo="stepper"] .step.is-current {
+      box-shadow: 0 0 0 1px var(--accent);
+      color: var(--accent);
+    }
+    [data-demo="stepper"] .step.is-done {
+      background: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent);
+      color: var(--surface);
+    }
+    [data-demo="stepper"] .num { display: block; }
+    [data-demo="stepper"] .check {
+      display: none;
+      width: 9px;
+      height: 5px;
+      border-left: 1.5px solid currentColor;
+      border-bottom: 1.5px solid currentColor;
+      transform: rotate(-45deg) translateY(-1px);
+    }
+    [data-demo="stepper"] .step.is-done .num { display: none; }
+    [data-demo="stepper"] .step.is-done .check { display: block; }
+    [data-demo="stepper"] .line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    [data-demo="stepper"] .panel { margin-top: var(--s5); }
+    [data-demo="stepper"] .status-count {
+      margin: 0 0 var(--s1);
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--ink-3);
+      font-variant-numeric: tabular-nums;
+    }
+    [data-demo="stepper"] .status-name {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.5;
+      color: var(--ink);
+    }
+    [data-demo="stepper"] .actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: var(--s5);
+    }
+    [data-demo="stepper"] .btn {
+      height: 32px;
+      padding: 0 var(--s3);
+      border: 0;
+      border-radius: var(--r1);
+      background: none;
+      cursor: pointer;
+      font-family: var(--serif);
+      font-size: 13.5px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+    [data-demo="stepper"] .next {
+      background: var(--accent);
+      color: var(--surface);
+    }
+    [data-demo="stepper"] .next:hover { background: var(--accent-strong); }
+    [data-demo="stepper"] .back {
+      background: transparent;
+      box-shadow: inset 0 0 0 1px var(--border);
+      color: var(--ink);
+    }
+    [data-demo="stepper"] .back:hover:not(:disabled) { background: var(--sand); }
+    [data-demo="stepper"] .back:disabled { opacity: 0.45; cursor: default; }
+    [data-demo="stepper"] .done {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: var(--s5);
+    }
+    [data-demo="stepper"] .done-text {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--ink-3);
+    }
+    [data-demo="stepper"] .restart { color: var(--accent); }
+    [data-demo="stepper"] .restart:hover {
+      color: var(--accent-strong);
+      text-decoration: underline;
+    }
+  </style>
+  <div class="stage">
+    <div class="steps" aria-hidden="true">
+      <span class="step is-current"><span class="num">1</span><span class="check"></span></span>
+      <span class="line"></span>
+      <span class="step"><span class="num">2</span><span class="check"></span></span>
+      <span class="line"></span>
+      <span class="step"><span class="num">3</span><span class="check"></span></span>
+    </div>
+    <div class="panel">
+      <p class="status-count">Step 1 of 3</p>
+      <p class="status-name">Account</p>
+    </div>
+    <div class="actions">
+      <button class="btn back" type="button" disabled>Back</button>
+      <button class="btn next" type="button">Continue</button>
+    </div>
+    <div class="done" hidden>
+      <p class="done-text">All steps complete.</p>
+      <button class="btn restart" type="button">Restart</button>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="stepper"]');
+      var steps = Array.prototype.slice.call(root.querySelectorAll('.step'));
+      var count = root.querySelector('.status-count');
+      var name = root.querySelector('.status-name');
+      var panel = root.querySelector('.panel');
+      var actions = root.querySelector('.actions');
+      var done = root.querySelector('.done');
+      var back = root.querySelector('.back');
+      var next = root.querySelector('.next');
+      var restart = root.querySelector('.restart');
+      var names = ['Account', 'Details', 'Review'];
+      var current = 0;
+
+      function render() {
+        steps.forEach(function (step, i) {
+          step.classList.toggle('is-done', i < current);
+          step.classList.toggle('is-current', i === current);
+        });
+        count.textContent = 'Step ' + (current + 1) + ' of ' + steps.length;
+        name.textContent = names[current];
+        back.disabled = current === 0;
+        next.textContent = current === steps.length - 1 ? 'Finish' : 'Continue';
+      }
+
+      next.addEventListener('click', function () {
+        if (current < steps.length - 1) {
+          current += 1;
+          render();
+          return;
+        }
+        steps.forEach(function (step) {
+          step.classList.add('is-done');
+          step.classList.remove('is-current');
+        });
+        panel.hidden = true;
+        actions.hidden = true;
+        done.hidden = false;
+        restart.focus();
+      });
+
+      back.addEventListener('click', function () {
+        if (current > 0) {
+          current -= 1;
+          render();
+        }
+      });
+
+      restart.addEventListener('click', function () {
+        current = 0;
+        done.hidden = true;
+        panel.hidden = false;
+        actions.hidden = false;
+        render();
+        next.focus();
+      });
+
+      render();
+    })();
+  </script>
+</section>

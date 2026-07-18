@@ -1,0 +1,110 @@
+<section data-demo="accordion">
+  <style>
+    [data-demo="accordion"] { margin-top: 0; }
+    [data-demo="accordion"] .item + .item { border-top: 1px solid var(--border); }
+    [data-demo="accordion"] .head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: var(--s3) 0;
+      border: 0;
+      background: none;
+      cursor: pointer;
+      text-align: left;
+      font-family: var(--serif);
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.5;
+      color: var(--ink);
+    }
+    [data-demo="accordion"] .head:hover { color: var(--accent); }
+    [data-demo="accordion"] .chevron {
+      flex: none;
+      width: 8px;
+      height: 8px;
+      margin-left: var(--s3);
+      border-right: 1.5px solid currentColor;
+      border-bottom: 1.5px solid currentColor;
+      transform: rotate(45deg);
+      transition: transform var(--dur-2) var(--ease-out);
+    }
+    [data-demo="accordion"] .item.is-open .chevron { transform: rotate(225deg); }
+    [data-demo="accordion"] .body {
+      display: grid;
+      grid-template-rows: 0fr;
+      visibility: hidden;
+      transition: grid-template-rows var(--dur-2) var(--ease-out), visibility var(--dur-2);
+    }
+    [data-demo="accordion"] .item.is-open .body {
+      grid-template-rows: 1fr;
+      visibility: visible;
+    }
+    [data-demo="accordion"] .body-inner {
+      overflow: hidden;
+      min-height: 0;
+    }
+    [data-demo="accordion"] .body-inner p {
+      margin: 0;
+      padding: 0 0 var(--s4);
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--ink-2);
+    }
+  </style>
+  <div class="stage">
+    <div class="item is-open">
+      <button class="head" type="button" aria-expanded="true">
+        <span class="title">What is an accordion?</span>
+        <span class="chevron" aria-hidden="true"></span>
+      </button>
+      <div class="body">
+        <div class="body-inner">
+          <p>A stack of sections that expand one at a time, so long pages stay scannable.</p>
+        </div>
+      </div>
+    </div>
+    <div class="item">
+      <button class="head" type="button" aria-expanded="false">
+        <span class="title">When should I use one?</span>
+        <span class="chevron" aria-hidden="true"></span>
+      </button>
+      <div class="body">
+        <div class="body-inner">
+          <p>Use it for progressive disclosure: FAQs, advanced options, or details most readers can skip.</p>
+        </div>
+      </div>
+    </div>
+    <div class="item">
+      <button class="head" type="button" aria-expanded="false">
+        <span class="title">How does it behave?</span>
+        <span class="chevron" aria-hidden="true"></span>
+      </button>
+      <div class="body">
+        <div class="body-inner">
+          <p>Opening a section closes the others. The chevron rotates, and the body animates open.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="accordion"]');
+      var items = Array.prototype.slice.call(root.querySelectorAll('.item'));
+      items.forEach(function (item) {
+        var head = item.querySelector('.head');
+        head.addEventListener('click', function () {
+          var willOpen = !item.classList.contains('is-open');
+          items.forEach(function (other) {
+            other.classList.remove('is-open');
+            other.querySelector('.head').setAttribute('aria-expanded', 'false');
+          });
+          if (willOpen) {
+            item.classList.add('is-open');
+            head.setAttribute('aria-expanded', 'true');
+          }
+        });
+      });
+    })();
+  </script>
+</section>

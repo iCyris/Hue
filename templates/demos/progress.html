@@ -1,0 +1,132 @@
+<section data-demo="progress">
+  <style>
+    [data-demo="progress"] { margin: 0; }
+    [data-demo="progress"] .stage {
+      display: flex;
+      justify-content: center;
+    }
+    [data-demo="progress"] .card {
+      width: 100%;
+      max-width: 360px;
+      padding: var(--s4);
+      border-radius: var(--r2);
+      box-shadow: 0 0 0 1px var(--border);
+    }
+    [data-demo="progress"] .top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--s3);
+    }
+    [data-demo="progress"] .name {
+      font-size: 13.5px; font-weight: 500; line-height: 1.4;
+      color: var(--ink);
+    }
+    [data-demo="progress"] .percent {
+      font-size: 12.5px; line-height: 1.5;
+      color: var(--ink-2);
+      font-variant-numeric: tabular-nums;
+    }
+    [data-demo="progress"] .track {
+      height: 4px;
+      margin-top: var(--s3);
+      background: var(--border);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    [data-demo="progress"] .fill {
+      width: 0;
+      height: 100%;
+      background: var(--accent);
+      border-radius: 999px;
+      transition: width var(--dur-1) var(--ease-out);
+    }
+    [data-demo="progress"] .bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--s3);
+      margin-top: var(--s3);
+    }
+    [data-demo="progress"] .status {
+      display: flex;
+      align-items: center;
+      gap: var(--s1);
+      font-size: 12.5px; line-height: 1.5;
+      color: var(--ink-3);
+    }
+    [data-demo="progress"] .check {
+      display: none;
+      width: 5px;
+      height: 9px;
+      border-right: 2px solid var(--accent);
+      border-bottom: 2px solid var(--accent);
+      transform: translateY(-1px) rotate(45deg);
+    }
+    [data-demo="progress"] .card.is-done .check { display: inline-block; }
+    [data-demo="progress"] .replay {
+      height: 32px;
+      padding: 0 var(--s3);
+      font-family: var(--serif);
+      font-size: 13.5px; font-weight: 500;
+      color: var(--ink);
+      background: transparent;
+      border: 0;
+      border-radius: var(--r1);
+      box-shadow: 0 0 0 1px var(--border);
+      cursor: pointer;
+    }
+    [data-demo="progress"] .replay:hover { background: var(--sand); }
+  </style>
+  <div class="stage">
+    <div class="card">
+      <div class="top">
+        <span class="name">contacts.csv</span>
+        <span class="percent">0%</span>
+      </div>
+      <div class="track"><div class="fill"></div></div>
+      <div class="bottom">
+        <span class="status" aria-live="polite"><span class="check"></span><span class="status-text">Importing…</span></span>
+        <button class="replay" type="button">Replay</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="progress"]');
+      var card = root.querySelector('.card');
+      var fill = root.querySelector('.fill');
+      var percent = root.querySelector('.percent');
+      var statusText = root.querySelector('.status-text');
+      var replay = root.querySelector('.replay');
+      var timer = null;
+
+      function render(pct) {
+        fill.style.width = pct + '%';
+        percent.textContent = pct + '%';
+      }
+
+      function start() {
+        if (timer) { clearInterval(timer); }
+        card.classList.remove('is-done');
+        statusText.textContent = 'Importing…';
+        var pct = 0;
+        render(0);
+        timer = setInterval(function () {
+          pct += 5;
+          if (pct >= 100) {
+            pct = 100;
+            clearInterval(timer);
+            timer = null;
+            card.classList.add('is-done');
+            statusText.textContent = 'Import complete';
+          }
+          render(pct);
+        }, 90);
+      }
+
+      replay.addEventListener('click', start);
+      start();
+    })();
+  </script>
+</section>

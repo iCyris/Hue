@@ -1,0 +1,58 @@
+<section data-demo="segmented-control">
+  <style>
+    [data-demo="segmented-control"] { margin: 0; }
+    [data-demo="segmented-control"] .control {
+      position: relative; display: flex;
+      padding: var(--s1);
+      background: var(--sand); border-radius: var(--r2);
+    }
+    [data-demo="segmented-control"] .knob {
+      position: absolute; top: var(--s1); left: var(--s1); bottom: var(--s1);
+      width: calc((100% - var(--s2)) / 3);
+      background: var(--surface); border-radius: var(--r1);
+      box-shadow: 0 1px 2px rgba(27, 27, 24, .04), 0 4px 24px rgba(27, 27, 24, .05);
+      transition: transform var(--dur-2) var(--ease-out);
+    }
+    [data-demo="segmented-control"] .option {
+      position: relative; z-index: 1; flex: 1;
+      height: 32px; padding: 0 var(--s3);
+      border: 0; border-radius: var(--r1);
+      background: transparent; cursor: pointer;
+      font-family: var(--serif); font-size: 13.5px; font-weight: 500; line-height: 1;
+      color: var(--ink-2);
+    }
+    [data-demo="segmented-control"] .option:hover { color: var(--ink); }
+    [data-demo="segmented-control"] .option[aria-pressed="true"] { color: var(--ink); }
+    [data-demo="segmented-control"] .status {
+      margin: var(--s3) 0 0;
+      font-size: 12.5px; line-height: 1.5; color: var(--ink-3);
+    }
+  </style>
+  <div class="stage">
+    <div class="control" role="group" aria-label="View">
+      <span class="knob" aria-hidden="true"></span>
+      <button type="button" class="option" aria-pressed="true">List</button>
+      <button type="button" class="option" aria-pressed="false">Board</button>
+      <button type="button" class="option" aria-pressed="false">Calendar</button>
+    </div>
+    <p class="status" aria-live="polite">Selected view: List</p>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="segmented-control"]');
+      var knob = root.querySelector('.knob');
+      var status = root.querySelector('.status');
+      var options = root.querySelectorAll('.option');
+      Array.prototype.forEach.call(options, function (btn, i) {
+        btn.addEventListener('click', function () {
+          Array.prototype.forEach.call(options, function (b) {
+            b.setAttribute('aria-pressed', 'false');
+          });
+          btn.setAttribute('aria-pressed', 'true');
+          knob.style.transform = 'translateX(' + (i * 100) + '%)';
+          status.textContent = 'Selected view: ' + btn.textContent;
+        });
+      });
+    })();
+  </script>
+</section>

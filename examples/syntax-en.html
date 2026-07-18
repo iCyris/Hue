@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hue syntax forms: full visual test</title>
+<style>
+:root {
+  --paper: #F7F5EE;
+  --surface: #FDFCF9;
+  --sand: #EFEDE3;
+  --ink: #1B1B18;
+  --ink-2: #4B4A44;
+  --ink-3: #76756E;
+  --border: #E8E5DA;
+  --border-soft: #EEECE2;
+  --accent: #4E5FA0;
+  --accent-strong: #3D4C85;
+  --accent-tint: #ECEFF7;
+  --accent-tint-2: #DFE4F2;
+  --accent-tint-3: #C9D1E9;
+  --danger: #A5483D;
+  --danger-tint: #F6E9E6;
+
+  --serif: Charter, "Bitstream Charter", Georgia, "TsangerJinKai02",
+           "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
+  --mono: "JetBrains Mono", "SF Mono", Consolas, "TsangerJinKai02",
+          "Source Han Serif SC", monospace;
+
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 40px; --s7: 64px;
+  --r1: 6px; --r2: 8px; --r3: 12px;
+
+  --dur-1: 120ms; --dur-2: 200ms; --dur-3: 320ms;
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --ease-spring: cubic-bezier(.5, 1.6, .4, 1);
+}
+html[lang^="zh"] {
+  --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC",
+           "Songti SC", Georgia, serif;
+}
+
+* { box-sizing: border-box; }
+html { font-synthesis: none; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+html[lang^="zh"] body { letter-spacing: 0.35px; }
+
+.page { max-width: 960px; margin: 0 auto; padding: var(--s7) var(--s5); }
+main, header { max-width: 680px; margin-left: auto; margin-right: auto; }
+
+strong { font-weight: 500; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--accent-strong); text-decoration: underline; }
+a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px;
+}
+
+/* Header */
+.eyebrow {
+  display: flex; align-items: center; gap: var(--s3);
+  font-size: 12.5px; line-height: 1.4; color: var(--ink-3);
+  margin-bottom: var(--s4);
+}
+.doc-title {
+  font-size: 34px; line-height: 1.15; font-weight: 500;
+  margin: 0 0 var(--s4);
+}
+html[lang="en"] .doc-title { letter-spacing: -0.3px; }
+.lead { font-size: 17px; line-height: 1.65; color: var(--ink-2); margin: 0 0 var(--s5); }
+header { padding-bottom: var(--s6); border-bottom: 1px solid var(--border); margin-bottom: var(--s6); }
+
+.tag {
+  display: inline-block;
+  font-size: 12.5px; font-weight: 500; line-height: 1.4;
+  color: var(--accent); background: var(--accent-tint);
+  border-radius: var(--r1); padding: 2px var(--s2);
+  white-space: nowrap;
+}
+
+/* Meta line */
+.meta {
+  display: flex; flex-wrap: wrap; gap: var(--s2) var(--s5);
+  font-size: 12.5px; line-height: 1.5;
+  margin-top: var(--s4);
+  font-variant-numeric: tabular-nums;
+}
+.meta-field { white-space: nowrap; }
+.meta-key { color: var(--ink-3); margin-right: var(--s2); }
+.meta-val { color: var(--ink); }
+
+/* Sections */
+section { margin-top: var(--s6); }
+h2 {
+  font-size: 20px; line-height: 1.3; font-weight: 500;
+  margin: 0 0 var(--s4);
+  border-left: 2.5px solid var(--accent); padding-left: 10px;
+}
+h3 { font-size: 17px; line-height: 1.35; font-weight: 500; margin: var(--s5) 0 var(--s3); }
+p { margin: 0 0 var(--s4); }
+ul, ol { margin: 0 0 var(--s4); padding-left: var(--s5); }
+li { margin-bottom: var(--s1); }
+li::marker { color: var(--ink-3); }
+blockquote {
+  margin: 0 0 var(--s4); padding-left: var(--s4);
+  border-left: 2px solid var(--border); color: var(--ink-2);
+}
+hr { border: 0; border-top: 1px solid var(--border); margin: var(--s6) 0; }
+
+/* Callouts */
+.callout {
+  background: var(--sand); border-radius: var(--r2);
+  padding: var(--s3) var(--s4); margin: 0 0 var(--s4);
+}
+.callout--warn { background: var(--danger-tint); }
+.callout-title { font-weight: 500; margin: 0 0 var(--s1); }
+.callout--warn .callout-title { color: var(--danger); }
+.callout p:last-child { margin-bottom: 0; }
+
+/* Tables */
+.table {
+  width: 100%; border-collapse: collapse;
+  font-size: 15px; line-height: 1.5;
+  margin: 0 0 var(--s4);
+  font-variant-numeric: tabular-nums;
+}
+.table th {
+  font-size: 12.5px; font-weight: 500; color: var(--ink-3);
+  text-align: left; padding: var(--s2) var(--s3);
+  border-bottom: 1px solid var(--border);
+}
+.table td { padding: var(--s2) var(--s3); border-bottom: 1px solid var(--border-soft); }
+.table tr:last-child td { border-bottom: 0; }
+
+/* Code */
+code {
+  font-family: var(--mono); font-size: 0.92em;
+  background: var(--sand); border-radius: var(--s1); padding: 1px 5px;
+}
+pre {
+  font-family: var(--mono); font-size: 13px; line-height: 1.6;
+  background: var(--surface); box-shadow: 0 0 0 1px var(--border);
+  border-radius: var(--r2); padding: var(--s4);
+  overflow-x: auto; margin: 0 0 var(--s4);
+}
+pre code { background: none; padding: 0; border-radius: 0; }
+
+/* Demo stage */
+figure.demo {
+  margin: 0 0 var(--s4);
+  background: var(--surface);
+  box-shadow: 0 0 0 1px var(--border);
+  border-radius: var(--r3);
+  padding: var(--s5);
+}
+figure.demo figcaption {
+  margin-top: var(--s3);
+  font-size: 12.5px; line-height: 1.5; color: var(--ink-3);
+}
+
+/* Footer */
+footer {
+  max-width: 680px; margin: var(--s7) auto 0;
+  padding-top: var(--s4); border-top: 1px solid var(--border);
+  font-size: 12.5px; color: var(--ink-3);
+}
+
+@media (max-width: 720px) {
+  .page { padding: var(--s6) var(--s4); }
+  .doc-title { font-size: 26px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <div class="eyebrow">
+    <span class="tag">Test document</span>
+    <span>Design system · Visual baseline</span>
+  </div>
+  <h1 class="doc-title">Hue syntax forms: full visual test</h1>
+  <p class="lead">This document exercises every content form a Hue document can render. Each section covers one component; after any design-system change, compare against this page to confirm the rendering.</p>
+  <div class="meta">
+    <span class="meta-field"><span class="meta-key">Status</span><span class="meta-val">Living</span></span>
+    <span class="meta-field"><span class="meta-key">Version</span><span class="meta-val">1.0</span></span>
+    <span class="meta-field"><span class="meta-key">Updated</span><span class="meta-val">2026-07-18</span></span>
+  </div>
+</header>
+
+<main>
+  <section>
+    <h2>Headings and paragraphs</h2>
+    <p>This is body prose, used to check size, line height, and paragraph spacing. A sentence can carry <strong>emphasized text</strong>, inline code such as <code>inline code</code>, and <a href="#headings-and-paragraphs">a link to this page</a>. A second paragraph follows so the rhythm between paragraphs is visible.</p>
+    <p>The second paragraph. Mixed script spacing should hold when prose mentions HTML and CSS, a version like 1.0, or a date like 2026-07-18.</p>
+    <h3>Subsection heading</h3>
+    <p>A subsection heading has no accent bar, keeps the same weight as section headings, and layers structure inside a long section.</p>
+  </section>
+
+  <section>
+    <h2>Lists</h2>
+    <p>An unordered list renders like this:</p>
+    <ul>
+      <li>First item, to check marker color and indentation.</li>
+      <li>Second item, to check the spacing between items.</li>
+      <li>A third, longer item that wraps onto a second line so the hanging indent aligns with the text rather than the marker.</li>
+    </ul>
+    <p>An ordered list renders like this:</p>
+    <ol>
+      <li>Step one, confirming numerals use tabular figures.</li>
+      <li>Step two, confirming the marker color is quieter than the text.</li>
+      <li>Step three, confirming the rhythm matches the unordered list.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Quotes and dividers</h2>
+    <p>A blockquote carries decisions, quotations, or external material:</p>
+    <blockquote>The quote has a pale rule on the left, secondary ink, and no italics. This sentence is long enough to wrap, which checks line height against the left padding.</blockquote>
+    <p>A divider marks a strong pause inside a section, with even space on both sides:</p>
+    <hr>
+    <p>The paragraph after the divider, confirming the rhythm returns to normal.</p>
+  </section>
+
+  <section>
+    <h2>Callouts</h2>
+    <p>A plain callout records decisions and background:</p>
+    <div class="callout">
+      <p class="callout-title">Decision: polling refresh</p>
+      <p>The callout sits on a sand surface, its title row at weight 500, its prose aligned with the page. This second sentence confirms the last paragraph has no extra bottom margin.</p>
+    </div>
+    <p>A warning callout carries risks and cautions:</p>
+    <div class="callout callout--warn">
+      <p class="callout-title">Risk: data latency</p>
+      <p>The warning callout uses the danger tint, with the title in danger ink. It is the only sanctioned second color on the page.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Tables</h2>
+    <p>Tables hold structured, comparable information; numeric columns use tabular figures:</p>
+    <table class="table">
+      <tr><th>Property</th><th>Value</th><th>Notes</th></tr>
+      <tr><td>Reading measure</td><td>680 px</td><td>Maximum width of the prose column</td></tr>
+      <tr><td>Page shell</td><td>960 px</td><td>Maximum width of the page container</td></tr>
+      <tr><td>Body size</td><td>15 px</td><td>Line height 1.65</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Code blocks</h2>
+    <p>Multi-line code uses the mono stack on a surface card; wide content scrolls horizontally:</p>
+    <pre><code>body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>Interactive demo</h2>
+    <p>An interactive demo sits inside a demo card with an optional caption below. The switch demo here shows on, off, and disabled states:</p>
+    <figure class="demo">
+<section data-demo="toggle">
+  <style>
+    [data-demo="toggle"] { margin: 0; }
+    [data-demo="toggle"] .setting {
+      display: flex; align-items: center; justify-content: space-between; gap: var(--s4);
+      padding: var(--s3) 0;
+    }
+    [data-demo="toggle"] .setting:first-child { padding-top: 0; }
+    [data-demo="toggle"] .setting:last-child { padding-bottom: 0; }
+    [data-demo="toggle"] .setting + .setting { border-top: 1px solid var(--border-soft); }
+    [data-demo="toggle"] .setting-text {
+      display: flex; flex-direction: column; gap: var(--s1);
+    }
+    [data-demo="toggle"] .setting-label {
+      font-size: 13.5px; font-weight: 500; line-height: 1.4; color: var(--ink);
+    }
+    [data-demo="toggle"] .setting-desc {
+      font-size: 12.5px; line-height: 1.5; color: var(--ink-3);
+    }
+    [data-demo="toggle"] .switch {
+      flex: none; position: relative;
+      width: 40px; height: 24px; padding: 0; border: 0;
+      border-radius: var(--r3); background: var(--sand);
+      box-shadow: 0 0 0 1px var(--border); cursor: pointer;
+      transition: opacity var(--dur-1) var(--ease-out);
+    }
+    [data-demo="toggle"] .knob {
+      position: absolute; top: var(--s1); left: var(--s1);
+      width: 16px; height: 16px; border-radius: 50%;
+      background: var(--surface);
+      box-shadow: 0 0 0 1px var(--border), 0 1px 2px rgba(27, 27, 24, .04), 0 4px 24px rgba(27, 27, 24, .05);
+      transition: transform var(--dur-2) var(--ease-out);
+    }
+    [data-demo="toggle"] .switch[aria-checked="true"] {
+      background: var(--accent); box-shadow: 0 0 0 1px var(--accent);
+    }
+    [data-demo="toggle"] .switch[aria-checked="true"] .knob { transform: translateX(16px); }
+    [data-demo="toggle"] .switch[disabled] {
+      opacity: .45; cursor: default; pointer-events: none;
+    }
+  </style>
+  <div class="stage">
+    <div class="setting">
+      <div class="setting-text">
+        <span class="setting-label">Email notifications</span>
+        <span class="setting-desc">Receive an email when someone comments on your documents.</span>
+      </div>
+      <button type="button" class="switch" role="switch" aria-checked="false" aria-label="Email notifications"><span class="knob" aria-hidden="true"></span></button>
+    </div>
+    <div class="setting">
+      <div class="setting-text">
+        <span class="setting-label">Public access</span>
+        <span class="setting-desc">This setting is managed by your workspace administrator.</span>
+      </div>
+      <button type="button" class="switch" role="switch" aria-checked="true" aria-label="Public access" disabled><span class="knob" aria-hidden="true"></span></button>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="toggle"]');
+      var switches = root.querySelectorAll('.switch:not([disabled])');
+      Array.prototype.forEach.call(switches, function (sw) {
+        sw.addEventListener('click', function () {
+          var on = sw.getAttribute('aria-checked') === 'true';
+          sw.setAttribute('aria-checked', on ? 'false' : 'true');
+        });
+      });
+    })();
+  </script>
+</section>
+      <figcaption>Click the first switch to toggle it; the second is disabled and cannot be operated.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>Wireframe</h2>
+    <p>A wireframe shows layout structure without interaction. The drawing below is a three-pane list-detail screen; the highlighted block is the selected item under discussion:</p>
+    <figure class="demo">
+<section data-demo="wireframe">
+  <style>
+    [data-demo="wireframe"] { margin: 0; }
+    [data-demo="wireframe"] .wf-canvas { display: block; width: 100%; height: auto; }
+    [data-demo="wireframe"] .wf-frame { fill: var(--surface); stroke: var(--border); }
+    [data-demo="wireframe"] .wf-block { fill: var(--sand); }
+    [data-demo="wireframe"] .wf-line { fill: var(--border); }
+    [data-demo="wireframe"] .wf-line-soft { fill: var(--border-soft); }
+    [data-demo="wireframe"] .wf-text { fill: var(--ink-2); }
+    [data-demo="wireframe"] .wf-label {
+      fill: var(--ink-3);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.4px;
+    }
+    [data-demo="wireframe"] .wf-accent { fill: var(--accent-tint); stroke: var(--accent-tint-3); }
+  </style>
+  <svg class="wf-canvas" viewBox="0 0 600 340" role="img" aria-label="Wireframe: list-detail layout with a sidebar, a list pane, and a detail pane">
+    <rect class="wf-frame" x="1" y="1" width="598" height="338" rx="8"/>
+    <rect class="wf-block" x="1" y="1" width="598" height="36" rx="8"/>
+    <rect class="wf-block" x="1" y="25" width="598" height="12"/>
+    <rect class="wf-line" x="16" y="15" width="72" height="8" rx="4"/>
+    <rect class="wf-line" x="512" y="14" width="72" height="10" rx="5"/>
+    <rect class="wf-line-soft" x="16" y="57" width="120" height="10" rx="5"/>
+    <rect class="wf-block" x="16" y="83" width="120" height="44" rx="6"/>
+    <rect class="wf-block" x="16" y="139" width="120" height="44" rx="6"/>
+    <rect class="wf-block" x="16" y="195" width="120" height="44" rx="6"/>
+    <rect class="wf-line-soft" x="160" y="57" width="160" height="10" rx="5"/>
+    <rect class="wf-accent" x="160" y="83" width="184" height="52" rx="6"/>
+    <rect class="wf-block" x="160" y="147" width="184" height="52" rx="6"/>
+    <rect class="wf-block" x="160" y="211" width="184" height="52" rx="6"/>
+    <rect class="wf-block" x="160" y="275" width="184" height="52" rx="6"/>
+    <rect class="wf-line-soft" x="368" y="57" width="200" height="10" rx="5"/>
+    <rect class="wf-text" x="368" y="87" width="140" height="12" rx="6"/>
+    <rect class="wf-line" x="368" y="115" width="200" height="7" rx="3.5"/>
+    <rect class="wf-line" x="368" y="130" width="200" height="7" rx="3.5"/>
+    <rect class="wf-line" x="368" y="145" width="152" height="7" rx="3.5"/>
+    <rect class="wf-block" x="368" y="177" width="200" height="96" rx="6"/>
+    <rect class="wf-accent" x="368" y="293" width="96" height="28" rx="6"/>
+    <text class="wf-label" x="16" y="330">SIDEBAR</text>
+    <text class="wf-label" x="160" y="330">LIST</text>
+    <text class="wf-label" x="368" y="330">DETAIL</text>
+  </svg>
+</section>
+      <figcaption>A wireframe states structure only: bars stand in for text, blocks for content, and one drawing has at most one highlight.</figcaption>
+    </figure>
+  </section>
+</main>
+
+<footer>
+Generated with Hue.
+</footer>
+
+</div>
+</body>
+</html>

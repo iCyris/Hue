@@ -1,0 +1,85 @@
+<section data-demo="slider">
+  <style>
+    [data-demo="slider"] { margin: 0; }
+    [data-demo="slider"] .label {
+      display: block; margin-bottom: var(--s3);
+      font-size: 13.5px; font-weight: 500; line-height: 1.4; color: var(--ink);
+    }
+    [data-demo="slider"] .control {
+      display: flex; align-items: center; gap: var(--s4);
+    }
+    [data-demo="slider"] .range-wrap {
+      display: block; position: relative; flex: 1; height: 20px;
+    }
+    [data-demo="slider"] .track {
+      position: absolute; left: 0; right: 0; top: 50%;
+      transform: translateY(-50%);
+      height: var(--s1); border-radius: var(--r1);
+      background: var(--border); pointer-events: none;
+    }
+    [data-demo="slider"] .fill {
+      position: absolute; left: 0; top: 50%; width: 0;
+      transform: translateY(-50%);
+      height: var(--s1); border-radius: var(--r1);
+      background: var(--accent); pointer-events: none;
+    }
+    [data-demo="slider"] input[type="range"] {
+      -webkit-appearance: none; appearance: none;
+      display: block; position: relative;
+      width: 100%; height: 20px; margin: 0; padding: 0;
+      background: transparent; cursor: pointer;
+    }
+    [data-demo="slider"] input[type="range"]::-webkit-slider-runnable-track {
+      -webkit-appearance: none;
+      height: 20px; background: transparent; border: 0;
+    }
+    [data-demo="slider"] input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px; height: 20px; margin-top: 0; border: 0; border-radius: 50%;
+      background: var(--surface);
+      box-shadow: 0 0 0 1px var(--border), 0 1px 2px rgba(27, 27, 24, .04), 0 4px 24px rgba(27, 27, 24, .05);
+    }
+    [data-demo="slider"] input[type="range"]::-moz-range-track {
+      height: 20px; background: transparent; border: 0;
+    }
+    [data-demo="slider"] input[type="range"]::-moz-range-thumb {
+      width: 20px; height: 20px; border: 0; border-radius: 50%;
+      background: var(--surface);
+      box-shadow: 0 0 0 1px var(--border), 0 1px 2px rgba(27, 27, 24, .04), 0 4px 24px rgba(27, 27, 24, .05);
+    }
+    [data-demo="slider"] .readout {
+      flex: none; min-width: 64px; text-align: right;
+      font-size: 15px; line-height: 1.5; color: var(--ink);
+      font-variant-numeric: tabular-nums;
+    }
+  </style>
+  <div class="stage">
+    <span class="label">Retention period</span>
+    <div class="control">
+      <span class="range-wrap">
+        <span class="track" aria-hidden="true"></span>
+        <span class="fill" aria-hidden="true"></span>
+        <input type="range" min="1" max="90" step="1" value="30" aria-label="Retention period in days">
+      </span>
+      <span class="readout">30 days</span>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="slider"]');
+      var input = root.querySelector('input[type="range"]');
+      var fill = root.querySelector('.fill');
+      var readout = root.querySelector('.readout');
+      function render() {
+        var min = Number(input.min);
+        var max = Number(input.max);
+        var v = Number(input.value);
+        var pct = Math.round(((v - min) / (max - min)) * 10000) / 100;
+        fill.style.width = 'calc(' + pct + '% + ' + (10 - pct * 0.2) + 'px)';
+        readout.textContent = v + (v === 1 ? ' day' : ' days');
+      }
+      input.addEventListener('input', render);
+      render();
+    })();
+  </script>
+</section>

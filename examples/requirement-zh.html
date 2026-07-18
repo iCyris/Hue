@@ -1,0 +1,732 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>订单页增加物流实时跟踪</title>
+<style>
+:root {
+  --paper: #F7F5EE;
+  --surface: #FDFCF9;
+  --sand: #EFEDE3;
+  --ink: #1B1B18;
+  --ink-2: #4B4A44;
+  --ink-3: #76756E;
+  --border: #E8E5DA;
+  --border-soft: #EEECE2;
+  --accent: #4E5FA0;
+  --accent-strong: #3D4C85;
+  --accent-tint: #ECEFF7;
+  --accent-tint-2: #DFE4F2;
+  --accent-tint-3: #C9D1E9;
+  --danger: #A5483D;
+  --danger-tint: #F6E9E6;
+
+  --serif: Charter, "Bitstream Charter", Georgia, "TsangerJinKai02",
+           "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
+  --mono: "JetBrains Mono", "SF Mono", Consolas, "TsangerJinKai02",
+          "Source Han Serif SC", monospace;
+
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 40px; --s7: 64px;
+  --r1: 6px; --r2: 8px; --r3: 12px;
+
+  --dur-1: 120ms; --dur-2: 200ms; --dur-3: 320ms;
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --ease-spring: cubic-bezier(.5, 1.6, .4, 1);
+}
+html[lang^="zh"] {
+  --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC",
+           "Songti SC", Georgia, serif;
+}
+
+* { box-sizing: border-box; }
+html { font-synthesis: none; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+html[lang^="zh"] body { letter-spacing: 0.35px; }
+
+.page { max-width: 960px; margin: 0 auto; padding: var(--s7) var(--s5); }
+main, header { max-width: 680px; margin-left: auto; margin-right: auto; }
+
+strong { font-weight: 500; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--accent-strong); text-decoration: underline; }
+a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px;
+}
+
+/* Header */
+.eyebrow {
+  display: flex; align-items: center; gap: var(--s3);
+  font-size: 12.5px; line-height: 1.4; color: var(--ink-3);
+  margin-bottom: var(--s4);
+}
+.doc-title {
+  font-size: 34px; line-height: 1.15; font-weight: 500;
+  margin: 0 0 var(--s4);
+}
+html[lang="en"] .doc-title { letter-spacing: -0.3px; }
+.lead { font-size: 17px; line-height: 1.65; color: var(--ink-2); margin: 0 0 var(--s5); }
+header { padding-bottom: var(--s6); border-bottom: 1px solid var(--border); margin-bottom: var(--s6); }
+
+.tag {
+  display: inline-block;
+  font-size: 12.5px; font-weight: 500; line-height: 1.4;
+  color: var(--accent); background: var(--accent-tint);
+  border-radius: var(--r1); padding: 2px var(--s2);
+  white-space: nowrap;
+}
+
+/* Meta line */
+.meta {
+  display: flex; flex-wrap: wrap; gap: var(--s2) var(--s5);
+  font-size: 12.5px; line-height: 1.5;
+  margin-top: var(--s4);
+  font-variant-numeric: tabular-nums;
+}
+.meta-field { white-space: nowrap; }
+.meta-key { color: var(--ink-3); margin-right: var(--s2); }
+.meta-val { color: var(--ink); }
+
+/* Sections */
+section { margin-top: var(--s6); }
+h2 {
+  font-size: 20px; line-height: 1.3; font-weight: 500;
+  margin: 0 0 var(--s4);
+  border-left: 2.5px solid var(--accent); padding-left: 10px;
+}
+h3 { font-size: 17px; line-height: 1.35; font-weight: 500; margin: var(--s5) 0 var(--s3); }
+p { margin: 0 0 var(--s4); }
+ul, ol { margin: 0 0 var(--s4); padding-left: var(--s5); }
+li { margin-bottom: var(--s1); }
+li::marker { color: var(--ink-3); }
+blockquote {
+  margin: 0 0 var(--s4); padding-left: var(--s4);
+  border-left: 2px solid var(--border); color: var(--ink-2);
+}
+hr { border: 0; border-top: 1px solid var(--border); margin: var(--s6) 0; }
+
+/* Callouts */
+.callout {
+  background: var(--sand); border-radius: var(--r2);
+  padding: var(--s3) var(--s4); margin: 0 0 var(--s4);
+}
+.callout--warn { background: var(--danger-tint); }
+.callout-title { font-weight: 500; margin: 0 0 var(--s1); }
+.callout--warn .callout-title { color: var(--danger); }
+.callout p:last-child { margin-bottom: 0; }
+
+/* Tables */
+.table {
+  width: 100%; border-collapse: collapse;
+  font-size: 15px; line-height: 1.5;
+  margin: 0 0 var(--s4);
+  font-variant-numeric: tabular-nums;
+}
+.table th {
+  font-size: 12.5px; font-weight: 500; color: var(--ink-3);
+  text-align: left; padding: var(--s2) var(--s3);
+  border-bottom: 1px solid var(--border);
+}
+.table td { padding: var(--s2) var(--s3); border-bottom: 1px solid var(--border-soft); }
+.table tr:last-child td { border-bottom: 0; }
+
+/* Code */
+code {
+  font-family: var(--mono); font-size: 0.92em;
+  background: var(--sand); border-radius: var(--s1); padding: 1px 5px;
+}
+pre {
+  font-family: var(--mono); font-size: 13px; line-height: 1.6;
+  background: var(--surface); box-shadow: 0 0 0 1px var(--border);
+  border-radius: var(--r2); padding: var(--s4);
+  overflow-x: auto; margin: 0 0 var(--s4);
+}
+pre code { background: none; padding: 0; border-radius: 0; }
+
+/* Demo stage */
+figure.demo {
+  margin: 0 0 var(--s4);
+  background: var(--surface);
+  box-shadow: 0 0 0 1px var(--border);
+  border-radius: var(--r3);
+  padding: var(--s5);
+}
+figure.demo figcaption {
+  margin-top: var(--s3);
+  font-size: 12.5px; line-height: 1.5; color: var(--ink-3);
+}
+
+/* Footer */
+footer {
+  max-width: 680px; margin: var(--s7) auto 0;
+  padding-top: var(--s4); border-top: 1px solid var(--border);
+  font-size: 12.5px; color: var(--ink-3);
+}
+footer a {
+  color: inherit; text-decoration: underline;
+  text-decoration-color: transparent;
+  cursor: pointer;
+  transition: color var(--dur-2), text-decoration-color var(--dur-2);
+}
+footer a:hover { color: var(--ink-2); text-decoration-color: currentColor; }
+
+@media (max-width: 720px) {
+  .page { padding: var(--s6) var(--s4); }
+  .doc-title { font-size: 26px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <div class="eyebrow">
+    <span class="tag">需求文档</span>
+    <span>订单详情页</span>
+  </div>
+  <h1 class="doc-title">订单页增加物流实时跟踪</h1>
+  <p class="lead">本文档描述在订单详情页增加物流实时跟踪的需求。目前用户在订单页只能看到运单号，查物流要自行去第三方平台；上线后，物流状态与流转节点直接展示在订单页内。</p>
+  <div class="meta">
+    <span class="meta-field"><span class="meta-key">状态</span><span class="meta-val">草稿</span></span>
+    <span class="meta-field"><span class="meta-key">版本</span><span class="meta-val">0.1</span></span>
+  </div>
+</header>
+
+<main>
+  <section>
+    <h2>背景与目标</h2>
+    <p>订单详情页目前只展示运单号。用户想知道包裹到哪里时，需要复制运单号，打开承运方网站或第三方查询平台，粘贴查询，再返回订单页。</p>
+    <p>本需求的目标：用户在订单详情页直接看到物流当前状态、最新动态和关键节点，不再依赖站外查询。</p>
+  </section>
+
+  <section>
+    <h2>范围</h2>
+    <ul>
+      <li>包含：订单详情页新增物流模块，含状态摘要、关键节点进度、完整时间线入口和运单号复制。</li>
+      <li>不包含：物流状态的消息推送、承运方选择、运费相关逻辑。</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>功能描述</h2>
+    <p>物流模块位于订单详情页的商品信息下方，仅当订单已发货时展示。模块内容从上到下依次是：</p>
+    <ul>
+      <li>当前物流状态和最新一条动态，含动态的摘要与时间；</li>
+      <li>关键节点步骤条，展示已揽收、运输中、已签收三个节点的完成情况；</li>
+      <li>运单号，右侧带复制按钮。</li>
+    </ul>
+    <p>步骤条中，当前节点高亮描边，已完成节点填充为蓝色并显示对勾。点击下面演示中的「下一步」可以模拟节点推进。</p>
+    <figure class="demo">
+<section data-demo="stepper">
+  <style>
+    [data-demo="stepper"] { margin-top: 0; }
+    [data-demo="stepper"] [hidden] { display: none !important; }
+    [data-demo="stepper"] .steps {
+      display: flex;
+      align-items: center;
+      gap: var(--s2);
+      max-width: 240px;
+      margin: 0 auto;
+    }
+    [data-demo="stepper"] .step {
+      flex: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: var(--s5);
+      height: var(--s5);
+      border-radius: var(--r3);
+      background: var(--surface);
+      box-shadow: 0 0 0 1px var(--border);
+      color: var(--ink-3);
+      font-size: 12.5px;
+      font-weight: 500;
+      line-height: 1.05;
+      font-variant-numeric: tabular-nums;
+    }
+    [data-demo="stepper"] .step.is-current {
+      box-shadow: 0 0 0 1px var(--accent);
+      color: var(--accent);
+    }
+    [data-demo="stepper"] .step.is-done {
+      background: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent);
+      color: var(--surface);
+    }
+    [data-demo="stepper"] .num { display: block; }
+    [data-demo="stepper"] .check {
+      display: none;
+      width: 9px;
+      height: 5px;
+      border-left: 1.5px solid currentColor;
+      border-bottom: 1.5px solid currentColor;
+      transform: rotate(-45deg) translateY(-1px);
+    }
+    [data-demo="stepper"] .step.is-done .num { display: none; }
+    [data-demo="stepper"] .step.is-done .check { display: block; }
+    [data-demo="stepper"] .line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    [data-demo="stepper"] .panel { margin-top: var(--s5); }
+    [data-demo="stepper"] .status-count {
+      margin: 0 0 var(--s1);
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--ink-3);
+      font-variant-numeric: tabular-nums;
+    }
+    [data-demo="stepper"] .status-name {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.5;
+      color: var(--ink);
+    }
+    [data-demo="stepper"] .actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: var(--s5);
+    }
+    [data-demo="stepper"] .btn {
+      height: 32px;
+      padding: 0 var(--s3);
+      border: 0;
+      border-radius: var(--r1);
+      background: none;
+      cursor: pointer;
+      font-family: var(--serif);
+      font-size: 13.5px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+    [data-demo="stepper"] .next {
+      background: var(--accent);
+      color: var(--surface);
+    }
+    [data-demo="stepper"] .next:hover { background: var(--accent-strong); }
+    [data-demo="stepper"] .back {
+      background: transparent;
+      box-shadow: inset 0 0 0 1px var(--border);
+      color: var(--ink);
+    }
+    [data-demo="stepper"] .back:hover:not(:disabled) { background: var(--sand); }
+    [data-demo="stepper"] .back:disabled { opacity: 0.45; cursor: default; }
+    [data-demo="stepper"] .done {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: var(--s5);
+    }
+    [data-demo="stepper"] .done-text {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--ink-3);
+    }
+    [data-demo="stepper"] .restart { color: var(--accent); }
+    [data-demo="stepper"] .restart:hover {
+      color: var(--accent-strong);
+      text-decoration: underline;
+    }
+  </style>
+  <div class="stage">
+    <div class="steps" aria-hidden="true">
+      <span class="step is-current"><span class="num">1</span><span class="check"></span></span>
+      <span class="line"></span>
+      <span class="step"><span class="num">2</span><span class="check"></span></span>
+      <span class="line"></span>
+      <span class="step"><span class="num">3</span><span class="check"></span></span>
+    </div>
+    <div class="panel">
+      <p class="status-count">第 1 步，共 3 步</p>
+      <p class="status-name">已揽收</p>
+    </div>
+    <div class="actions">
+      <button class="btn back" type="button" disabled>上一步</button>
+      <button class="btn next" type="button">下一步</button>
+    </div>
+    <div class="done" hidden>
+      <p class="done-text">全部节点已完成。</p>
+      <button class="btn restart" type="button">重新演示</button>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="stepper"]');
+      var steps = Array.prototype.slice.call(root.querySelectorAll('.step'));
+      var count = root.querySelector('.status-count');
+      var name = root.querySelector('.status-name');
+      var panel = root.querySelector('.panel');
+      var actions = root.querySelector('.actions');
+      var done = root.querySelector('.done');
+      var back = root.querySelector('.back');
+      var next = root.querySelector('.next');
+      var restart = root.querySelector('.restart');
+      var names = ['已揽收', '运输中', '已签收'];
+      var current = 0;
+
+      function render() {
+        steps.forEach(function (step, i) {
+          step.classList.toggle('is-done', i < current);
+          step.classList.toggle('is-current', i === current);
+        });
+        count.textContent = '第 ' + (current + 1) + ' 步，共 ' + steps.length + ' 步';
+        name.textContent = names[current];
+        back.disabled = current === 0;
+        next.textContent = current === steps.length - 1 ? '完成' : '下一步';
+      }
+
+      next.addEventListener('click', function () {
+        if (current < steps.length - 1) {
+          current += 1;
+          render();
+          return;
+        }
+        steps.forEach(function (step) {
+          step.classList.add('is-done');
+          step.classList.remove('is-current');
+        });
+        panel.hidden = true;
+        actions.hidden = true;
+        done.hidden = false;
+        restart.focus();
+      });
+
+      back.addEventListener('click', function () {
+        if (current > 0) {
+          current -= 1;
+          render();
+        }
+      });
+
+      restart.addEventListener('click', function () {
+        current = 0;
+        done.hidden = true;
+        panel.hidden = false;
+        actions.hidden = false;
+        render();
+        next.focus();
+      });
+
+      render();
+    })();
+  </script>
+</section>
+      <figcaption>点击「下一步」推进节点，观察当前节点高亮与已完成节点的对勾样式。</figcaption>
+    </figure>
+    <p>当前状态共四种取值，含义如下。步骤条只取其中已揽收、运输中、已签收三个关键节点。</p>
+    <table class="table">
+      <tr><th>状态</th><th>含义</th></tr>
+      <tr><td>已揽收</td><td>承运方已取件，包裹尚未离开始发网点</td></tr>
+      <tr><td>运输中</td><td>包裹在始发地与目的地之间流转</td></tr>
+      <tr><td>派送中</td><td>包裹已到达目的城市，正在派送</td></tr>
+      <tr><td>已签收</td><td>收件人已完成签收</td></tr>
+    </table>
+    <p>进入订单详情页时请求一次物流数据；页面停留期间每 60 秒自动刷新一次，刷新不阻塞页面操作。</p>
+    <div class="callout">
+      <p class="callout-title">决定：轮询刷新</p>
+      <p>物流状态通过每 60 秒轮询更新，不使用长连接。物流节点变化以分钟计，轮询带来的延迟可以接受。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>交互细节</h2>
+    <p>物流数据返回前，模块区域显示骨架占位：一个圆形位、两行文字位和一块内容位。数据返回后，占位原地替换为真实内容，页面其他元素位置不变。</p>
+    <figure class="demo">
+<section data-demo="skeleton">
+  <style>
+    [data-demo="skeleton"] { margin: 0; }
+
+    [data-demo="skeleton"] .card {
+      display: grid;
+      padding: var(--s4);
+      border-radius: var(--r2);
+      box-shadow: 0 0 0 1px var(--border);
+    }
+    [data-demo="skeleton"] .view {
+      grid-area: 1 / 1;
+      min-width: 0;
+      transition: opacity var(--dur-2) var(--ease-out);
+    }
+    [data-demo="skeleton"] .view-real { opacity: 0; pointer-events: none; }
+    [data-demo="skeleton"] .card.is-loaded .view-skel { opacity: 0; pointer-events: none; }
+    [data-demo="skeleton"] .card.is-loaded .view-real { opacity: 1; pointer-events: auto; }
+
+    [data-demo="skeleton"] .row { display: flex; align-items: center; gap: var(--s3); }
+    [data-demo="skeleton"] .lines {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--s2);
+    }
+
+    [data-demo="skeleton"] .ph {
+      position: relative;
+      overflow: hidden;
+      background: var(--sand);
+    }
+    [data-demo="skeleton"] .ph::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      transform: translateX(-100%);
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .55) 50%, rgba(255, 255, 255, 0) 100%);
+      animation: skeleton-sweep 1.4s linear infinite;
+    }
+    @keyframes skeleton-sweep {
+      to { transform: translateX(100%); }
+    }
+
+    [data-demo="skeleton"] .avatar { flex: none; width: var(--s6); height: var(--s6); border-radius: 50%; }
+    [data-demo="skeleton"] .line { height: var(--s3); border-radius: var(--r1); }
+    [data-demo="skeleton"] .line-a { width: 55%; }
+    [data-demo="skeleton"] .line-b { width: 35%; }
+    [data-demo="skeleton"] .media { margin-top: var(--s4); aspect-ratio: 16 / 9; border-radius: var(--r2); }
+
+    [data-demo="skeleton"] .avatar-real {
+      flex: none;
+      width: var(--s6);
+      height: var(--s6);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-tint);
+      color: var(--accent);
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1;
+    }
+    [data-demo="skeleton"] .name { margin: 0; font-size: 15px; font-weight: 500; line-height: 1.4; color: var(--ink); }
+    [data-demo="skeleton"] .meta { margin: 0; font-size: 12.5px; line-height: 1.5; color: var(--ink-3); }
+    [data-demo="skeleton"] .media-real { margin-top: var(--s4); aspect-ratio: 16 / 9; border-radius: var(--r2); background: var(--accent-tint); }
+
+    [data-demo="skeleton"] .controls { margin-top: var(--s4); }
+    [data-demo="skeleton"] .btn {
+      appearance: none;
+      margin: 0;
+      height: 32px;
+      padding: 0 var(--s3);
+      border: 0;
+      border-radius: var(--r1);
+      background: transparent;
+      box-shadow: 0 0 0 1px var(--border);
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: 13.5px;
+      font-weight: 500;
+      line-height: 1.4;
+      cursor: pointer;
+      transition: background var(--dur-1) var(--ease-out), transform var(--dur-1) var(--ease-out);
+    }
+    [data-demo="skeleton"] .btn:hover { background: var(--sand); }
+    [data-demo="skeleton"] .btn:active { transform: translateY(1px); }
+  </style>
+  <div class="stage">
+    <div class="card" aria-live="polite">
+      <div class="view view-skel" aria-hidden="false">
+        <div class="row">
+          <div class="ph avatar"></div>
+          <div class="lines">
+            <div class="ph line line-a"></div>
+            <div class="ph line line-b"></div>
+          </div>
+        </div>
+        <div class="ph media"></div>
+      </div>
+      <div class="view view-real" aria-hidden="true">
+        <div class="row">
+          <div class="avatar-real">物</div>
+          <div class="lines">
+            <p class="name">物流详情</p>
+            <p class="meta">运输中 · 2 分钟前更新</p>
+          </div>
+        </div>
+        <div class="media-real"></div>
+      </div>
+    </div>
+    <div class="controls">
+      <button type="button" class="btn" aria-pressed="false">切换加载状态</button>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="skeleton"]');
+      var card = root.querySelector('.card');
+      var skel = root.querySelector('.view-skel');
+      var real = root.querySelector('.view-real');
+      var btn = root.querySelector('.btn');
+      btn.addEventListener('click', function () {
+        var loaded = card.classList.toggle('is-loaded');
+        btn.setAttribute('aria-pressed', loaded ? 'true' : 'false');
+        skel.setAttribute('aria-hidden', loaded ? 'true' : 'false');
+        real.setAttribute('aria-hidden', loaded ? 'false' : 'true');
+      });
+    })();
+  </script>
+</section>
+      <figcaption>点击「切换加载状态」，对比骨架占位与真实内容的原地替换过程。</figcaption>
+    </figure>
+    <p>点击复制按钮后，运单号写入剪贴板，页面底部居中弹出提示条「运单号已复制」，约 2.4 秒后自动消失。连续触发时最多同时存在 3 条提示，新提示替换最早的一条。复制失败（如剪贴板权限被拒绝）时，提示条以红点标识，文案为「复制失败，请重试」。</p>
+    <figure class="demo">
+<section data-demo="toast">
+  <style>
+    [data-demo="toast"] { margin: 0; position: relative; }
+    [data-demo="toast"] .stage {
+      min-height: 200px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: var(--s3);
+    }
+    [data-demo="toast"] .show-success,
+    [data-demo="toast"] .show-error {
+      height: 32px;
+      padding: 0 var(--s3);
+      font-family: var(--serif);
+      font-size: 13.5px; font-weight: 500;
+      border: 0;
+      border-radius: var(--r1);
+      cursor: pointer;
+    }
+    [data-demo="toast"] .show-success {
+      color: var(--surface);
+      background: var(--accent);
+    }
+    [data-demo="toast"] .show-success:hover { background: var(--accent-strong); }
+    [data-demo="toast"] .show-error {
+      color: var(--danger);
+      background: transparent;
+      box-shadow: 0 0 0 1px var(--border);
+    }
+    [data-demo="toast"] .show-error:hover { background: var(--danger-tint); }
+    [data-demo="toast"] .toasts {
+      position: absolute;
+      left: 50%;
+      bottom: var(--s4);
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: center;
+      gap: var(--s2);
+      max-width: 100%;
+      pointer-events: none;
+    }
+    [data-demo="toast"] .toast {
+      max-width: 100%;
+      padding: var(--s2) var(--s3);
+      display: flex;
+      align-items: center;
+      gap: var(--s2);
+      font-size: 12.5px; line-height: 1.5;
+      color: var(--paper);
+      background: var(--ink);
+      border-radius: var(--r1);
+      white-space: nowrap;
+      animation: toast-in var(--dur-2) var(--ease-out);
+    }
+    [data-demo="toast"] .toast.is-error::before {
+      content: "";
+      flex: none;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--danger);
+    }
+    [data-demo="toast"] .toast.is-leaving {
+      animation: toast-out var(--dur-2) var(--ease-out) forwards;
+    }
+    @keyframes toast-in {
+      from { opacity: 0; transform: translateY(8px); }
+    }
+    @keyframes toast-out {
+      to { opacity: 0; }
+    }
+  </style>
+  <div class="stage">
+    <button class="show-success" type="button">复制运单号</button>
+    <button class="show-error" type="button">模拟复制失败</button>
+    <div class="toasts"></div>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="toast"]');
+      var toasts = root.querySelector('.toasts');
+      var showSuccess = root.querySelector('.show-success');
+      var showError = root.querySelector('.show-error');
+      var MAX_TOASTS = 3;
+      var LIFETIME = 2400;
+
+      function spawn(kind) {
+        while (toasts.children.length >= MAX_TOASTS) {
+          toasts.removeChild(toasts.firstChild);
+        }
+        var toast = document.createElement('div');
+        toast.className = kind === 'error' ? 'toast is-error' : 'toast';
+        toast.setAttribute('role', 'status');
+        toast.textContent = kind === 'error' ? '复制失败，请重试' : '运单号已复制';
+        toasts.appendChild(toast);
+        setTimeout(function () {
+          toast.classList.add('is-leaving');
+        }, LIFETIME);
+        setTimeout(function () {
+          if (toast.parentNode) { toast.parentNode.removeChild(toast); }
+        }, LIFETIME + 220);
+      }
+
+      showSuccess.addEventListener('click', function () { spawn('success'); });
+      showError.addEventListener('click', function () { spawn('error'); });
+    })();
+  </script>
+</section>
+      <figcaption>分别点击两个按钮，观察提示条的出现、堆叠上限与自动消失。</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>边界与异常</h2>
+    <ul>
+      <li>未发货的订单不展示物流模块。</li>
+      <li>承运方暂未回传数据时，模块显示「暂无物流信息」，不显示骨架占位与步骤条。</li>
+      <li>物流请求失败时，模块内显示错误文案和「重试」按钮，订单页其他内容不受影响。</li>
+      <li>请求超过 10 秒未返回按失败处理。</li>
+      <li>单条动态文案超过两行时截断显示，完整内容在完整时间线中查看。</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>验收标准</h2>
+    <ul>
+      <li>已发货订单打开详情页，物流模块展示当前状态、最新一条动态和关键节点步骤条。</li>
+      <li>未发货订单打开详情页，页面不出现物流模块。</li>
+      <li>物流数据返回前显示骨架占位，返回后原地替换为真实内容，且页面其他元素位置不变。</li>
+      <li>点击复制按钮后，剪贴板内容与页面显示的运单号一致，页面底部出现成功提示。</li>
+      <li>成功提示无需用户操作即自动消失，停留时间不超过 3 秒。</li>
+      <li>连续复制 5 次，同时存在的提示条不超过 3 条。</li>
+      <li>物流请求失败时，模块显示错误文案和「重试」按钮，订单页其他内容正常展示。</li>
+    </ul>
+  </section>
+</main>
+
+<footer>
+  由 <a href="https://github.com/iCyris/Hue" target="_blank" rel="noopener noreferrer">Hue</a> 生成。
+</footer>
+
+</div>
+</body>
+</html>

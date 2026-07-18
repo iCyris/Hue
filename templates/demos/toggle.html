@@ -1,0 +1,70 @@
+<section data-demo="toggle">
+  <style>
+    [data-demo="toggle"] { margin: 0; }
+    [data-demo="toggle"] .setting {
+      display: flex; align-items: center; justify-content: space-between; gap: var(--s4);
+      padding: var(--s3) 0;
+    }
+    [data-demo="toggle"] .setting:first-child { padding-top: 0; }
+    [data-demo="toggle"] .setting:last-child { padding-bottom: 0; }
+    [data-demo="toggle"] .setting + .setting { border-top: 1px solid var(--border-soft); }
+    [data-demo="toggle"] .setting-text {
+      display: flex; flex-direction: column; gap: var(--s1);
+    }
+    [data-demo="toggle"] .setting-label {
+      font-size: 13.5px; font-weight: 500; line-height: 1.4; color: var(--ink);
+    }
+    [data-demo="toggle"] .setting-desc {
+      font-size: 12.5px; line-height: 1.5; color: var(--ink-3);
+    }
+    [data-demo="toggle"] .switch {
+      flex: none; position: relative;
+      width: 40px; height: 24px; padding: 0; border: 0;
+      border-radius: var(--r3); background: var(--sand);
+      box-shadow: 0 0 0 1px var(--border); cursor: pointer;
+      transition: opacity var(--dur-1) var(--ease-out);
+    }
+    [data-demo="toggle"] .knob {
+      position: absolute; top: var(--s1); left: var(--s1);
+      width: 16px; height: 16px; border-radius: 50%;
+      background: var(--surface);
+      box-shadow: 0 0 0 1px var(--border), 0 1px 2px rgba(27, 27, 24, .04), 0 4px 24px rgba(27, 27, 24, .05);
+      transition: transform var(--dur-2) var(--ease-out);
+    }
+    [data-demo="toggle"] .switch[aria-checked="true"] {
+      background: var(--accent); box-shadow: 0 0 0 1px var(--accent);
+    }
+    [data-demo="toggle"] .switch[aria-checked="true"] .knob { transform: translateX(16px); }
+    [data-demo="toggle"] .switch[disabled] {
+      opacity: .45; cursor: default; pointer-events: none;
+    }
+  </style>
+  <div class="stage">
+    <div class="setting">
+      <div class="setting-text">
+        <span class="setting-label">Email notifications</span>
+        <span class="setting-desc">Receive an email when someone comments on your documents.</span>
+      </div>
+      <button type="button" class="switch" role="switch" aria-checked="false" aria-label="Email notifications"><span class="knob" aria-hidden="true"></span></button>
+    </div>
+    <div class="setting">
+      <div class="setting-text">
+        <span class="setting-label">Public access</span>
+        <span class="setting-desc">This setting is managed by your workspace administrator.</span>
+      </div>
+      <button type="button" class="switch" role="switch" aria-checked="true" aria-label="Public access" disabled><span class="knob" aria-hidden="true"></span></button>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="toggle"]');
+      var switches = root.querySelectorAll('.switch:not([disabled])');
+      Array.prototype.forEach.call(switches, function (sw) {
+        sw.addEventListener('click', function () {
+          var on = sw.getAttribute('aria-checked') === 'true';
+          sw.setAttribute('aria-checked', on ? 'false' : 'true');
+        });
+      });
+    })();
+  </script>
+</section>

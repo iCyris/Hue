@@ -1,0 +1,95 @@
+<section data-demo="button-states">
+  <style>
+    [data-demo="button-states"] { margin: 0; }
+    [data-demo="button-states"] .stage {
+      display: flex; flex-direction: column; gap: var(--s4);
+    }
+    [data-demo="button-states"] .row {
+      display: flex; flex-wrap: wrap; align-items: center; gap: var(--s3);
+    }
+    [data-demo="button-states"] .row-label {
+      width: 100%;
+      font-size: 12.5px; line-height: 1.4; color: var(--ink-3);
+    }
+    [data-demo="button-states"] .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: var(--s2);
+      height: 32px; padding: 0 var(--s3);
+      font-family: var(--serif); font-size: 13.5px; font-weight: 500; line-height: 1;
+      border: 0; border-radius: var(--r1); cursor: pointer;
+      transition: transform var(--dur-1) var(--ease-out), opacity var(--dur-1) var(--ease-out);
+    }
+    [data-demo="button-states"] .btn--primary { background: var(--accent); color: var(--surface); }
+    [data-demo="button-states"] .btn--primary:hover:not([disabled]) { background: var(--accent-strong); }
+    [data-demo="button-states"] .btn--primary:active:not([disabled]) { transform: translateY(1px); }
+    [data-demo="button-states"] .btn--secondary {
+      background: transparent; color: var(--ink);
+      box-shadow: 0 0 0 1px var(--border);
+    }
+    [data-demo="button-states"] .btn--secondary:hover:not([disabled]) { background: var(--sand); }
+    [data-demo="button-states"] .btn--secondary:active:not([disabled]) { transform: translateY(1px); }
+    [data-demo="button-states"] .btn--danger { background: var(--danger); color: var(--surface); }
+    [data-demo="button-states"] .btn--danger:hover:not([disabled]) { opacity: .9; }
+    [data-demo="button-states"] .btn--danger:active:not([disabled]) { transform: translateY(1px); }
+    [data-demo="button-states"] .btn[disabled] { opacity: .45; cursor: default; }
+    [data-demo="button-states"] .spinner {
+      display: none; width: 12px; height: 12px; border-radius: 50%;
+      border: 2px solid rgba(253, 252, 249, .4); border-top-color: var(--surface);
+    }
+    [data-demo="button-states"] .btn-save.is-loading .spinner {
+      display: inline-block;
+      animation: button-states-spin calc(var(--dur-3) * 2) linear infinite;
+    }
+    [data-demo="button-states"] .btn-save.is-saved {
+      animation: button-states-flash var(--dur-3) var(--ease-out);
+    }
+    @keyframes button-states-spin { to { transform: rotate(360deg); } }
+    @keyframes button-states-flash { 0% { opacity: .55; } 100% { opacity: 1; } }
+  </style>
+  <div class="stage">
+    <div class="row">
+      <span class="row-label">Default, hover, and pressed</span>
+      <button type="button" class="btn btn--primary">Primary</button>
+      <button type="button" class="btn btn--secondary">Secondary</button>
+      <button type="button" class="btn btn--danger">Danger</button>
+    </div>
+    <div class="row">
+      <span class="row-label">Disabled</span>
+      <button type="button" class="btn btn--primary" disabled>Primary</button>
+      <button type="button" class="btn btn--secondary" disabled>Secondary</button>
+      <button type="button" class="btn btn--danger" disabled>Danger</button>
+    </div>
+    <div class="row">
+      <span class="row-label">Async submit, click Save to run it</span>
+      <button type="button" class="btn btn--primary btn-save">
+        <span class="spinner" aria-hidden="true"></span>
+        <span class="save-label">Save changes</span>
+      </button>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="button-states"]');
+      var btn = root.querySelector('.btn-save');
+      var label = root.querySelector('.save-label');
+      var busy = false;
+      btn.addEventListener('click', function () {
+        if (busy) { return; }
+        busy = true;
+        btn.classList.add('is-loading');
+        btn.setAttribute('aria-busy', 'true');
+        label.textContent = 'Saving…';
+        setTimeout(function () {
+          btn.classList.remove('is-loading');
+          btn.classList.add('is-saved');
+          label.textContent = 'Saved';
+          setTimeout(function () {
+            btn.classList.remove('is-saved');
+            btn.removeAttribute('aria-busy');
+            label.textContent = 'Save changes';
+            busy = false;
+          }, 900);
+        }, 1600);
+      });
+    })();
+  </script>
+</section>

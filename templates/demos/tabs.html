@@ -1,0 +1,105 @@
+<section data-demo="tabs">
+  <style>
+    [data-demo="tabs"] { margin-top: 0; }
+    [data-demo="tabs"] .bar {
+      position: relative;
+      display: flex;
+      border-bottom: 1px solid var(--border);
+    }
+    [data-demo="tabs"] .tab {
+      flex: 1 1 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 32px;
+      padding: 0 var(--s3);
+      border: 0;
+      background: none;
+      cursor: pointer;
+      font-family: var(--serif);
+      font-size: 13.5px;
+      font-weight: 500;
+      line-height: 1.4;
+      color: var(--ink-3);
+    }
+    [data-demo="tabs"] .tab:hover { color: var(--ink-2); }
+    [data-demo="tabs"] .tab.is-active { color: var(--ink); }
+    [data-demo="tabs"] .indicator {
+      position: absolute;
+      left: 0;
+      bottom: -1px;
+      width: calc(100% / 3);
+      height: 2px;
+      background: var(--accent);
+      transition: transform var(--dur-2) var(--ease-out);
+    }
+    [data-demo="tabs"] [hidden] { display: none; }
+    [data-demo="tabs"] .panel { padding-top: var(--s4); }
+    [data-demo="tabs"] .panel.is-active { animation: tabs-fade var(--dur-2) var(--ease-out); }
+    [data-demo="tabs"] .panel p {
+      margin: 0 0 var(--s3);
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--ink-2);
+    }
+    [data-demo="tabs"] .panel p:last-child { margin-bottom: 0; }
+    @keyframes tabs-fade {
+      from { opacity: 0; transform: translateY(2px); }
+      to { opacity: 1; transform: none; }
+    }
+  </style>
+  <div class="stage">
+    <div class="bar" role="tablist" aria-label="Views">
+      <button class="tab is-active" type="button" role="tab" aria-selected="true">Overview</button>
+      <button class="tab" type="button" role="tab" aria-selected="false" tabindex="-1">Spec</button>
+      <button class="tab" type="button" role="tab" aria-selected="false" tabindex="-1">Activity</button>
+      <span class="indicator" aria-hidden="true"></span>
+    </div>
+    <div class="panel is-active" role="tabpanel">
+      <p>This panel summarizes the requirement at a glance: scope, goal, and current status.</p>
+      <p>It is the first thing readers see, so keep it short.</p>
+    </div>
+    <div class="panel" role="tabpanel" hidden>
+      <p>The spec panel holds the detailed behavior rules, each one observable and testable.</p>
+      <p>Edge cases live here too, written as plainly as the happy path.</p>
+    </div>
+    <div class="panel" role="tabpanel" hidden>
+      <p>The activity panel lists recent changes and decisions, newest first.</p>
+      <p>Each entry names who changed what, and when.</p>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="tabs"]');
+      var tabs = Array.prototype.slice.call(root.querySelectorAll('.tab'));
+      var panels = Array.prototype.slice.call(root.querySelectorAll('.panel'));
+      var indicator = root.querySelector('.indicator');
+
+      function select(index, moveFocus) {
+        tabs.forEach(function (tab, i) {
+          var active = i === index;
+          tab.classList.toggle('is-active', active);
+          tab.setAttribute('aria-selected', active ? 'true' : 'false');
+          tab.tabIndex = active ? 0 : -1;
+          panels[i].classList.toggle('is-active', active);
+          panels[i].hidden = !active;
+        });
+        indicator.style.transform = 'translateX(' + index * 100 + '%)';
+        if (moveFocus) tabs[index].focus();
+      }
+
+      tabs.forEach(function (tab, i) {
+        tab.addEventListener('click', function () { select(i, false); });
+        tab.addEventListener('keydown', function (event) {
+          var next = null;
+          if (event.key === 'ArrowRight') next = (i + 1) % tabs.length;
+          if (event.key === 'ArrowLeft') next = (i + tabs.length - 1) % tabs.length;
+          if (next !== null) {
+            event.preventDefault();
+            select(next, true);
+          }
+        });
+      });
+    })();
+  </script>
+</section>

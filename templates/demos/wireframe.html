@@ -1,0 +1,44 @@
+<section data-demo="wireframe">
+  <style>
+    [data-demo="wireframe"] { margin: 0; }
+    [data-demo="wireframe"] .wf-canvas { display: block; width: 100%; height: auto; }
+    [data-demo="wireframe"] .wf-frame { fill: var(--surface); stroke: var(--border); }
+    [data-demo="wireframe"] .wf-block { fill: var(--sand); }
+    [data-demo="wireframe"] .wf-line { fill: var(--border); }
+    [data-demo="wireframe"] .wf-line-soft { fill: var(--border-soft); }
+    [data-demo="wireframe"] .wf-text { fill: var(--ink-2); }
+    [data-demo="wireframe"] .wf-label {
+      fill: var(--ink-3);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.4px;
+    }
+    [data-demo="wireframe"] .wf-accent { fill: var(--accent-tint); stroke: var(--accent-tint-3); }
+  </style>
+  <svg class="wf-canvas" viewBox="0 0 600 340" role="img" aria-label="Wireframe: list-detail layout with a sidebar, a list pane, and a detail pane">
+    <rect class="wf-frame" x="1" y="1" width="598" height="338" rx="8"/>
+    <rect class="wf-block" x="1" y="1" width="598" height="36" rx="8"/>
+    <rect class="wf-block" x="1" y="25" width="598" height="12"/>
+    <rect class="wf-line" x="16" y="15" width="72" height="8" rx="4"/>
+    <rect class="wf-line" x="512" y="14" width="72" height="10" rx="5"/>
+    <rect class="wf-line-soft" x="16" y="57" width="120" height="10" rx="5"/>
+    <rect class="wf-block" x="16" y="83" width="120" height="44" rx="6"/>
+    <rect class="wf-block" x="16" y="139" width="120" height="44" rx="6"/>
+    <rect class="wf-block" x="16" y="195" width="120" height="44" rx="6"/>
+    <rect class="wf-line-soft" x="160" y="57" width="160" height="10" rx="5"/>
+    <rect class="wf-accent" x="160" y="83" width="184" height="52" rx="6"/>
+    <rect class="wf-block" x="160" y="147" width="184" height="52" rx="6"/>
+    <rect class="wf-block" x="160" y="211" width="184" height="52" rx="6"/>
+    <rect class="wf-block" x="160" y="275" width="184" height="52" rx="6"/>
+    <rect class="wf-line-soft" x="368" y="57" width="200" height="10" rx="5"/>
+    <rect class="wf-text" x="368" y="87" width="140" height="12" rx="6"/>
+    <rect class="wf-line" x="368" y="115" width="200" height="7" rx="3.5"/>
+    <rect class="wf-line" x="368" y="130" width="200" height="7" rx="3.5"/>
+    <rect class="wf-line" x="368" y="145" width="152" height="7" rx="3.5"/>
+    <rect class="wf-block" x="368" y="177" width="200" height="96" rx="6"/>
+    <rect class="wf-accent" x="368" y="293" width="96" height="28" rx="6"/>
+    <text class="wf-label" x="16" y="330">SIDEBAR</text>
+    <text class="wf-label" x="160" y="330">LIST</text>
+    <text class="wf-label" x="368" y="330">DETAIL</text>
+  </svg>
+</section>

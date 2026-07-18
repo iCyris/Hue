@@ -1,0 +1,110 @@
+<section data-demo="toast">
+  <style>
+    [data-demo="toast"] { margin: 0; position: relative; }
+    [data-demo="toast"] .stage {
+      min-height: 200px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: var(--s3);
+    }
+    [data-demo="toast"] .show-success,
+    [data-demo="toast"] .show-error {
+      height: 32px;
+      padding: 0 var(--s3);
+      font-family: var(--serif);
+      font-size: 13.5px; font-weight: 500;
+      border: 0;
+      border-radius: var(--r1);
+      cursor: pointer;
+    }
+    [data-demo="toast"] .show-success {
+      color: var(--surface);
+      background: var(--accent);
+    }
+    [data-demo="toast"] .show-success:hover { background: var(--accent-strong); }
+    [data-demo="toast"] .show-error {
+      color: var(--danger);
+      background: transparent;
+      box-shadow: 0 0 0 1px var(--border);
+    }
+    [data-demo="toast"] .show-error:hover { background: var(--danger-tint); }
+    [data-demo="toast"] .toasts {
+      position: absolute;
+      left: 50%;
+      bottom: var(--s4);
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: center;
+      gap: var(--s2);
+      max-width: 100%;
+      pointer-events: none;
+    }
+    [data-demo="toast"] .toast {
+      max-width: 100%;
+      padding: var(--s2) var(--s3);
+      display: flex;
+      align-items: center;
+      gap: var(--s2);
+      font-size: 12.5px; line-height: 1.5;
+      color: var(--paper);
+      background: var(--ink);
+      border-radius: var(--r1);
+      white-space: nowrap;
+      animation: toast-in var(--dur-2) var(--ease-out);
+    }
+    [data-demo="toast"] .toast.is-error::before {
+      content: "";
+      flex: none;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--danger);
+    }
+    [data-demo="toast"] .toast.is-leaving {
+      animation: toast-out var(--dur-2) var(--ease-out) forwards;
+    }
+    @keyframes toast-in {
+      from { opacity: 0; transform: translateY(8px); }
+    }
+    @keyframes toast-out {
+      to { opacity: 0; }
+    }
+  </style>
+  <div class="stage">
+    <button class="show-success" type="button">Show success</button>
+    <button class="show-error" type="button">Show error</button>
+    <div class="toasts"></div>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="toast"]');
+      var toasts = root.querySelector('.toasts');
+      var showSuccess = root.querySelector('.show-success');
+      var showError = root.querySelector('.show-error');
+      var MAX_TOASTS = 3;
+      var LIFETIME = 2400;
+
+      function spawn(kind) {
+        while (toasts.children.length >= MAX_TOASTS) {
+          toasts.removeChild(toasts.firstChild);
+        }
+        var toast = document.createElement('div');
+        toast.className = kind === 'error' ? 'toast is-error' : 'toast';
+        toast.setAttribute('role', 'status');
+        toast.textContent = kind === 'error' ? 'Could not save changes' : 'Changes saved';
+        toasts.appendChild(toast);
+        setTimeout(function () {
+          toast.classList.add('is-leaving');
+        }, LIFETIME);
+        setTimeout(function () {
+          if (toast.parentNode) { toast.parentNode.removeChild(toast); }
+        }, LIFETIME + 220);
+      }
+
+      showSuccess.addEventListener('click', function () { spawn('success'); });
+      showError.addEventListener('click', function () { spawn('error'); });
+    })();
+  </script>
+</section>

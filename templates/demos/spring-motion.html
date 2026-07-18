@@ -1,0 +1,140 @@
+<section data-demo="spring-motion">
+  <style>
+    [data-demo="spring-motion"] { margin: 0; }
+
+    [data-demo="spring-motion"] .rows { display: flex; flex-direction: column; gap: var(--s1); }
+
+    [data-demo="spring-motion"] .row {
+      appearance: none;
+      margin: 0;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: var(--s4);
+      padding: var(--s2);
+      border: 0;
+      border-radius: var(--r1);
+      background: transparent;
+      font-family: var(--serif);
+      text-align: left;
+      cursor: pointer;
+      transition: background var(--dur-1) var(--ease-out);
+    }
+    [data-demo="spring-motion"] .row:hover { background: var(--sand); }
+
+    [data-demo="spring-motion"] .label {
+      flex: none;
+      width: 64px;
+      font-size: 13.5px;
+      font-weight: 500;
+      line-height: 1.4;
+      color: var(--ink-2);
+    }
+    [data-demo="spring-motion"] .lane {
+      position: relative;
+      flex: 1;
+      min-width: 0;
+      height: var(--s5);
+      display: flex;
+      align-items: center;
+    }
+    [data-demo="spring-motion"] .lane::after {
+      content: "";
+      position: absolute;
+      left: 160px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1px;
+      height: var(--s4);
+      background: var(--border);
+    }
+    [data-demo="spring-motion"] .box {
+      flex: none;
+      width: var(--s4);
+      height: var(--s4);
+      border-radius: var(--r1);
+      background: var(--accent);
+    }
+
+    [data-demo="spring-motion"] .controls { margin-top: var(--s4); }
+    [data-demo="spring-motion"] .play {
+      appearance: none;
+      margin: 0;
+      height: 32px;
+      padding: 0 var(--s3);
+      border: 0;
+      border-radius: var(--r1);
+      background: var(--accent);
+      color: var(--surface);
+      font-family: var(--serif);
+      font-size: 13.5px;
+      font-weight: 500;
+      line-height: 1.4;
+      cursor: pointer;
+      transition: background var(--dur-1) var(--ease-out), transform var(--dur-1) var(--ease-out);
+    }
+    [data-demo="spring-motion"] .play:hover { background: var(--accent-strong); }
+    [data-demo="spring-motion"] .play:active { transform: translateY(1px); }
+
+    [data-demo="spring-motion"] .note {
+      margin: var(--s3) 0 0;
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--ink-3);
+    }
+  </style>
+  <div class="stage">
+    <div class="rows">
+      <button type="button" class="row row-ease">
+        <span class="label">Ease-out</span>
+        <span class="lane"><span class="box"></span></span>
+      </button>
+      <button type="button" class="row row-spring">
+        <span class="label">Spring</span>
+        <span class="lane"><span class="box"></span></span>
+      </button>
+    </div>
+    <div class="controls">
+      <button type="button" class="play">Play</button>
+    </div>
+    <p class="note">Same distance, different feel.</p>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="spring-motion"]');
+      var play = root.querySelector('.play');
+      var rows = root.querySelectorAll('.row');
+
+      function token(name, fallback) {
+        var value = getComputedStyle(root).getPropertyValue(name).trim();
+        return value || fallback;
+      }
+
+      function animateAll() {
+        var duration = parseFloat(token('--dur-3', '320ms')) || 320;
+        rows.forEach(function (row) {
+          var box = row.querySelector('.box');
+          var easing = row.classList.contains('row-spring')
+            ? token('--ease-spring', 'cubic-bezier(.5, 1.6, .4, 1)')
+            : token('--ease-out', 'cubic-bezier(.22, 1, .36, 1)');
+          if (box.getAnimations) {
+            box.getAnimations().forEach(function (anim) { anim.cancel(); });
+          }
+          box.animate(
+            [
+              { transform: 'translateX(0px)', easing: easing },
+              { transform: 'translateX(160px)', easing: easing },
+              { transform: 'translateX(0px)' }
+            ],
+            { duration: duration * 2, easing: 'linear' }
+          );
+        });
+      }
+
+      play.addEventListener('click', animateAll);
+      rows.forEach(function (row) {
+        row.addEventListener('click', animateAll);
+      });
+    })();
+  </script>
+</section>

@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hue 语法形态全量测试</title>
+<style>
+:root {
+  --paper: #F7F5EE;
+  --surface: #FDFCF9;
+  --sand: #EFEDE3;
+  --ink: #1B1B18;
+  --ink-2: #4B4A44;
+  --ink-3: #76756E;
+  --border: #E8E5DA;
+  --border-soft: #EEECE2;
+  --accent: #4E5FA0;
+  --accent-strong: #3D4C85;
+  --accent-tint: #ECEFF7;
+  --accent-tint-2: #DFE4F2;
+  --accent-tint-3: #C9D1E9;
+  --danger: #A5483D;
+  --danger-tint: #F6E9E6;
+
+  --serif: Charter, "Bitstream Charter", Georgia, "TsangerJinKai02",
+           "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
+  --mono: "JetBrains Mono", "SF Mono", Consolas, "TsangerJinKai02",
+          "Source Han Serif SC", monospace;
+
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 40px; --s7: 64px;
+  --r1: 6px; --r2: 8px; --r3: 12px;
+
+  --dur-1: 120ms; --dur-2: 200ms; --dur-3: 320ms;
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --ease-spring: cubic-bezier(.5, 1.6, .4, 1);
+}
+html[lang^="zh"] {
+  --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC",
+           "Songti SC", Georgia, serif;
+}
+
+* { box-sizing: border-box; }
+html { font-synthesis: none; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+html[lang^="zh"] body { letter-spacing: 0.35px; }
+
+.page { max-width: 960px; margin: 0 auto; padding: var(--s7) var(--s5); }
+main, header { max-width: 680px; margin-left: auto; margin-right: auto; }
+
+strong { font-weight: 500; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--accent-strong); text-decoration: underline; }
+a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px;
+}
+
+/* Header */
+.eyebrow {
+  display: flex; align-items: center; gap: var(--s3);
+  font-size: 12.5px; line-height: 1.4; color: var(--ink-3);
+  margin-bottom: var(--s4);
+}
+.doc-title {
+  font-size: 34px; line-height: 1.15; font-weight: 500;
+  margin: 0 0 var(--s4);
+}
+html[lang="en"] .doc-title { letter-spacing: -0.3px; }
+.lead { font-size: 17px; line-height: 1.65; color: var(--ink-2); margin: 0 0 var(--s5); }
+header { padding-bottom: var(--s6); border-bottom: 1px solid var(--border); margin-bottom: var(--s6); }
+
+.tag {
+  display: inline-block;
+  font-size: 12.5px; font-weight: 500; line-height: 1.4;
+  color: var(--accent); background: var(--accent-tint);
+  border-radius: var(--r1); padding: 2px var(--s2);
+  white-space: nowrap;
+}
+
+/* Meta line */
+.meta {
+  display: flex; flex-wrap: wrap; gap: var(--s2) var(--s5);
+  font-size: 12.5px; line-height: 1.5;
+  margin-top: var(--s4);
+  font-variant-numeric: tabular-nums;
+}
+.meta-field { white-space: nowrap; }
+.meta-key { color: var(--ink-3); margin-right: var(--s2); }
+.meta-val { color: var(--ink); }
+
+/* Sections */
+section { margin-top: var(--s6); }
+h2 {
+  font-size: 20px; line-height: 1.3; font-weight: 500;
+  margin: 0 0 var(--s4);
+  border-left: 2.5px solid var(--accent); padding-left: 10px;
+}
+h3 { font-size: 17px; line-height: 1.35; font-weight: 500; margin: var(--s5) 0 var(--s3); }
+p { margin: 0 0 var(--s4); }
+ul, ol { margin: 0 0 var(--s4); padding-left: var(--s5); }
+li { margin-bottom: var(--s1); }
+li::marker { color: var(--ink-3); }
+blockquote {
+  margin: 0 0 var(--s4); padding-left: var(--s4);
+  border-left: 2px solid var(--border); color: var(--ink-2);
+}
+hr { border: 0; border-top: 1px solid var(--border); margin: var(--s6) 0; }
+
+/* Callouts */
+.callout {
+  background: var(--sand); border-radius: var(--r2);
+  padding: var(--s3) var(--s4); margin: 0 0 var(--s4);
+}
+.callout--warn { background: var(--danger-tint); }
+.callout-title { font-weight: 500; margin: 0 0 var(--s1); }
+.callout--warn .callout-title { color: var(--danger); }
+.callout p:last-child { margin-bottom: 0; }
+
+/* Tables */
+.table {
+  width: 100%; border-collapse: collapse;
+  font-size: 15px; line-height: 1.5;
+  margin: 0 0 var(--s4);
+  font-variant-numeric: tabular-nums;
+}
+.table th {
+  font-size: 12.5px; font-weight: 500; color: var(--ink-3);
+  text-align: left; padding: var(--s2) var(--s3);
+  border-bottom: 1px solid var(--border);
+}
+.table td { padding: var(--s2) var(--s3); border-bottom: 1px solid var(--border-soft); }
+.table tr:last-child td { border-bottom: 0; }
+
+/* Code */
+code {
+  font-family: var(--mono); font-size: 0.92em;
+  background: var(--sand); border-radius: var(--s1); padding: 1px 5px;
+}
+pre {
+  font-family: var(--mono); font-size: 13px; line-height: 1.6;
+  background: var(--surface); box-shadow: 0 0 0 1px var(--border);
+  border-radius: var(--r2); padding: var(--s4);
+  overflow-x: auto; margin: 0 0 var(--s4);
+}
+pre code { background: none; padding: 0; border-radius: 0; }
+
+/* Demo stage */
+figure.demo {
+  margin: 0 0 var(--s4);
+  background: var(--surface);
+  box-shadow: 0 0 0 1px var(--border);
+  border-radius: var(--r3);
+  padding: var(--s5);
+}
+figure.demo figcaption {
+  margin-top: var(--s3);
+  font-size: 12.5px; line-height: 1.5; color: var(--ink-3);
+}
+
+/* Footer */
+footer {
+  max-width: 680px; margin: var(--s7) auto 0;
+  padding-top: var(--s4); border-top: 1px solid var(--border);
+  font-size: 12.5px; color: var(--ink-3);
+}
+
+@media (max-width: 720px) {
+  .page { padding: var(--s6) var(--s4); }
+  .doc-title { font-size: 26px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <div class="eyebrow">
+    <span class="tag">测试文档</span>
+    <span>设计系统 · 视觉基线</span>
+  </div>
+  <h1 class="doc-title">Hue 语法形态全量测试</h1>
+  <p class="lead">本文档集中展示 Hue 文档支持的全部内容形态，用于视觉回归检查。每一节对应一种组件，改版设计系统后对照本文档确认渲染效果。</p>
+  <div class="meta">
+    <span class="meta-field"><span class="meta-key">状态</span><span class="meta-val">长期有效</span></span>
+    <span class="meta-field"><span class="meta-key">版本</span><span class="meta-val">1.0</span></span>
+    <span class="meta-field"><span class="meta-key">更新于</span><span class="meta-val">2026-07-18</span></span>
+  </div>
+</header>
+
+<main>
+  <section>
+    <h2>标题与段落</h2>
+    <p>这是正文段落，用于检查字号、行高与段间距。句中可以出现<strong>强调文字</strong>，也可以出现<code>inline code</code> 这样的行内代码，以及<a href="#标题与段落">指向本页的链接</a>。连续两段用于确认段落之间的节奏一致。</p>
+    <p>第二段正文。中英混排时间距应自动留出，例如使用 HTML 与 CSS 渲染，版本号写作 1.0，日期写作 2026-07-18。</p>
+    <h3>小节标题</h3>
+    <p>小节标题没有左侧色条，字重与二级标题一致，用于在长章节内部分层。</p>
+  </section>
+
+  <section>
+    <h2>列表</h2>
+    <p>无序列表的形态如下：</p>
+    <ul>
+      <li>第一项，检查列表标记的颜色与缩进。</li>
+      <li>第二项，检查条目之间的间距。</li>
+      <li>第三项，较长的一条，用于观察折行后的悬挂缩进是否对齐到文字而不是标记。</li>
+    </ul>
+    <p>有序列表的形态如下：</p>
+    <ol>
+      <li>第一步，确认序号使用等宽数字。</li>
+      <li>第二步，确认序号颜色弱于正文。</li>
+      <li>第三步，确认与无序列表的节奏一致。</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>引用与分隔</h2>
+    <p>引用块用于转述决定、原话或外部材料：</p>
+    <blockquote>引用块的左侧有一条浅色竖线，文字使用次级墨色，不使用斜体。这段文字足够长时会自然折行，用于检查行高与左内边距的配合。</blockquote>
+    <p>分隔线用于章节内的强停顿，前后留白一致：</p>
+    <hr>
+    <p>分隔线之后的段落，确认间距恢复常态。</p>
+  </section>
+
+  <section>
+    <h2>提示块</h2>
+    <p>普通提示块用于记录决定、说明背景：</p>
+    <div class="callout">
+      <p class="callout-title">决定：轮询刷新</p>
+      <p>提示块使用沙色底，标题行字重 500，正文与页面对齐。这是提示块内的第二句，确认末段没有多余的底部间距。</p>
+    </div>
+    <p>警告提示块用于风险与注意事项：</p>
+    <div class="callout callout--warn">
+      <p class="callout-title">风险：数据延迟</p>
+      <p>警告块使用警示色底，标题使用警示色文字。整页只允许这一种第二色彩出现。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>表格</h2>
+    <p>表格用于并列的结构化信息，数字列使用等宽数字：</p>
+    <table class="table">
+      <tr><th>项目</th><th>数值</th><th>说明</th></tr>
+      <tr><td>正文宽度</td><td>680 px</td><td>阅读列的最大宽度</td></tr>
+      <tr><td>页面宽度</td><td>960 px</td><td>页面外壳的最大宽度</td></tr>
+      <tr><td>正文字号</td><td>15 px</td><td>行高 1.65</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>代码块</h2>
+    <p>多行代码使用等宽字体，底色为纸面卡片色，超宽内容横向滚动：</p>
+    <pre><code>body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>交互演示</h2>
+    <p>交互演示放在演示卡片内，卡片下方可以配一句图注。下面的开关演示展示开启、关闭与禁用三种状态：</p>
+    <figure class="demo">
+<section data-demo="toggle">
+  <style>
+    [data-demo="toggle"] { margin: 0; }
+    [data-demo="toggle"] .setting {
+      display: flex; align-items: center; justify-content: space-between; gap: var(--s4);
+      padding: var(--s3) 0;
+    }
+    [data-demo="toggle"] .setting:first-child { padding-top: 0; }
+    [data-demo="toggle"] .setting:last-child { padding-bottom: 0; }
+    [data-demo="toggle"] .setting + .setting { border-top: 1px solid var(--border-soft); }
+    [data-demo="toggle"] .setting-text {
+      display: flex; flex-direction: column; gap: var(--s1);
+    }
+    [data-demo="toggle"] .setting-label {
+      font-size: 13.5px; font-weight: 500; line-height: 1.4; color: var(--ink);
+    }
+    [data-demo="toggle"] .setting-desc {
+      font-size: 12.5px; line-height: 1.5; color: var(--ink-3);
+    }
+    [data-demo="toggle"] .switch {
+      flex: none; position: relative;
+      width: 40px; height: 24px; padding: 0; border: 0;
+      border-radius: var(--r3); background: var(--sand);
+      box-shadow: 0 0 0 1px var(--border); cursor: pointer;
+      transition: opacity var(--dur-1) var(--ease-out);
+    }
+    [data-demo="toggle"] .knob {
+      position: absolute; top: var(--s1); left: var(--s1);
+      width: 16px; height: 16px; border-radius: 50%;
+      background: var(--surface);
+      box-shadow: 0 0 0 1px var(--border), 0 1px 2px rgba(27, 27, 24, .04), 0 4px 24px rgba(27, 27, 24, .05);
+      transition: transform var(--dur-2) var(--ease-out);
+    }
+    [data-demo="toggle"] .switch[aria-checked="true"] {
+      background: var(--accent); box-shadow: 0 0 0 1px var(--accent);
+    }
+    [data-demo="toggle"] .switch[aria-checked="true"] .knob { transform: translateX(16px); }
+    [data-demo="toggle"] .switch[disabled] {
+      opacity: .45; cursor: default; pointer-events: none;
+    }
+  </style>
+  <div class="stage">
+    <div class="setting">
+      <div class="setting-text">
+        <span class="setting-label">邮件通知</span>
+        <span class="setting-desc">有人评论你的文档时收到一封邮件。</span>
+      </div>
+      <button type="button" class="switch" role="switch" aria-checked="false" aria-label="邮件通知"><span class="knob" aria-hidden="true"></span></button>
+    </div>
+    <div class="setting">
+      <div class="setting-text">
+        <span class="setting-label">公开访问</span>
+        <span class="setting-desc">此设置由工作区管理员统一管理。</span>
+      </div>
+      <button type="button" class="switch" role="switch" aria-checked="true" aria-label="公开访问" disabled><span class="knob" aria-hidden="true"></span></button>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="toggle"]');
+      var switches = root.querySelectorAll('.switch:not([disabled])');
+      Array.prototype.forEach.call(switches, function (sw) {
+        sw.addEventListener('click', function () {
+          var on = sw.getAttribute('aria-checked') === 'true';
+          sw.setAttribute('aria-checked', on ? 'false' : 'true');
+        });
+      });
+    })();
+  </script>
+</section>
+      <figcaption>点击第一个开关切换状态；第二个开关为禁用态，不可操作。</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>界面示意</h2>
+    <p>界面示意用于展示布局结构，不提供交互。下图为一个列表加详情的三栏界面，高亮块表示当前讨论的选中项：</p>
+    <figure class="demo">
+<section data-demo="wireframe">
+  <style>
+    [data-demo="wireframe"] { margin: 0; }
+    [data-demo="wireframe"] .wf-canvas { display: block; width: 100%; height: auto; }
+    [data-demo="wireframe"] .wf-frame { fill: var(--surface); stroke: var(--border); }
+    [data-demo="wireframe"] .wf-block { fill: var(--sand); }
+    [data-demo="wireframe"] .wf-line { fill: var(--border); }
+    [data-demo="wireframe"] .wf-line-soft { fill: var(--border-soft); }
+    [data-demo="wireframe"] .wf-text { fill: var(--ink-2); }
+    [data-demo="wireframe"] .wf-label {
+      fill: var(--ink-3);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.4px;
+    }
+    [data-demo="wireframe"] .wf-accent { fill: var(--accent-tint); stroke: var(--accent-tint-3); }
+  </style>
+  <svg class="wf-canvas" viewBox="0 0 600 340" role="img" aria-label="界面示意：包含侧栏、列表与详情三栏的布局，列表中有一项高亮">
+    <rect class="wf-frame" x="1" y="1" width="598" height="338" rx="8"/>
+    <rect class="wf-block" x="1" y="1" width="598" height="36" rx="8"/>
+    <rect class="wf-block" x="1" y="25" width="598" height="12"/>
+    <rect class="wf-line" x="16" y="15" width="72" height="8" rx="4"/>
+    <rect class="wf-line" x="512" y="14" width="72" height="10" rx="5"/>
+    <rect class="wf-line-soft" x="16" y="57" width="120" height="10" rx="5"/>
+    <rect class="wf-block" x="16" y="83" width="120" height="44" rx="6"/>
+    <rect class="wf-block" x="16" y="139" width="120" height="44" rx="6"/>
+    <rect class="wf-block" x="16" y="195" width="120" height="44" rx="6"/>
+    <rect class="wf-line-soft" x="160" y="57" width="160" height="10" rx="5"/>
+    <rect class="wf-accent" x="160" y="83" width="184" height="52" rx="6"/>
+    <rect class="wf-block" x="160" y="147" width="184" height="52" rx="6"/>
+    <rect class="wf-block" x="160" y="211" width="184" height="52" rx="6"/>
+    <rect class="wf-block" x="160" y="275" width="184" height="52" rx="6"/>
+    <rect class="wf-line-soft" x="368" y="57" width="200" height="10" rx="5"/>
+    <rect class="wf-text" x="368" y="87" width="140" height="12" rx="6"/>
+    <rect class="wf-line" x="368" y="115" width="200" height="7" rx="3.5"/>
+    <rect class="wf-line" x="368" y="130" width="200" height="7" rx="3.5"/>
+    <rect class="wf-line" x="368" y="145" width="152" height="7" rx="3.5"/>
+    <rect class="wf-block" x="368" y="177" width="200" height="96" rx="6"/>
+    <rect class="wf-accent" x="368" y="293" width="96" height="28" rx="6"/>
+    <text class="wf-label" x="16" y="330">侧栏</text>
+    <text class="wf-label" x="160" y="330">列表</text>
+    <text class="wf-label" x="368" y="330">详情</text>
+  </svg>
+</section>
+      <figcaption>示意图只表达结构：圆角条代表文字，色块代表内容区，一张图至多一个高亮元素。</figcaption>
+    </figure>
+  </section>
+</main>
+
+<footer>
+  由 Hue 生成。
+</footer>
+
+</div>
+</body>
+</html>
