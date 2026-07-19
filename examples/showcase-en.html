@@ -1,0 +1,2255 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hue Showcase: Syntax and Demo Blocks</title>
+<style>
+:root {
+  --paper: #F7F5EE;
+  --surface: #FDFCF9;
+  --sand: #EFEDE3;
+  --ink: #1B1B18;
+  --ink-2: #4B4A44;
+  --ink-3: #76756E;
+  --border: #E8E5DA;
+  --border-strong: #D4D0C3;
+  --border-soft: #EEECE2;
+  --accent: #4E5FA0;
+  --accent-strong: #3D4C85;
+  --accent-tint: #ECEFF7;
+  --accent-tint-2: #DFE4F2;
+  --accent-tint-3: #C9D1E9;
+  --danger: #A5483D;
+  --danger-tint: #F6E9E6;
+
+  --serif: Charter, "Bitstream Charter", Georgia, "TsangerJinKai02",
+           "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
+  --mono: "JetBrains Mono", "SF Mono", Consolas, "TsangerJinKai02",
+          "Source Han Serif SC", monospace;
+
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 40px; --s7: 64px;
+  --r1: 6px; --r2: 8px; --r3: 12px;
+
+  --dur-1: 120ms; --dur-2: 200ms; --dur-3: 320ms;
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --ease-spring: cubic-bezier(.5, 1.6, .4, 1);
+}
+html[lang^="zh"] {
+  --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC",
+           "Songti SC", Georgia, serif;
+}
+
+* { box-sizing: border-box; }
+html { font-synthesis: none; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+html[lang^="zh"] body { letter-spacing: 0.35px; }
+
+.page { max-width: 960px; margin: 0 auto; padding: var(--s7) var(--s5); }
+main, header { max-width: 680px; margin-left: auto; margin-right: auto; }
+
+strong { font-weight: 500; }
+a {
+  color: var(--accent);
+  text-decoration-line: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: var(--s1);
+  transition: color var(--dur-1) var(--ease-out), text-decoration-color var(--dur-1) var(--ease-out);
+}
+a:hover { color: var(--accent-strong); text-decoration-color: currentColor; }
+a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px;
+}
+
+/* Header */
+.eyebrow {
+  display: flex; align-items: center; gap: var(--s3);
+  font-size: 12.5px; line-height: 1.4; color: var(--ink-3);
+  margin-bottom: var(--s4);
+}
+.doc-title {
+  font-size: 34px; line-height: 1.15; font-weight: 500;
+  margin: 0 0 var(--s4);
+}
+html[lang="en"] .doc-title { letter-spacing: -0.3px; }
+.lead { font-size: 17px; line-height: 1.65; color: var(--ink-2); margin: 0 0 var(--s5); }
+header { padding-bottom: var(--s6); border-bottom: 1px solid var(--border); margin-bottom: var(--s6); }
+
+.tag {
+  display: inline-block;
+  font-size: 12.5px; font-weight: 500; line-height: 1.4;
+  color: var(--accent); background: var(--accent-tint);
+  border-radius: var(--r1); padding: 2px var(--s2);
+  white-space: nowrap;
+}
+
+/* Meta line */
+.meta {
+  display: flex; flex-wrap: wrap; gap: var(--s2) var(--s5);
+  font-size: 12.5px; line-height: 1.5;
+  margin-top: var(--s4);
+  font-variant-numeric: tabular-nums;
+}
+.meta-field { white-space: nowrap; }
+.meta-key { color: var(--ink-3); margin-right: var(--s2); }
+.meta-val { color: var(--ink); }
+
+/* Sections */
+section { margin-top: var(--s6); }
+h2 {
+  font-size: 20px; line-height: 1.3; font-weight: 500;
+  margin: 0 0 var(--s4);
+  border-left: 2.5px solid var(--accent); padding-left: 10px;
+}
+h3 { font-size: 17px; line-height: 1.35; font-weight: 500; margin: var(--s5) 0 var(--s3); }
+p { margin: 0 0 var(--s4); }
+ul, ol { margin: 0 0 var(--s4); padding-left: var(--s5); }
+li { margin-bottom: var(--s1); }
+li::marker { color: var(--ink-3); }
+blockquote {
+  margin: 0 0 var(--s4); padding-left: var(--s4);
+  border-left: 2px solid var(--border-strong); color: var(--ink-2);
+}
+hr { border: 0; border-top: 1px solid var(--border); margin: var(--s6) 0; }
+
+/* Callouts */
+.callout {
+  background: var(--sand); border-radius: var(--r2);
+  padding: var(--s3) var(--s4); margin: 0 0 var(--s4);
+}
+.callout--warn { background: var(--danger-tint); }
+.callout-title { font-weight: 500; margin: 0 0 var(--s1); }
+.callout--warn .callout-title { color: var(--danger); }
+.callout p:last-child { margin-bottom: 0; }
+
+/* Tables */
+.table {
+  width: 100%; border-collapse: collapse;
+  font-size: 15px; line-height: 1.5;
+  margin: 0 0 var(--s4);
+  font-variant-numeric: tabular-nums;
+}
+.table th {
+  font-size: 12.5px; font-weight: 500; color: var(--ink-2);
+  text-align: left; padding: var(--s2) var(--s3);
+  border-bottom: 1px solid var(--border-strong);
+}
+.table td { padding: var(--s2) var(--s3); border-bottom: 1px solid var(--border-soft); }
+.table tr:last-child td { border-bottom: 0; }
+
+/* Code */
+code {
+  font-family: var(--mono); font-size: 0.92em;
+  background: var(--sand); border-radius: var(--s1); padding: 1px 5px;
+}
+pre {
+  font-family: var(--mono); font-size: 13px; line-height: 1.6;
+  background: var(--surface); box-shadow: 0 0 0 1px var(--border);
+  border-radius: var(--r2); padding: var(--s4);
+  overflow-x: auto; margin: 0 0 var(--s4);
+}
+pre code { background: none; padding: 0; border-radius: 0; }
+
+/* Demo stage */
+figure.demo {
+  margin: 0 0 var(--s4);
+  background: var(--surface);
+  box-shadow: 0 0 0 1px var(--border);
+  border-radius: var(--r3);
+  padding: var(--s5);
+}
+figure.demo figcaption {
+  margin-top: var(--s3);
+  font-size: 12.5px; line-height: 1.5; color: var(--ink-3);
+}
+
+/* Footer */
+footer {
+  max-width: 680px; margin: var(--s7) auto 0;
+  padding-top: var(--s4); border-top: 1px solid var(--border);
+  font-size: 12.5px; color: var(--ink-3);
+}
+footer a {
+  color: inherit; text-decoration: underline;
+  text-decoration-color: transparent;
+  cursor: pointer;
+  transition: color var(--dur-1) var(--ease-out), text-decoration-color var(--dur-1) var(--ease-out);
+}
+footer a:hover { color: var(--ink-2); text-decoration-color: currentColor; }
+
+@media (max-width: 720px) {
+  .page { padding: var(--s6) var(--s4); }
+  .doc-title { font-size: 26px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <div class="eyebrow">
+    <span class="tag">Showcase</span>
+    <span>Design system · Visual baseline</span>
+  </div>
+  <h1 class="doc-title">Hue Showcase: Syntax and Demo Blocks</h1>
+  <p class="lead">This document exercises every content form a Hue document can render, followed by all 16 demo blocks in four groups. After any design-system change, compare against this page to confirm the rendering.</p>
+  <div class="meta">
+    <span class="meta-field"><span class="meta-key">Status</span><span class="meta-val">Living</span></span>
+    <span class="meta-field"><span class="meta-key">Version</span><span class="meta-val">1.0</span></span>
+    <span class="meta-field"><span class="meta-key">Updated</span><span class="meta-val">2026-07-18</span></span>
+  </div>
+</header>
+
+<main>
+  <section>
+    <h2>Headings and paragraphs</h2>
+    <p>This is body prose, used to check size, line height, and paragraph spacing. A sentence can carry <strong>emphasized text</strong>, inline code such as <code>inline code</code>, and <a href="#headings-and-paragraphs">a link to this page</a>. A second paragraph follows so the rhythm between paragraphs is visible.</p>
+    <p>The second paragraph. Mixed script spacing should hold when prose mentions HTML and CSS, a version like 1.0, or a date like 2026-07-18.</p>
+    <h3>Subsection heading</h3>
+    <p>A subsection heading has no accent bar, keeps the same weight as section headings, and layers structure inside a long section.</p>
+  </section>
+
+  <section>
+    <h2>Lists</h2>
+    <p>An unordered list renders like this:</p>
+    <ul>
+      <li>First item, to check marker color and indentation.</li>
+      <li>Second item, to check the spacing between items.</li>
+      <li>A third, longer item that wraps onto a second line so the hanging indent aligns with the text rather than the marker.</li>
+    </ul>
+    <p>An ordered list renders like this:</p>
+    <ol>
+      <li>Step one, confirming numerals use tabular figures.</li>
+      <li>Step two, confirming the marker color is quieter than the text.</li>
+      <li>Step three, confirming the rhythm matches the unordered list.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Quotes and dividers</h2>
+    <p>A blockquote carries decisions, quotations, or external material:</p>
+    <blockquote>The quote has a visible warm-neutral rule on the left, secondary ink, and no italics. This sentence is long enough to wrap, which checks line height against the left padding.</blockquote>
+    <p>A divider marks a strong pause inside a section, with even space on both sides:</p>
+    <hr>
+    <p>The paragraph after the divider, confirming the rhythm returns to normal.</p>
+  </section>
+
+  <section>
+    <h2>Callouts</h2>
+    <p>A plain callout records decisions and background:</p>
+    <div class="callout">
+      <p class="callout-title">Decision: polling refresh</p>
+      <p>The callout sits on a sand surface, its title row at weight 500, its prose aligned with the page. This second sentence confirms the last paragraph has no extra bottom margin.</p>
+    </div>
+    <p>A warning callout carries risks and cautions:</p>
+    <div class="callout callout--warn">
+      <p class="callout-title">Risk: data latency</p>
+      <p>The warning callout uses the danger tint, with the title in danger ink. It is the only sanctioned second color on the page.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Tables</h2>
+    <p>Tables hold structured, comparable information; numeric columns use tabular figures:</p>
+    <table class="table">
+      <tr><th>Property</th><th>Value</th><th>Notes</th></tr>
+      <tr><td>Reading measure</td><td>680 px</td><td>Maximum width of the prose column</td></tr>
+      <tr><td>Page shell</td><td>960 px</td><td>Maximum width of the page container</td></tr>
+      <tr><td>Body size</td><td>15 px</td><td>Line height 1.65</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Code blocks</h2>
+    <p>Multi-line code uses the mono stack on a surface card; wide content scrolls horizontally:</p>
+    <pre><code>body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+}</code></pre>
+  </section>
+
+  <section>
+    <h2>Controls</h2>
+    <h3>Button states</h3>
+    <p>Buttons carry the page's actions and give clear feedback in every state.</p>
+    <figure class="demo">
+<section data-demo="button-states">
+  <style>
+    [data-demo="button-states"] { margin: 0; }
+    [data-demo="button-states"] .stage {
+      display: flex; flex-direction: column; gap: var(--s4);
+    }
+    [data-demo="button-states"] .row {
+      display: flex; flex-wrap: wrap; align-items: center; gap: var(--s3);
+    }
+    [data-demo="button-states"] .row-label {
+      width: 100%;
+      font-size: 12.5px; line-height: 1.4; color: var(--ink-3);
+    }
+    [data-demo="button-states"] .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: var(--s2);
+      height: 32px; padding: 0 var(--s3);
+      font-family: var(--serif); font-size: 13.5px; font-weight: 500; line-height: 1;
+      border: 0; border-radius: var(--r1); cursor: pointer;
+      transition: transform var(--dur-1) var(--ease-out), opacity var(--dur-1) var(--ease-out);
+    }
+    [data-demo="button-states"] .btn--primary { background: var(--accent); color: var(--surface); }
+    [data-demo="button-states"] .btn--primary:hover:not([disabled]) { background: var(--accent-strong); }
+    [data-demo="button-states"] .btn--primary:active:not([disabled]) { transform: translateY(1px); }
+    [data-demo="button-states"] .btn--secondary {
+      background: transparent; color: var(--ink);
+      box-shadow: 0 0 0 1px var(--border);
+    }
+    [data-demo="button-states"] .btn--secondary:hover:not([disabled]) { background: var(--sand); }
+    [data-demo="button-states"] .btn--secondary:active:not([disabled]) { transform: translateY(1px); }
+    [data-demo="button-states"] .btn--danger { background: var(--danger); color: var(--surface); }
+    [data-demo="button-states"] .btn--danger:hover:not([disabled]) { opacity: .9; }
+    [data-demo="button-states"] .btn--danger:active:not([disabled]) { transform: translateY(1px); }
+    [data-demo="button-states"] .btn[disabled] { opacity: .45; cursor: default; }
+    [data-demo="button-states"] .spinner {
+      display: none; width: 12px; height: 12px; border-radius: 50%;
+      border: 2px solid rgba(253, 252, 249, .4); border-top-color: var(--surface);
+    }
+    [data-demo="button-states"] .btn-save.is-loading .spinner {
+      display: inline-block;
+      animation: button-states-spin calc(var(--dur-3) * 2) linear infinite;
+    }
+    [data-demo="button-states"] .btn-save.is-saved {
+      animation: button-states-flash var(--dur-3) var(--ease-out);
+    }
+    @keyframes button-states-spin { to { transform: rotate(360deg); } }
+    @keyframes button-states-flash { 0% { opacity: .55; } 100% { opacity: 1; } }
+  </style>
+  <div class="stage">
+    <div class="row">
+      <span class="row-label">Default, hover, and pressed</span>
+      <button type="button" class="btn btn--primary">Primary</button>
+      <button type="button" class="btn btn--secondary">Secondary</button>
+      <button type="button" class="btn btn--danger">Danger</button>
+    </div>
+    <div class="row">
+      <span class="row-label">Disabled</span>
+      <button type="button" class="btn btn--primary" disabled>Primary</button>
+      <button type="button" class="btn btn--secondary" disabled>Secondary</button>
+      <button type="button" class="btn btn--danger" disabled>Danger</button>
+    </div>
+    <div class="row">
+      <span class="row-label">Async submit, click Save to run it</span>
+      <button type="button" class="btn btn--primary btn-save">
+        <span class="spinner" aria-hidden="true"></span>
+        <span class="save-label">Save changes</span>
+      </button>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="button-states"]');
+      var btn = root.querySelector('.btn-save');
+      var label = root.querySelector('.save-label');
+      var busy = false;
+      btn.addEventListener('click', function () {
+        if (busy) { return; }
+        busy = true;
+        btn.classList.add('is-loading');
+        btn.setAttribute('aria-busy', 'true');
+        label.textContent = 'Saving…';
+        setTimeout(function () {
+          btn.classList.remove('is-loading');
+          btn.classList.add('is-saved');
+          label.textContent = 'Saved';
+          setTimeout(function () {
+            btn.classList.remove('is-saved');
+            btn.removeAttribute('aria-busy');
+            label.textContent = 'Save changes';
+            busy = false;
+          }, 900);
+        }, 1600);
+      });
+    })();
+  </script>
+</section>
+      <figcaption>Hover and press each button, then click Save to watch the loading and saved states.</figcaption>
+    </figure>
+    <h3>Toggle</h3>
+    <p>A switch flips a setting that takes effect immediately.</p>
+    <figure class="demo">
+<section data-demo="toggle">
+  <style>
+    [data-demo="toggle"] { margin: 0; }
+    [data-demo="toggle"] .setting {
+      display: flex; align-items: center; justify-content: space-between; gap: var(--s3);
+      padding: var(--s2) 0;
+    }
+    [data-demo="toggle"] .setting:first-child { padding-top: 0; }
+    [data-demo="toggle"] .setting:last-child { padding-bottom: 0; }
+    [data-demo="toggle"] .setting + .setting { border-top: 1px solid var(--border-soft); }
+    [data-demo="toggle"] .setting-text {
+      display: flex; flex-direction: column; gap: var(--s1);
+    }
+    [data-demo="toggle"] .setting-label {
+      font-size: 13.5px; font-weight: 500; line-height: 1.4; color: var(--ink);
+    }
+    [data-demo="toggle"] .setting-desc {
+      font-size: 12.5px; line-height: 1.5; color: var(--ink-3);
+    }
+    [data-demo="toggle"] .switch {
+      flex: none; position: relative;
+      width: 36px; height: 20px; padding: 0; border: 0;
+      border-radius: var(--r3); background: var(--sand);
+      box-shadow: 0 0 0 1px var(--border); cursor: pointer;
+      transition: background-color var(--dur-1) var(--ease-out), box-shadow var(--dur-1) var(--ease-out), opacity var(--dur-1) var(--ease-out);
+    }
+    [data-demo="toggle"] .switch::before {
+      content: ""; position: absolute;
+      inset: calc(var(--s3) * -1) calc(var(--s1) * -1);
+    }
+    [data-demo="toggle"] .knob {
+      position: absolute; top: var(--s1); left: var(--s1);
+      width: 12px; height: 12px; border-radius: 50%;
+      background: var(--surface);
+      box-shadow: 0 0 0 1px var(--border), 0 1px 2px rgba(27, 27, 24, .08);
+      transition: transform var(--dur-2) var(--ease-out);
+    }
+    [data-demo="toggle"] .switch[aria-checked="true"] {
+      background: var(--accent); box-shadow: 0 0 0 1px var(--accent);
+    }
+    [data-demo="toggle"] .switch[aria-checked="true"] .knob { transform: translateX(16px); }
+    [data-demo="toggle"] .switch[disabled] {
+      opacity: .45; cursor: default; pointer-events: none;
+    }
+  </style>
+  <div class="stage">
+    <div class="setting">
+      <div class="setting-text">
+        <span class="setting-label">Email notifications</span>
+        <span class="setting-desc">Receive an email when someone comments on your documents.</span>
+      </div>
+      <button type="button" class="switch" role="switch" aria-checked="false" aria-label="Email notifications"><span class="knob" aria-hidden="true"></span></button>
+    </div>
+    <div class="setting">
+      <div class="setting-text">
+        <span class="setting-label">Public access</span>
+        <span class="setting-desc">This setting is managed by your workspace administrator.</span>
+      </div>
+      <button type="button" class="switch" role="switch" aria-checked="true" aria-label="Public access" disabled><span class="knob" aria-hidden="true"></span></button>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="toggle"]');
+      var switches = root.querySelectorAll('.switch:not([disabled])');
+      Array.prototype.forEach.call(switches, function (sw) {
+        sw.addEventListener('click', function () {
+          var on = sw.getAttribute('aria-checked') === 'true';
+          sw.setAttribute('aria-checked', on ? 'false' : 'true');
+        });
+      });
+    })();
+  </script>
+</section>
+      <figcaption>Click the first switch to toggle it; the second is disabled and cannot be operated.</figcaption>
+    </figure>
+    <h3>Slider</h3>
+    <p>A slider tunes a threshold or range, with the readout updating as it moves.</p>
+    <figure class="demo">
+<section data-demo="slider">
+  <style>
+    [data-demo="slider"] { margin: 0; }
+    [data-demo="slider"] .label {
+      display: block; margin-bottom: var(--s3);
+      font-size: 13.5px; font-weight: 500; line-height: 1.4; color: var(--ink);
+    }
+    [data-demo="slider"] .control {
+      display: flex; align-items: center; gap: var(--s4);
+    }
+    [data-demo="slider"] .range-wrap {
+      display: block; position: relative; flex: 1; height: 20px;
+    }
+    [data-demo="slider"] .track {
+      position: absolute; left: 0; right: 0; top: 50%;
+      transform: translateY(-50%);
+      height: var(--s1); border-radius: var(--r1);
+      background: var(--border); pointer-events: none;
+    }
+    [data-demo="slider"] .fill {
+      position: absolute; left: 0; top: 50%; width: 0;
+      transform: translateY(-50%);
+      height: var(--s1); border-radius: var(--r1);
+      background: var(--accent); pointer-events: none;
+    }
+    [data-demo="slider"] input[type="range"] {
+      -webkit-appearance: none; appearance: none;
+      display: block; position: relative;
+      width: 100%; height: 20px; margin: 0; padding: 0;
+      background: transparent; cursor: pointer;
+    }
+    [data-demo="slider"] input[type="range"]::-webkit-slider-runnable-track {
+      -webkit-appearance: none;
+      height: 20px; background: transparent; border: 0;
+    }
+    [data-demo="slider"] input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px; height: 20px; margin-top: 0; border: 0; border-radius: 50%;
+      background: var(--surface);
+      box-shadow: 0 0 0 1px var(--border), 0 1px 2px rgba(27, 27, 24, .04), 0 4px 24px rgba(27, 27, 24, .05);
+    }
+    [data-demo="slider"] input[type="range"]::-moz-range-track {
+      height: 20px; background: transparent; border: 0;
+    }
+    [data-demo="slider"] input[type="range"]::-moz-range-thumb {
+      width: 20px; height: 20px; border: 0; border-radius: 50%;
+      background: var(--surface);
+      box-shadow: 0 0 0 1px var(--border), 0 1px 2px rgba(27, 27, 24, .04), 0 4px 24px rgba(27, 27, 24, .05);
+    }
+    [data-demo="slider"] .readout {
+      flex: none; min-width: 64px; text-align: right;
+      font-size: 15px; line-height: 1.5; color: var(--ink);
+      font-variant-numeric: tabular-nums;
+    }
+  </style>
+  <div class="stage">
+    <span class="label">Retention period</span>
+    <div class="control">
+      <span class="range-wrap">
+        <span class="track" aria-hidden="true"></span>
+        <span class="fill" aria-hidden="true"></span>
+        <input type="range" min="1" max="90" step="1" value="30" aria-label="Retention period in days">
+      </span>
+      <span class="readout">30 days</span>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="slider"]');
+      var input = root.querySelector('input[type="range"]');
+      var fill = root.querySelector('.fill');
+      var readout = root.querySelector('.readout');
+      function render() {
+        var min = Number(input.min);
+        var max = Number(input.max);
+        var v = Number(input.value);
+        var pct = Math.round(((v - min) / (max - min)) * 10000) / 100;
+        fill.style.width = 'calc(' + pct + '% + ' + (10 - pct * 0.2) + 'px)';
+        readout.textContent = v + (v === 1 ? ' day' : ' days');
+      }
+      input.addEventListener('input', render);
+      render();
+    })();
+  </script>
+</section>
+      <figcaption>Drag the slider and watch the readout change.</figcaption>
+    </figure>
+    <h3>Segmented control</h3>
+    <p>A segmented control switches between a small set of mutually exclusive options.</p>
+    <figure class="demo">
+<section data-demo="segmented-control">
+  <style>
+    [data-demo="segmented-control"] { margin: 0; }
+    [data-demo="segmented-control"] .control {
+      position: relative; display: flex;
+      padding: var(--s1);
+      background: var(--sand); border-radius: var(--r2);
+    }
+    [data-demo="segmented-control"] .knob {
+      position: absolute; top: var(--s1); left: var(--s1); bottom: var(--s1);
+      width: calc((100% - var(--s2)) / 3);
+      background: var(--surface); border-radius: var(--r1);
+      box-shadow: 0 1px 2px rgba(27, 27, 24, .04), 0 4px 24px rgba(27, 27, 24, .05);
+      transition: transform var(--dur-2) var(--ease-out);
+    }
+    [data-demo="segmented-control"] .option {
+      position: relative; z-index: 1; flex: 1;
+      height: 32px; padding: 0 var(--s3);
+      border: 0; border-radius: var(--r1);
+      background: transparent; cursor: pointer;
+      font-family: var(--serif); font-size: 13.5px; font-weight: 500; line-height: 1;
+      color: var(--ink-2);
+    }
+    [data-demo="segmented-control"] .option:hover { color: var(--ink); }
+    [data-demo="segmented-control"] .option[aria-pressed="true"] { color: var(--ink); }
+    [data-demo="segmented-control"] .status {
+      margin: var(--s3) 0 0;
+      font-size: 12.5px; line-height: 1.5; color: var(--ink-3);
+    }
+  </style>
+  <div class="stage">
+    <div class="control" role="group" aria-label="View">
+      <span class="knob" aria-hidden="true"></span>
+      <button type="button" class="option" aria-pressed="true">List</button>
+      <button type="button" class="option" aria-pressed="false">Board</button>
+      <button type="button" class="option" aria-pressed="false">Calendar</button>
+    </div>
+    <p class="status" aria-live="polite">Selected view: List</p>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="segmented-control"]');
+      var knob = root.querySelector('.knob');
+      var status = root.querySelector('.status');
+      var options = root.querySelectorAll('.option');
+      Array.prototype.forEach.call(options, function (btn, i) {
+        btn.addEventListener('click', function () {
+          Array.prototype.forEach.call(options, function (b) {
+            b.setAttribute('aria-pressed', 'false');
+          });
+          btn.setAttribute('aria-pressed', 'true');
+          knob.style.transform = 'translateX(' + (i * 100) + '%)';
+          status.textContent = 'Selected view: ' + btn.textContent;
+        });
+      });
+    })();
+  </script>
+</section>
+      <figcaption>Click each option; the knob moves and the status text updates.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>Form and feedback</h2>
+    <h3>Form validation</h3>
+    <p>The field validates on blur and on submit, reporting error and success inline.</p>
+    <figure class="demo">
+<section data-demo="form-validation">
+  <style>
+    [data-demo="form-validation"] { margin: 0; }
+    [data-demo="form-validation"] .form { max-width: 280px; }
+    [data-demo="form-validation"] .label {
+      display: block;
+      font-size: 13.5px; font-weight: 500; line-height: 1.4;
+      color: var(--ink);
+    }
+    [data-demo="form-validation"] .input {
+      display: block;
+      width: 100%;
+      height: 34px;
+      margin-top: var(--s1);
+      padding: 0 var(--s3);
+      font-family: var(--serif);
+      font-size: 15px; font-weight: 400;
+      color: var(--ink);
+      background: var(--surface);
+      border: 0;
+      border-radius: var(--r1);
+      box-shadow: 0 0 0 1px var(--border);
+    }
+    [data-demo="form-validation"] .input::placeholder { color: var(--ink-3); }
+    [data-demo="form-validation"] .input:focus {
+      outline: none;
+      box-shadow: 0 0 0 1px var(--accent);
+    }
+    [data-demo="form-validation"] .input.is-error { box-shadow: 0 0 0 1px var(--danger); }
+    [data-demo="form-validation"] .input.is-success { box-shadow: 0 0 0 1px var(--accent); }
+    [data-demo="form-validation"] .hint {
+      margin: var(--s1) 0 0;
+      font-size: 12.5px; line-height: 1.5;
+      color: var(--ink-3);
+    }
+    [data-demo="form-validation"] .hint.is-error { color: var(--danger); }
+    [data-demo="form-validation"] .hint.is-error,
+    [data-demo="form-validation"] .hint.is-success {
+      animation: form-validation-hint-in var(--dur-2) var(--ease-out);
+    }
+    @keyframes form-validation-hint-in {
+      from { opacity: 0; transform: translateY(-2px); }
+    }
+    [data-demo="form-validation"] .button {
+      margin-top: var(--s3);
+      height: 32px;
+      padding: 0 var(--s3);
+      font-family: var(--serif);
+      font-size: 13.5px; font-weight: 500;
+      color: var(--surface);
+      background: var(--accent);
+      border: 0;
+      border-radius: var(--r1);
+      cursor: pointer;
+      transition: opacity var(--dur-1) var(--ease-out);
+    }
+    [data-demo="form-validation"] .button:hover { background: var(--accent-strong); }
+    [data-demo="form-validation"] .button:disabled { opacity: .7; cursor: default; }
+  </style>
+  <div class="stage">
+    <form class="form" novalidate>
+      <label class="label">Email <input class="input" type="email" name="email" placeholder="you@example.com" autocomplete="off"></label>
+      <p class="hint" aria-live="polite">Used only for account notifications.</p>
+      <button class="button" type="submit">Submit</button>
+    </form>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="form-validation"]');
+      var form = root.querySelector('.form');
+      var input = root.querySelector('.input');
+      var hint = root.querySelector('.hint');
+      var button = root.querySelector('.button');
+      var defaultHint = hint.textContent;
+      var EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      var timer = null;
+
+      function setState(state) {
+        input.classList.toggle('is-error', state === 'error');
+        input.classList.toggle('is-success', state === 'success');
+        hint.classList.toggle('is-error', state === 'error');
+        hint.classList.toggle('is-success', state === 'success');
+        if (state === 'error') {
+          input.setAttribute('aria-invalid', 'true');
+          hint.textContent = 'Enter a valid email address';
+        } else if (state === 'success') {
+          input.removeAttribute('aria-invalid');
+          hint.textContent = 'Looks good';
+        } else {
+          input.removeAttribute('aria-invalid');
+          hint.textContent = defaultHint;
+        }
+      }
+
+      function validate() {
+        var value = input.value.trim();
+        if (!value || !EMAIL.test(value)) {
+          setState('error');
+          return false;
+        }
+        setState('success');
+        return true;
+      }
+
+      input.addEventListener('blur', validate);
+
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        if (!validate()) { return; }
+        button.disabled = true;
+        button.textContent = 'Submitted';
+        timer = setTimeout(function () {
+          button.disabled = false;
+          button.textContent = 'Submit';
+          form.reset();
+          setState(null);
+        }, 1400);
+      });
+    })();
+  </script>
+</section>
+      <figcaption>Enter an invalid email and blur, then fix it and submit.</figcaption>
+    </figure>
+    <h3>Dialog</h3>
+    <p>A modal dialog interrupts the flow to confirm a destructive action.</p>
+    <figure class="demo">
+<section data-demo="dialog">
+  <style>
+    [data-demo="dialog"] { margin: 0; position: relative; }
+    [data-demo="dialog"] .stage {
+      min-height: 240px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    [data-demo="dialog"] .trigger {
+      height: 32px;
+      padding: 0 var(--s3);
+      font-family: var(--serif);
+      font-size: 13.5px; font-weight: 500;
+      color: var(--danger);
+      background: transparent;
+      border: 0;
+      border-radius: var(--r1);
+      box-shadow: 0 0 0 1px var(--border);
+      cursor: pointer;
+    }
+    [data-demo="dialog"] .trigger:hover { background: var(--danger-tint); }
+    [data-demo="dialog"] .overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--s5);
+      background: rgba(27, 27, 24, .28);
+      animation: dialog-fade var(--dur-2) var(--ease-out);
+    }
+    [data-demo="dialog"] .overlay[hidden] { display: none; }
+    @keyframes dialog-fade {
+      from { opacity: 0; }
+    }
+    [data-demo="dialog"] .dialog {
+      width: 100%;
+      max-width: 320px;
+      padding: var(--s4);
+      background: var(--surface);
+      border-radius: var(--r2);
+      box-shadow: 0 0 0 1px var(--border), 0 1px 2px rgba(27, 27, 24, .04), 0 4px 24px rgba(27, 27, 24, .05);
+      animation: dialog-in var(--dur-2) var(--ease-out);
+    }
+    @keyframes dialog-in {
+      from { opacity: 0; transform: scale(.96); }
+    }
+    [data-demo="dialog"] .title {
+      margin: 0 0 var(--s2);
+      font-size: 15px; font-weight: 500; line-height: 1.35;
+      color: var(--ink);
+    }
+    [data-demo="dialog"] .copy {
+      margin: 0;
+      font-size: 15px; line-height: 1.65;
+      color: var(--ink-2);
+    }
+    [data-demo="dialog"] .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: var(--s2);
+      margin-top: var(--s4);
+    }
+    [data-demo="dialog"] .cancel,
+    [data-demo="dialog"] .delete {
+      height: 32px;
+      padding: 0 var(--s3);
+      font-family: var(--serif);
+      font-size: 13.5px; font-weight: 500;
+      border: 0;
+      border-radius: var(--r1);
+      cursor: pointer;
+    }
+    [data-demo="dialog"] .cancel {
+      color: var(--ink);
+      background: transparent;
+      box-shadow: 0 0 0 1px var(--border);
+    }
+    [data-demo="dialog"] .cancel:hover { background: var(--sand); }
+    [data-demo="dialog"] .delete {
+      color: var(--surface);
+      background: var(--danger);
+      transition: opacity var(--dur-1) var(--ease-out);
+    }
+    [data-demo="dialog"] .delete:hover { opacity: .88; }
+  </style>
+  <div class="stage">
+    <button class="trigger" type="button" aria-haspopup="dialog">Delete project</button>
+    <div class="overlay" hidden>
+      <div class="dialog" role="dialog" aria-modal="true" aria-label="Delete project">
+        <p class="title">Delete project?</p>
+        <p class="copy">This permanently removes the project and all of its files.</p>
+        <div class="actions">
+          <button class="cancel" type="button">Cancel</button>
+          <button class="delete" type="button">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="dialog"]');
+      var trigger = root.querySelector('.trigger');
+      var overlay = root.querySelector('.overlay');
+      var cancel = root.querySelector('.cancel');
+      var confirmDelete = root.querySelector('.delete');
+
+      function openDialog() {
+        overlay.hidden = false;
+        cancel.focus();
+      }
+
+      function closeDialog() {
+        overlay.hidden = true;
+        trigger.focus();
+      }
+
+      trigger.addEventListener('click', openDialog);
+      cancel.addEventListener('click', closeDialog);
+      confirmDelete.addEventListener('click', closeDialog);
+      overlay.addEventListener('click', function (event) {
+        if (event.target === overlay) { closeDialog(); }
+      });
+      overlay.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') { closeDialog(); }
+      });
+    })();
+  </script>
+</section>
+      <figcaption>Click Delete project to open the dialog; Esc or an overlay click closes it.</figcaption>
+    </figure>
+    <h3>Toast</h3>
+    <p>Toasts give non-blocking feedback for async results and dismiss themselves.</p>
+    <figure class="demo">
+<section data-demo="toast">
+  <style>
+    [data-demo="toast"] { margin: 0; position: relative; }
+    [data-demo="toast"] .stage {
+      min-height: 168px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: var(--s3);
+    }
+    [data-demo="toast"] .show-success,
+    [data-demo="toast"] .show-error {
+      height: 32px;
+      padding: 0 var(--s3);
+      font-family: var(--serif);
+      font-size: 13.5px; font-weight: 500;
+      border: 0;
+      border-radius: var(--r1);
+      cursor: pointer;
+    }
+    [data-demo="toast"] .show-success {
+      color: var(--surface);
+      background: var(--accent);
+    }
+    [data-demo="toast"] .show-success:hover { background: var(--accent-strong); }
+    [data-demo="toast"] .show-error {
+      color: var(--danger);
+      background: transparent;
+      box-shadow: 0 0 0 1px var(--border);
+    }
+    [data-demo="toast"] .show-error:hover { background: var(--danger-tint); }
+    [data-demo="toast"] .toasts {
+      position: absolute;
+      left: 50%;
+      bottom: var(--s2);
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: center;
+      gap: var(--s2);
+      max-width: 100%;
+      pointer-events: none;
+    }
+    [data-demo="toast"] .toast {
+      max-width: 100%;
+      padding: var(--s2) var(--s3);
+      display: flex;
+      align-items: center;
+      gap: var(--s2);
+      font-size: 12.5px; line-height: 1.5;
+      color: var(--paper);
+      background: var(--ink);
+      border-radius: var(--r1);
+      white-space: nowrap;
+      animation: toast-in var(--dur-2) var(--ease-out);
+    }
+    [data-demo="toast"] .toast.is-error::before {
+      content: "";
+      flex: none;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--danger);
+    }
+    [data-demo="toast"] .toast.is-leaving {
+      animation: toast-out var(--dur-2) var(--ease-out) forwards;
+    }
+    @keyframes toast-in {
+      from { opacity: 0; transform: translateY(8px); }
+    }
+    @keyframes toast-out {
+      to { opacity: 0; }
+    }
+  </style>
+  <div class="stage">
+    <button class="show-success" type="button">Show success</button>
+    <button class="show-error" type="button">Show error</button>
+    <div class="toasts"></div>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="toast"]');
+      var toasts = root.querySelector('.toasts');
+      var showSuccess = root.querySelector('.show-success');
+      var showError = root.querySelector('.show-error');
+      var MAX_TOASTS = 3;
+      var LIFETIME = 2400;
+
+      function spawn(kind) {
+        while (toasts.children.length >= MAX_TOASTS) {
+          toasts.removeChild(toasts.firstChild);
+        }
+        var toast = document.createElement('div');
+        toast.className = kind === 'error' ? 'toast is-error' : 'toast';
+        toast.setAttribute('role', 'status');
+        toast.textContent = kind === 'error' ? 'Could not save changes' : 'Changes saved';
+        toasts.appendChild(toast);
+        setTimeout(function () {
+          toast.classList.add('is-leaving');
+        }, LIFETIME);
+        setTimeout(function () {
+          if (toast.parentNode) { toast.parentNode.removeChild(toast); }
+        }, LIFETIME + 220);
+      }
+
+      showSuccess.addEventListener('click', function () { spawn('success'); });
+      showError.addEventListener('click', function () { spawn('error'); });
+      spawn('success');
+    })();
+  </script>
+</section>
+      <figcaption>Trigger both buttons and watch the toasts stack and auto-dismiss.</figcaption>
+    </figure>
+    <h3>Progress</h3>
+    <p>A determinate progress bar shows how much of a task is done.</p>
+    <figure class="demo">
+<section data-demo="progress">
+  <style>
+    [data-demo="progress"] { margin: 0; }
+    [data-demo="progress"] .stage {
+      display: flex;
+      justify-content: center;
+    }
+    [data-demo="progress"] .card {
+      width: 100%;
+      max-width: 360px;
+      padding: var(--s4);
+      border-radius: var(--r2);
+      box-shadow: 0 0 0 1px var(--border);
+    }
+    [data-demo="progress"] .top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--s3);
+    }
+    [data-demo="progress"] .name {
+      font-size: 13.5px; font-weight: 500; line-height: 1.4;
+      color: var(--ink);
+    }
+    [data-demo="progress"] .percent {
+      font-size: 12.5px; line-height: 1.5;
+      color: var(--ink-2);
+      font-variant-numeric: tabular-nums;
+    }
+    [data-demo="progress"] .track {
+      height: 4px;
+      margin-top: var(--s3);
+      background: var(--border);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    [data-demo="progress"] .fill {
+      width: 0;
+      height: 100%;
+      background: var(--accent);
+      border-radius: 999px;
+      transition: width var(--dur-1) var(--ease-out);
+    }
+    [data-demo="progress"] .bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--s3);
+      margin-top: var(--s3);
+    }
+    [data-demo="progress"] .status {
+      display: flex;
+      align-items: center;
+      gap: var(--s1);
+      font-size: 12.5px; line-height: 1.5;
+      color: var(--ink-3);
+    }
+    [data-demo="progress"] .check {
+      display: none;
+      width: 5px;
+      height: 9px;
+      border-right: 2px solid var(--accent);
+      border-bottom: 2px solid var(--accent);
+      transform: translateY(-1px) rotate(45deg);
+    }
+    [data-demo="progress"] .card.is-done .check { display: inline-block; }
+    [data-demo="progress"] .replay {
+      height: 32px;
+      padding: 0 var(--s3);
+      font-family: var(--serif);
+      font-size: 13.5px; font-weight: 500;
+      color: var(--ink);
+      background: transparent;
+      border: 0;
+      border-radius: var(--r1);
+      box-shadow: 0 0 0 1px var(--border);
+      cursor: pointer;
+    }
+    [data-demo="progress"] .replay:hover { background: var(--sand); }
+  </style>
+  <div class="stage">
+    <div class="card">
+      <div class="top">
+        <span class="name">contacts.csv</span>
+        <span class="percent">0%</span>
+      </div>
+      <div class="track"><div class="fill"></div></div>
+      <div class="bottom">
+        <span class="status" aria-live="polite"><span class="check"></span><span class="status-text">Importing…</span></span>
+        <button class="replay" type="button">Replay</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="progress"]');
+      var card = root.querySelector('.card');
+      var fill = root.querySelector('.fill');
+      var percent = root.querySelector('.percent');
+      var statusText = root.querySelector('.status-text');
+      var replay = root.querySelector('.replay');
+      var timer = null;
+
+      function render(pct) {
+        fill.style.width = pct + '%';
+        percent.textContent = pct + '%';
+      }
+
+      function start() {
+        if (timer) { clearInterval(timer); }
+        card.classList.remove('is-done');
+        statusText.textContent = 'Importing…';
+        var pct = 0;
+        render(0);
+        timer = setInterval(function () {
+          pct += 5;
+          if (pct >= 100) {
+            pct = 100;
+            clearInterval(timer);
+            timer = null;
+            card.classList.add('is-done');
+            statusText.textContent = 'Import complete';
+          }
+          render(pct);
+        }, 90);
+      }
+
+      replay.addEventListener('click', start);
+      start();
+    })();
+  </script>
+</section>
+      <figcaption>The bar plays on load; click Replay to run it again.</figcaption>
+    </figure>
+    <h3>Skeleton</h3>
+    <p>A skeleton holds the layout before content arrives, so the page does not jump.</p>
+    <figure class="demo">
+<section data-demo="skeleton">
+  <style>
+    [data-demo="skeleton"] { margin: 0; }
+
+    [data-demo="skeleton"] .card {
+      display: grid;
+      padding: var(--s4);
+      border-radius: var(--r2);
+      box-shadow: 0 0 0 1px var(--border);
+    }
+    [data-demo="skeleton"] .view {
+      grid-area: 1 / 1;
+      min-width: 0;
+      transition: opacity var(--dur-2) var(--ease-out);
+    }
+    [data-demo="skeleton"] .view-real { opacity: 0; pointer-events: none; }
+    [data-demo="skeleton"] .card.is-loaded .view-skel { opacity: 0; pointer-events: none; }
+    [data-demo="skeleton"] .card.is-loaded .view-real { opacity: 1; pointer-events: auto; }
+
+    [data-demo="skeleton"] .row { display: flex; align-items: center; gap: var(--s3); }
+    [data-demo="skeleton"] .lines {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--s2);
+    }
+
+    [data-demo="skeleton"] .ph {
+      position: relative;
+      overflow: hidden;
+      background: var(--sand);
+    }
+    [data-demo="skeleton"] .ph::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      transform: translateX(-100%);
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .55) 50%, rgba(255, 255, 255, 0) 100%);
+      animation: skeleton-sweep 1.4s linear infinite;
+    }
+    @keyframes skeleton-sweep {
+      to { transform: translateX(100%); }
+    }
+
+    [data-demo="skeleton"] .avatar { flex: none; width: var(--s6); height: var(--s6); border-radius: 50%; }
+    [data-demo="skeleton"] .line { height: var(--s3); border-radius: var(--r1); }
+    [data-demo="skeleton"] .line-a { width: 55%; }
+    [data-demo="skeleton"] .line-b { width: 35%; }
+    [data-demo="skeleton"] .media { margin-top: var(--s4); aspect-ratio: 16 / 9; border-radius: var(--r2); }
+
+    [data-demo="skeleton"] .avatar-real {
+      flex: none;
+      width: var(--s6);
+      height: var(--s6);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-tint);
+      color: var(--accent);
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1;
+    }
+    [data-demo="skeleton"] .name { margin: 0; font-size: 15px; font-weight: 500; line-height: 1.4; color: var(--ink); }
+    [data-demo="skeleton"] .meta { margin: 0; font-size: 12.5px; line-height: 1.5; color: var(--ink-3); }
+    [data-demo="skeleton"] .media-real { margin-top: var(--s4); aspect-ratio: 16 / 9; border-radius: var(--r2); background: var(--accent-tint); }
+
+    [data-demo="skeleton"] .controls { margin-top: var(--s4); }
+    [data-demo="skeleton"] .btn {
+      appearance: none;
+      margin: 0;
+      height: 32px;
+      padding: 0 var(--s3);
+      border: 0;
+      border-radius: var(--r1);
+      background: transparent;
+      box-shadow: 0 0 0 1px var(--border);
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: 13.5px;
+      font-weight: 500;
+      line-height: 1.4;
+      cursor: pointer;
+      transition: background var(--dur-1) var(--ease-out), transform var(--dur-1) var(--ease-out);
+    }
+    [data-demo="skeleton"] .btn:hover { background: var(--sand); }
+    [data-demo="skeleton"] .btn:active { transform: translateY(1px); }
+  </style>
+  <div class="stage">
+    <div class="card" aria-live="polite">
+      <div class="view view-skel" aria-hidden="false">
+        <div class="row">
+          <div class="ph avatar"></div>
+          <div class="lines">
+            <div class="ph line line-a"></div>
+            <div class="ph line line-b"></div>
+          </div>
+        </div>
+        <div class="ph media"></div>
+      </div>
+      <div class="view view-real" aria-hidden="true">
+        <div class="row">
+          <div class="avatar-real">A</div>
+          <div class="lines">
+            <p class="name">Ava Chen</p>
+            <p class="meta">Product update · 2 min read</p>
+          </div>
+        </div>
+        <div class="media-real"></div>
+      </div>
+    </div>
+    <div class="controls">
+      <button type="button" class="btn" aria-pressed="false">Toggle content</button>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="skeleton"]');
+      var card = root.querySelector('.card');
+      var skel = root.querySelector('.view-skel');
+      var real = root.querySelector('.view-real');
+      var btn = root.querySelector('.btn');
+      btn.addEventListener('click', function () {
+        var loaded = card.classList.toggle('is-loaded');
+        btn.setAttribute('aria-pressed', loaded ? 'true' : 'false');
+        skel.setAttribute('aria-hidden', loaded ? 'true' : 'false');
+        real.setAttribute('aria-hidden', loaded ? 'false' : 'true');
+      });
+    })();
+  </script>
+</section>
+      <figcaption>Click Toggle content to compare the placeholder with the loaded card.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>Navigation and structure</h2>
+    <h3>Tabs</h3>
+    <p>Tabs switch between sibling views and support arrow-key navigation.</p>
+    <figure class="demo">
+<section data-demo="tabs">
+  <style>
+    [data-demo="tabs"] { margin-top: 0; }
+    [data-demo="tabs"] .bar {
+      position: relative;
+      display: flex;
+      border-bottom: 1px solid var(--border);
+    }
+    [data-demo="tabs"] .tab {
+      flex: 1 1 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 32px;
+      padding: 0 var(--s3);
+      border: 0;
+      background: none;
+      cursor: pointer;
+      font-family: var(--serif);
+      font-size: 13.5px;
+      font-weight: 500;
+      line-height: 1.4;
+      color: var(--ink-3);
+    }
+    [data-demo="tabs"] .tab:hover { color: var(--ink-2); }
+    [data-demo="tabs"] .tab.is-active { color: var(--ink); }
+    [data-demo="tabs"] .indicator {
+      position: absolute;
+      left: 0;
+      bottom: -1px;
+      width: calc(100% / 3);
+      height: 2px;
+      background: var(--accent);
+      transition: transform var(--dur-2) var(--ease-out);
+    }
+    [data-demo="tabs"] [hidden] { display: none; }
+    [data-demo="tabs"] .panel { padding-top: var(--s4); }
+    [data-demo="tabs"] .panel.is-active { animation: tabs-fade var(--dur-2) var(--ease-out); }
+    [data-demo="tabs"] .panel p {
+      margin: 0 0 var(--s3);
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--ink-2);
+    }
+    [data-demo="tabs"] .panel p:last-child { margin-bottom: 0; }
+    @keyframes tabs-fade {
+      from { opacity: 0; transform: translateY(2px); }
+      to { opacity: 1; transform: none; }
+    }
+  </style>
+  <div class="stage">
+    <div class="bar" role="tablist" aria-label="Views">
+      <button class="tab is-active" type="button" role="tab" aria-selected="true">Overview</button>
+      <button class="tab" type="button" role="tab" aria-selected="false" tabindex="-1">Spec</button>
+      <button class="tab" type="button" role="tab" aria-selected="false" tabindex="-1">Activity</button>
+      <span class="indicator" aria-hidden="true"></span>
+    </div>
+    <div class="panel is-active" role="tabpanel">
+      <p>This panel summarizes the requirement at a glance: scope, goal, and current status.</p>
+      <p>It is the first thing readers see, so keep it short.</p>
+    </div>
+    <div class="panel" role="tabpanel" hidden>
+      <p>The spec panel holds the detailed behavior rules, each one observable and testable.</p>
+      <p>Edge cases live here too, written as plainly as the happy path.</p>
+    </div>
+    <div class="panel" role="tabpanel" hidden>
+      <p>The activity panel lists recent changes and decisions, newest first.</p>
+      <p>Each entry names who changed what, and when.</p>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="tabs"]');
+      var tabs = Array.prototype.slice.call(root.querySelectorAll('.tab'));
+      var panels = Array.prototype.slice.call(root.querySelectorAll('.panel'));
+      var indicator = root.querySelector('.indicator');
+
+      function select(index, moveFocus) {
+        tabs.forEach(function (tab, i) {
+          var active = i === index;
+          tab.classList.toggle('is-active', active);
+          tab.setAttribute('aria-selected', active ? 'true' : 'false');
+          tab.tabIndex = active ? 0 : -1;
+          panels[i].classList.toggle('is-active', active);
+          panels[i].hidden = !active;
+        });
+        indicator.style.transform = 'translateX(' + index * 100 + '%)';
+        if (moveFocus) tabs[index].focus();
+      }
+
+      tabs.forEach(function (tab, i) {
+        tab.addEventListener('click', function () { select(i, false); });
+        tab.addEventListener('keydown', function (event) {
+          var next = null;
+          if (event.key === 'ArrowRight') next = (i + 1) % tabs.length;
+          if (event.key === 'ArrowLeft') next = (i + tabs.length - 1) % tabs.length;
+          if (next !== null) {
+            event.preventDefault();
+            select(next, true);
+          }
+        });
+      });
+    })();
+  </script>
+</section>
+      <figcaption>Click a tab or use the left and right arrow keys to switch panels.</figcaption>
+    </figure>
+    <h3>Accordion</h3>
+    <p>An accordion folds long content into expandable sections.</p>
+    <figure class="demo">
+<section data-demo="accordion">
+  <style>
+    [data-demo="accordion"] { margin-top: 0; }
+    [data-demo="accordion"] .item + .item { border-top: 1px solid var(--border); }
+    [data-demo="accordion"] .head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: var(--s3) 0;
+      border: 0;
+      background: none;
+      cursor: pointer;
+      text-align: left;
+      font-family: var(--serif);
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.5;
+      color: var(--ink);
+    }
+    [data-demo="accordion"] .head:hover { color: var(--accent); }
+    [data-demo="accordion"] .chevron {
+      flex: none;
+      width: 8px;
+      height: 8px;
+      margin-left: var(--s3);
+      border-right: 1.5px solid currentColor;
+      border-bottom: 1.5px solid currentColor;
+      transform: rotate(45deg);
+      transition: transform var(--dur-2) var(--ease-out);
+    }
+    [data-demo="accordion"] .item.is-open .chevron { transform: rotate(225deg); }
+    [data-demo="accordion"] .body {
+      display: grid;
+      grid-template-rows: 0fr;
+      visibility: hidden;
+      transition: grid-template-rows var(--dur-2) var(--ease-out), visibility var(--dur-2);
+    }
+    [data-demo="accordion"] .item.is-open .body {
+      grid-template-rows: 1fr;
+      visibility: visible;
+    }
+    [data-demo="accordion"] .body-inner {
+      overflow: hidden;
+      min-height: 0;
+    }
+    [data-demo="accordion"] .body-inner p {
+      margin: 0;
+      padding: 0 0 var(--s4);
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--ink-2);
+    }
+  </style>
+  <div class="stage">
+    <div class="item is-open">
+      <button class="head" type="button" aria-expanded="true">
+        <span class="title">What is an accordion?</span>
+        <span class="chevron" aria-hidden="true"></span>
+      </button>
+      <div class="body">
+        <div class="body-inner">
+          <p>A stack of sections that expand one at a time, so long pages stay scannable.</p>
+        </div>
+      </div>
+    </div>
+    <div class="item">
+      <button class="head" type="button" aria-expanded="false">
+        <span class="title">When should I use one?</span>
+        <span class="chevron" aria-hidden="true"></span>
+      </button>
+      <div class="body">
+        <div class="body-inner">
+          <p>Use it for progressive disclosure: FAQs, advanced options, or details most readers can skip.</p>
+        </div>
+      </div>
+    </div>
+    <div class="item">
+      <button class="head" type="button" aria-expanded="false">
+        <span class="title">How does it behave?</span>
+        <span class="chevron" aria-hidden="true"></span>
+      </button>
+      <div class="body">
+        <div class="body-inner">
+          <p>Opening a section closes the others. The chevron rotates, and the body animates open.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="accordion"]');
+      var items = Array.prototype.slice.call(root.querySelectorAll('.item'));
+      items.forEach(function (item) {
+        var head = item.querySelector('.head');
+        head.addEventListener('click', function () {
+          var willOpen = !item.classList.contains('is-open');
+          items.forEach(function (other) {
+            other.classList.remove('is-open');
+            other.querySelector('.head').setAttribute('aria-expanded', 'false');
+          });
+          if (willOpen) {
+            item.classList.add('is-open');
+            head.setAttribute('aria-expanded', 'true');
+          }
+        });
+      });
+    })();
+  </script>
+</section>
+      <figcaption>Click the section titles; only one section stays open at a time.</figcaption>
+    </figure>
+    <h3>Stepper</h3>
+    <p>A stepper breaks a multi-step flow into ordered stages.</p>
+    <figure class="demo">
+<section data-demo="stepper">
+  <style>
+    [data-demo="stepper"] { margin-top: 0; }
+    [data-demo="stepper"] [hidden] { display: none !important; }
+    [data-demo="stepper"] .steps {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--s2);
+      max-width: 360px;
+      margin: 0 auto;
+    }
+    [data-demo="stepper"] .cell {
+      flex: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--s1);
+      min-width: var(--s6);
+    }
+    [data-demo="stepper"] .step {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: var(--s5);
+      height: var(--s5);
+      border-radius: var(--r3);
+      background: var(--surface);
+      box-shadow: 0 0 0 1px var(--border);
+      color: var(--ink-3);
+      font-size: 12.5px;
+      font-weight: 500;
+      line-height: 1.05;
+      font-variant-numeric: tabular-nums;
+    }
+    [data-demo="stepper"] .cell.is-current .step {
+      box-shadow: 0 0 0 1px var(--accent);
+      color: var(--accent);
+    }
+    [data-demo="stepper"] .cell.is-done .step {
+      background: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent);
+      color: var(--surface);
+    }
+    [data-demo="stepper"] .num { display: block; }
+    [data-demo="stepper"] .check {
+      display: none;
+      width: 9px;
+      height: 5px;
+      border-left: 1.5px solid currentColor;
+      border-bottom: 1.5px solid currentColor;
+      transform: rotate(-45deg) translateY(-1px);
+    }
+    [data-demo="stepper"] .cell.is-done .num { display: none; }
+    [data-demo="stepper"] .cell.is-done .check { display: block; }
+    [data-demo="stepper"] .step-label {
+      font-size: 12.5px;
+      line-height: 1.4;
+      color: var(--ink-3);
+      white-space: nowrap;
+    }
+    [data-demo="stepper"] .cell.is-current .step-label {
+      color: var(--ink);
+      font-weight: 500;
+    }
+    [data-demo="stepper"] .line {
+      flex: 1;
+      height: 1px;
+      margin-top: var(--s3);
+      background: var(--border);
+    }
+    [data-demo="stepper"] .foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--s3);
+      margin-top: var(--s5);
+    }
+    [data-demo="stepper"] .status-count {
+      margin: 0;
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--ink-3);
+      font-variant-numeric: tabular-nums;
+    }
+    [data-demo="stepper"] .actions {
+      flex: none;
+      display: flex;
+      gap: var(--s2);
+    }
+    [data-demo="stepper"] .btn {
+      height: 32px;
+      padding: 0 var(--s3);
+      border: 0;
+      border-radius: var(--r1);
+      background: none;
+      cursor: pointer;
+      font-family: var(--serif);
+      font-size: 13.5px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+    [data-demo="stepper"] .next {
+      background: var(--accent);
+      color: var(--surface);
+    }
+    [data-demo="stepper"] .next:hover { background: var(--accent-strong); }
+    [data-demo="stepper"] .back {
+      background: transparent;
+      box-shadow: inset 0 0 0 1px var(--border);
+      color: var(--ink);
+    }
+    [data-demo="stepper"] .back:hover:not(:disabled) { background: var(--sand); }
+    [data-demo="stepper"] .back:disabled { opacity: 0.45; cursor: default; }
+    [data-demo="stepper"] .done {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: var(--s5);
+    }
+    [data-demo="stepper"] .done-text {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--ink-3);
+    }
+    [data-demo="stepper"] .restart {
+      color: var(--accent);
+      text-decoration-line: underline;
+      text-decoration-color: transparent;
+      text-decoration-thickness: 1px;
+      text-underline-offset: var(--s1);
+      transition: color var(--dur-1) var(--ease-out), text-decoration-color var(--dur-1) var(--ease-out);
+    }
+    [data-demo="stepper"] .restart:hover {
+      color: var(--accent-strong);
+      text-decoration-color: currentColor;
+    }
+  </style>
+  <div class="stage">
+    <div class="steps" aria-hidden="true">
+      <div class="cell is-current">
+        <span class="step"><span class="num">1</span><span class="check"></span></span>
+        <span class="step-label">Account</span>
+      </div>
+      <span class="line"></span>
+      <div class="cell">
+        <span class="step"><span class="num">2</span><span class="check"></span></span>
+        <span class="step-label">Details</span>
+      </div>
+      <span class="line"></span>
+      <div class="cell">
+        <span class="step"><span class="num">3</span><span class="check"></span></span>
+        <span class="step-label">Review</span>
+      </div>
+    </div>
+    <div class="foot">
+      <p class="status-count">Step 1 of 3</p>
+      <div class="actions">
+        <button class="btn back" type="button" disabled>Back</button>
+        <button class="btn next" type="button">Continue</button>
+      </div>
+    </div>
+    <div class="done" hidden>
+      <p class="done-text">All steps complete.</p>
+      <button class="btn restart" type="button">Restart</button>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="stepper"]');
+      var cells = Array.prototype.slice.call(root.querySelectorAll('.cell'));
+      var count = root.querySelector('.status-count');
+      var foot = root.querySelector('.foot');
+      var done = root.querySelector('.done');
+      var back = root.querySelector('.back');
+      var next = root.querySelector('.next');
+      var restart = root.querySelector('.restart');
+      var current = 0;
+
+      function render() {
+        cells.forEach(function (cell, i) {
+          cell.classList.toggle('is-done', i < current);
+          cell.classList.toggle('is-current', i === current);
+        });
+        count.textContent = 'Step ' + (current + 1) + ' of ' + cells.length;
+        back.disabled = current === 0;
+        next.textContent = current === cells.length - 1 ? 'Finish' : 'Continue';
+      }
+
+      next.addEventListener('click', function () {
+        if (current < cells.length - 1) {
+          current += 1;
+          render();
+          return;
+        }
+        cells.forEach(function (cell) {
+          cell.classList.add('is-done');
+          cell.classList.remove('is-current');
+        });
+        foot.hidden = true;
+        done.hidden = false;
+        restart.focus();
+      });
+
+      back.addEventListener('click', function () {
+        if (current > 0) {
+          current -= 1;
+          render();
+        }
+      });
+
+      restart.addEventListener('click', function () {
+        current = 0;
+        done.hidden = true;
+        foot.hidden = false;
+        render();
+        next.focus();
+      });
+
+      render();
+    })();
+  </script>
+</section>
+      <figcaption>Click Continue through all steps, then Restart.</figcaption>
+    </figure>
+    <h3>Card list</h3>
+    <p>A card list lets the reader pick one item from a collection.</p>
+    <figure class="demo">
+<section data-demo="card-list">
+  <style>
+    [data-demo="card-list"] { margin-top: 0; }
+    [data-demo="card-list"] .list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--s2);
+    }
+    [data-demo="card-list"] .card {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      padding: var(--s3) var(--s4);
+      border: 0;
+      border-radius: var(--r2);
+      background: var(--surface);
+      box-shadow: 0 0 0 1px var(--border);
+      cursor: pointer;
+      text-align: left;
+      font-family: var(--serif);
+      transition: transform var(--dur-1) var(--ease-out), box-shadow var(--dur-1) var(--ease-out), background-color var(--dur-1) var(--ease-out);
+    }
+    [data-demo="card-list"] .card:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 0 1px var(--border), 0 1px 2px rgba(27, 27, 24, 0.04), 0 4px 24px rgba(27, 27, 24, 0.05);
+    }
+    [data-demo="card-list"] .card.is-selected {
+      background: var(--accent-tint);
+      box-shadow: 0 0 0 1px var(--accent-tint-3);
+    }
+    [data-demo="card-list"] .card.is-selected:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 0 1px var(--accent-tint-3), 0 1px 2px rgba(27, 27, 24, 0.04), 0 4px 24px rgba(27, 27, 24, 0.05);
+    }
+    [data-demo="card-list"] .card-main {
+      flex: 1;
+      min-width: 0;
+    }
+    [data-demo="card-list"] .card-title {
+      display: block;
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.4;
+      color: var(--ink);
+    }
+    [data-demo="card-list"] .card-desc {
+      display: block;
+      margin-top: var(--s1);
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--ink-2);
+    }
+    [data-demo="card-list"] .card-meta {
+      flex: none;
+      margin-left: var(--s4);
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--ink-3);
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+  </style>
+  <div class="stage">
+    <div class="list">
+      <button class="card" type="button" aria-pressed="false">
+        <span class="card-main">
+          <span class="card-title">Quarterly report</span>
+          <span class="card-desc">Revenue summary and open questions.</span>
+        </span>
+        <span class="card-meta">2h ago</span>
+      </button>
+      <button class="card" type="button" aria-pressed="false">
+        <span class="card-main">
+          <span class="card-title">Design review</span>
+          <span class="card-desc">Notes from the latest walkthrough.</span>
+        </span>
+        <span class="card-meta">Yesterday</span>
+      </button>
+      <button class="card" type="button" aria-pressed="false">
+        <span class="card-main">
+          <span class="card-title">Release plan</span>
+          <span class="card-desc">Milestones for the next cycle.</span>
+        </span>
+        <span class="card-meta">Mar 4</span>
+      </button>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="card-list"]');
+      var cards = Array.prototype.slice.call(root.querySelectorAll('.card'));
+      cards.forEach(function (card) {
+        card.addEventListener('click', function () {
+          cards.forEach(function (other) {
+            var on = other === card;
+            other.classList.toggle('is-selected', on);
+            other.setAttribute('aria-pressed', on ? 'true' : 'false');
+          });
+        });
+      });
+    })();
+  </script>
+</section>
+      <figcaption>Click any card; the selected state moves through the list.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>Motion and schematics</h2>
+    <h3>Spring motion</h3>
+    <p>The same travel distance feels different under ease-out and spring curves.</p>
+    <figure class="demo">
+<section data-demo="spring-motion">
+  <style>
+    [data-demo="spring-motion"] { margin: 0; }
+
+    [data-demo="spring-motion"] .rows { display: flex; flex-direction: column; gap: var(--s1); }
+
+    [data-demo="spring-motion"] .row {
+      appearance: none;
+      margin: 0;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: var(--s4);
+      padding: var(--s2);
+      border: 0;
+      border-radius: var(--r1);
+      background: transparent;
+      font-family: var(--serif);
+      text-align: left;
+      cursor: pointer;
+      transition: background var(--dur-1) var(--ease-out);
+    }
+    [data-demo="spring-motion"] .row:hover { background: var(--sand); }
+
+    [data-demo="spring-motion"] .label {
+      flex: none;
+      width: 64px;
+      font-size: 13.5px;
+      font-weight: 500;
+      line-height: 1.4;
+      color: var(--ink-2);
+    }
+    [data-demo="spring-motion"] .lane {
+      position: relative;
+      flex: 1;
+      min-width: 0;
+      height: var(--s5);
+      display: flex;
+      align-items: center;
+    }
+    [data-demo="spring-motion"] .lane::after {
+      content: "";
+      position: absolute;
+      left: 160px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1px;
+      height: var(--s4);
+      background: var(--border);
+    }
+    [data-demo="spring-motion"] .box {
+      flex: none;
+      width: var(--s4);
+      height: var(--s4);
+      border-radius: var(--r1);
+      background: var(--accent);
+    }
+
+    [data-demo="spring-motion"] .controls { margin-top: var(--s4); }
+    [data-demo="spring-motion"] .play {
+      appearance: none;
+      margin: 0;
+      height: 32px;
+      padding: 0 var(--s3);
+      border: 0;
+      border-radius: var(--r1);
+      background: var(--accent);
+      color: var(--surface);
+      font-family: var(--serif);
+      font-size: 13.5px;
+      font-weight: 500;
+      line-height: 1.4;
+      cursor: pointer;
+      transition: background var(--dur-1) var(--ease-out), transform var(--dur-1) var(--ease-out);
+    }
+    [data-demo="spring-motion"] .play:hover { background: var(--accent-strong); }
+    [data-demo="spring-motion"] .play:active { transform: translateY(1px); }
+
+    [data-demo="spring-motion"] .note {
+      margin: var(--s3) 0 0;
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--ink-3);
+    }
+  </style>
+  <div class="stage">
+    <div class="rows">
+      <button type="button" class="row row-ease">
+        <span class="label">Ease-out</span>
+        <span class="lane"><span class="box"></span></span>
+      </button>
+      <button type="button" class="row row-spring">
+        <span class="label">Spring</span>
+        <span class="lane"><span class="box"></span></span>
+      </button>
+    </div>
+    <div class="controls">
+      <button type="button" class="play">Play</button>
+    </div>
+    <p class="note">Same distance, different feel.</p>
+  </div>
+  <script>
+    (function () {
+      var root = document.currentScript.closest('[data-demo="spring-motion"]');
+      var play = root.querySelector('.play');
+      var rows = root.querySelectorAll('.row');
+
+      function token(name, fallback) {
+        var value = getComputedStyle(root).getPropertyValue(name).trim();
+        return value || fallback;
+      }
+
+      function animateAll() {
+        var duration = parseFloat(token('--dur-3', '320ms')) || 320;
+        rows.forEach(function (row) {
+          var box = row.querySelector('.box');
+          var easing = row.classList.contains('row-spring')
+            ? token('--ease-spring', 'cubic-bezier(.5, 1.6, .4, 1)')
+            : token('--ease-out', 'cubic-bezier(.22, 1, .36, 1)');
+          if (box.getAnimations) {
+            box.getAnimations().forEach(function (anim) { anim.cancel(); });
+          }
+          box.animate(
+            [
+              { transform: 'translateX(0px)', easing: easing },
+              { transform: 'translateX(160px)', easing: easing },
+              { transform: 'translateX(0px)' }
+            ],
+            { duration: duration * 2, easing: 'linear' }
+          );
+        });
+      }
+
+      play.addEventListener('click', animateAll);
+      rows.forEach(function (row) {
+        row.addEventListener('click', animateAll);
+      });
+    })();
+  </script>
+</section>
+      <figcaption>Click Play and compare the two boxes.</figcaption>
+    </figure>
+    <h3>Wireframe</h3>
+    <p>A wireframe is static SVG that shows layout structure without interaction.</p>
+    <figure class="demo">
+<section data-demo="wireframe">
+  <style>
+    [data-demo="wireframe"] { margin: 0; }
+    [data-demo="wireframe"] .wf-canvas { display: block; width: 100%; height: auto; }
+    [data-demo="wireframe"] .wf-frame { fill: var(--surface); stroke: var(--border); }
+    [data-demo="wireframe"] .wf-block { fill: var(--sand); }
+    [data-demo="wireframe"] .wf-block-soft { fill: var(--border-soft); }
+    [data-demo="wireframe"] .wf-card { fill: var(--surface); stroke: var(--border); }
+    [data-demo="wireframe"] .wf-control { fill: var(--surface); stroke: var(--border-strong); }
+    [data-demo="wireframe"] .wf-line { fill: var(--border); }
+    [data-demo="wireframe"] .wf-line-soft { fill: var(--border-soft); }
+    [data-demo="wireframe"] .wf-text { fill: var(--ink-2); }
+    [data-demo="wireframe"] .wf-copy {
+      fill: var(--ink-2);
+      font-family: var(--serif);
+      font-size: 12.5px;
+    }
+    [data-demo="wireframe"] .wf-copy-strong {
+      fill: var(--ink);
+      font-family: var(--serif);
+      font-size: 12.5px;
+      font-weight: 500;
+    }
+    [data-demo="wireframe"] .wf-copy-muted {
+      fill: var(--ink-3);
+      font-family: var(--serif);
+      font-size: 12px;
+    }
+    [data-demo="wireframe"] .wf-label {
+      fill: var(--ink-3);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.4px;
+    }
+    [data-demo="wireframe"] .wf-accent { fill: var(--accent-tint); stroke: var(--accent-tint-3); }
+  </style>
+  <svg class="wf-canvas" viewBox="0 0 600 290" role="img" aria-label="Wireframe: list-detail layout with a sidebar, a list pane, and a detail pane">
+    <rect class="wf-frame" x="1" y="1" width="598" height="288" rx="8"/>
+    <rect class="wf-block" x="1" y="1" width="598" height="32" rx="8"/>
+    <rect class="wf-block" x="1" y="23" width="598" height="10"/>
+    <text class="wf-copy-strong" x="16" y="21">Workspace</text>
+    <text class="wf-copy-muted" x="550" y="21">Draft</text>
+    <text class="wf-copy-muted" x="16" y="58">Navigation</text>
+    <rect class="wf-card" x="16" y="72" width="120" height="32" rx="4"/>
+    <text class="wf-copy" x="28" y="93">Overview</text>
+    <rect class="wf-card" x="16" y="112" width="120" height="32" rx="4"/>
+    <text class="wf-copy" x="28" y="133">Activity</text>
+    <rect class="wf-card" x="16" y="152" width="120" height="32" rx="4"/>
+    <text class="wf-copy" x="28" y="173">Settings</text>
+    <text class="wf-copy-muted" x="160" y="58">Items</text>
+    <rect class="wf-accent" x="160" y="72" width="184" height="44" rx="6"/>
+    <text class="wf-copy-strong" x="172" y="92">Pricing calculator</text>
+    <text class="wf-copy-muted" x="172" y="108">Selected item</text>
+    <rect class="wf-block-soft" x="160" y="128" width="184" height="32" rx="4"/>
+    <rect class="wf-line" x="172" y="141" width="96" height="6" rx="3"/>
+    <rect class="wf-block-soft" x="160" y="172" width="184" height="32" rx="4"/>
+    <rect class="wf-line" x="172" y="185" width="124" height="6" rx="3"/>
+    <text class="wf-copy-muted" x="368" y="58">Selected item</text>
+    <text class="wf-copy-strong" x="368" y="84">Pricing calculator</text>
+    <text class="wf-copy" x="368" y="108"><tspan x="368">Estimate cost from</tspan><tspan x="368" dy="16">expected usage.</tspan></text>
+    <text class="wf-copy-muted" x="368" y="146">Threshold and preview</text>
+    <rect class="wf-card" x="368" y="158" width="216" height="48" rx="6"/>
+    <rect class="wf-line-soft" x="380" y="172" width="80" height="6" rx="3"/>
+    <rect class="wf-line" x="380" y="188" width="148" height="6" rx="3"/>
+    <rect class="wf-control" x="368" y="218" width="64" height="24" rx="4"/>
+    <text class="wf-copy-strong" x="400" y="235" text-anchor="middle">Review</text>
+    <text class="wf-label" x="16" y="274">SIDEBAR</text>
+    <text class="wf-label" x="160" y="274">LIST</text>
+    <text class="wf-label" x="368" y="274">DETAIL</text>
+  </svg>
+</section>
+      <figcaption>The drawing keeps known interface copy as text and uses bars only where content is unspecified.</figcaption>
+    </figure>
+    <h3>Diagram</h3>
+    <p>A diagram is static SVG that shows flows, messages, and state changes without interaction; the three figures below are a flowchart, a sequence diagram, and a state diagram.</p>
+    <figure class="demo">
+<section data-demo="diagram">
+  <style>
+    [data-demo="diagram"] { margin: 0; }
+    [data-demo="diagram"] .dg-canvas { display: block; width: 100%; height: auto; }
+    [data-demo="diagram"] .dg-node { fill: var(--surface); stroke: var(--border-strong); }
+    [data-demo="diagram"] .dg-node-soft { fill: var(--sand); stroke: var(--border); }
+    [data-demo="diagram"] .dg-node-accent { fill: var(--accent-tint); stroke: var(--accent-tint-3); }
+    [data-demo="diagram"] .dg-group { fill: none; stroke: var(--border); stroke-dasharray: 4 4; }
+    [data-demo="diagram"] .dg-edge { fill: none; stroke: var(--border-strong); }
+    [data-demo="diagram"] .dg-edge-accent { fill: none; stroke: var(--accent); }
+    [data-demo="diagram"] .dg-edge-muted { fill: none; stroke: var(--border-strong); stroke-dasharray: 4 4; }
+    [data-demo="diagram"] .dg-arrow { fill: var(--border-strong); }
+    [data-demo="diagram"] .dg-arrow-accent { fill: var(--accent); }
+    [data-demo="diagram"] .dg-copy {
+      fill: var(--ink-2);
+      font-family: var(--serif);
+      font-size: 12.5px;
+    }
+    [data-demo="diagram"] .dg-copy-strong {
+      fill: var(--ink);
+      font-family: var(--serif);
+      font-size: 12.5px;
+      font-weight: 500;
+    }
+    [data-demo="diagram"] .dg-copy-muted {
+      fill: var(--ink-3);
+      font-family: var(--serif);
+      font-size: 12px;
+    }
+    [data-demo="diagram"] .dg-label {
+      fill: var(--ink-3);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.4px;
+    }
+  </style>
+  <svg class="dg-canvas" viewBox="0 0 640 200" role="img" aria-label="Flowchart: after a requirement is submitted, complete information leads to ready for review, otherwise more details are requested">
+    <rect class="dg-node" x="8" y="44" width="164" height="40" rx="6"/>
+    <text class="dg-copy" x="90" y="68" text-anchor="middle">Submit requirement</text>
+    <line class="dg-edge-accent" x1="172" y1="64" x2="218" y2="64"/>
+    <polygon class="dg-arrow-accent" points="218,60 226,64 218,68"/>
+    <polygon class="dg-node" points="330,28 434,64 330,100 226,64"/>
+    <text class="dg-copy" x="330" y="68" text-anchor="middle">Information complete?</text>
+    <text class="dg-label" x="447" y="56">Yes</text>
+    <line class="dg-edge-accent" x1="434" y1="64" x2="474" y2="64"/>
+    <polygon class="dg-arrow-accent" points="474,60 482,64 474,68"/>
+    <rect class="dg-node" x="482" y="44" width="148" height="40" rx="6"/>
+    <text class="dg-copy" x="556" y="68" text-anchor="middle">Ready for review</text>
+    <text class="dg-label" x="338" y="126">No</text>
+    <line class="dg-edge-muted" x1="330" y1="100" x2="330" y2="144"/>
+    <polygon class="dg-arrow" points="326,144 334,144 330,152"/>
+    <rect class="dg-node-soft" x="240" y="152" width="180" height="40" rx="6"/>
+    <text class="dg-copy" x="330" y="176" text-anchor="middle">Request more details</text>
+  </svg>
+</section>
+      <figcaption>The success path stays one continuous accent line; the incomplete-information branch is dashed.</figcaption>
+    </figure>
+    <figure class="demo">
+<section data-demo="diagram">
+  <style>
+    [data-demo="diagram"] { margin: 0; }
+    [data-demo="diagram"] .dg-canvas { display: block; width: 100%; height: auto; }
+    [data-demo="diagram"] .dg-node { fill: var(--surface); stroke: var(--border-strong); }
+    [data-demo="diagram"] .dg-node-soft { fill: var(--sand); stroke: var(--border); }
+    [data-demo="diagram"] .dg-node-accent { fill: var(--accent-tint); stroke: var(--accent-tint-3); }
+    [data-demo="diagram"] .dg-group { fill: none; stroke: var(--border); stroke-dasharray: 4 4; }
+    [data-demo="diagram"] .dg-edge { fill: none; stroke: var(--border-strong); }
+    [data-demo="diagram"] .dg-edge-accent { fill: none; stroke: var(--accent); }
+    [data-demo="diagram"] .dg-edge-muted { fill: none; stroke: var(--border-strong); stroke-dasharray: 4 4; }
+    [data-demo="diagram"] .dg-arrow { fill: var(--border-strong); }
+    [data-demo="diagram"] .dg-arrow-accent { fill: var(--accent); }
+    [data-demo="diagram"] .dg-copy {
+      fill: var(--ink-2);
+      font-family: var(--serif);
+      font-size: 12.5px;
+    }
+    [data-demo="diagram"] .dg-copy-strong {
+      fill: var(--ink);
+      font-family: var(--serif);
+      font-size: 12.5px;
+      font-weight: 500;
+    }
+    [data-demo="diagram"] .dg-copy-muted {
+      fill: var(--ink-3);
+      font-family: var(--serif);
+      font-size: 12px;
+    }
+    [data-demo="diagram"] .dg-label {
+      fill: var(--ink-3);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.4px;
+    }
+  </style>
+  <svg class="dg-canvas" viewBox="0 0 640 300" role="img" aria-label="Sequence diagram: the reader describes a requirement to Hue, Hue validates the document with the quality gate, the gate returns findings, and Hue delivers the checked HTML">
+    <rect class="dg-node" x="62" y="16" width="76" height="32" rx="6"/>
+    <text class="dg-copy-strong" x="100" y="36" text-anchor="middle">Reader</text>
+    <rect class="dg-node" x="292" y="16" width="56" height="32" rx="6"/>
+    <text class="dg-copy-strong" x="320" y="36" text-anchor="middle">Hue</text>
+    <rect class="dg-node" x="480" y="16" width="120" height="32" rx="6"/>
+    <text class="dg-copy-strong" x="540" y="36" text-anchor="middle">Quality gate</text>
+    <line class="dg-edge-muted" x1="100" y1="48" x2="100" y2="272"/>
+    <line class="dg-edge-muted" x1="320" y1="48" x2="320" y2="272"/>
+    <line class="dg-edge-muted" x1="540" y1="48" x2="540" y2="272"/>
+    <text class="dg-copy" x="207" y="80" text-anchor="middle">Describe requirement</text>
+    <line class="dg-edge" x1="100" y1="88" x2="306" y2="88"/>
+    <polygon class="dg-arrow" points="306,84 314,88 306,92"/>
+    <text class="dg-copy" x="427" y="128" text-anchor="middle">Validate document</text>
+    <line class="dg-edge" x1="320" y1="136" x2="526" y2="136"/>
+    <polygon class="dg-arrow" points="526,132 534,136 526,140"/>
+    <text class="dg-copy" x="430" y="176" text-anchor="middle">Findings</text>
+    <line class="dg-edge-muted" x1="540" y1="184" x2="334" y2="184"/>
+    <polygon class="dg-arrow" points="334,180 326,184 334,188"/>
+    <text class="dg-copy" x="213" y="224" text-anchor="middle">Deliver checked HTML</text>
+    <line class="dg-edge" x1="320" y1="232" x2="114" y2="232"/>
+    <polygon class="dg-arrow" points="114,228 106,232 114,236"/>
+  </svg>
+</section>
+      <figcaption>The sequence diagram orders the messages between the reader, Hue, and the quality gate from top to bottom, with requests solid and returns dashed.</figcaption>
+    </figure>
+    <figure class="demo">
+<section data-demo="diagram">
+  <style>
+    [data-demo="diagram"] { margin: 0; }
+    [data-demo="diagram"] .dg-canvas { display: block; width: 100%; height: auto; }
+    [data-demo="diagram"] .dg-node { fill: var(--surface); stroke: var(--border-strong); }
+    [data-demo="diagram"] .dg-node-soft { fill: var(--sand); stroke: var(--border); }
+    [data-demo="diagram"] .dg-node-accent { fill: var(--accent-tint); stroke: var(--accent-tint-3); }
+    [data-demo="diagram"] .dg-group { fill: none; stroke: var(--border); stroke-dasharray: 4 4; }
+    [data-demo="diagram"] .dg-edge { fill: none; stroke: var(--border-strong); }
+    [data-demo="diagram"] .dg-edge-accent { fill: none; stroke: var(--accent); }
+    [data-demo="diagram"] .dg-edge-muted { fill: none; stroke: var(--border-strong); stroke-dasharray: 4 4; }
+    [data-demo="diagram"] .dg-arrow { fill: var(--border-strong); }
+    [data-demo="diagram"] .dg-arrow-accent { fill: var(--accent); }
+    [data-demo="diagram"] .dg-copy {
+      fill: var(--ink-2);
+      font-family: var(--serif);
+      font-size: 12.5px;
+    }
+    [data-demo="diagram"] .dg-copy-strong {
+      fill: var(--ink);
+      font-family: var(--serif);
+      font-size: 12.5px;
+      font-weight: 500;
+    }
+    [data-demo="diagram"] .dg-copy-muted {
+      fill: var(--ink-3);
+      font-family: var(--serif);
+      font-size: 12px;
+    }
+    [data-demo="diagram"] .dg-label {
+      fill: var(--ink-3);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.4px;
+    }
+  </style>
+  <svg class="dg-canvas" viewBox="0 0 640 200" role="img" aria-label="State diagram: Draft moves to In review, then to Approved, while requested changes send it to Rework and back to Draft">
+    <rect class="dg-node" x="16" y="56" width="64" height="36" rx="6"/>
+    <text class="dg-copy" x="48" y="78" text-anchor="middle">Draft</text>
+    <rect class="dg-node-accent" x="232" y="56" width="96" height="36" rx="6"/>
+    <text class="dg-copy-strong" x="280" y="78" text-anchor="middle">In review</text>
+    <rect class="dg-node" x="496" y="56" width="88" height="36" rx="6"/>
+    <text class="dg-copy" x="540" y="78" text-anchor="middle">Approved</text>
+    <rect class="dg-node-soft" x="244" y="140" width="72" height="36" rx="6"/>
+    <text class="dg-copy" x="280" y="162" text-anchor="middle">Rework</text>
+    <line class="dg-edge" x1="80" y1="74" x2="224" y2="74"/>
+    <polygon class="dg-arrow" points="224,70 232,74 224,78"/>
+    <line class="dg-edge" x1="328" y1="74" x2="488" y2="74"/>
+    <polygon class="dg-arrow" points="488,70 496,74 488,78"/>
+    <line class="dg-edge-muted" x1="280" y1="92" x2="280" y2="132"/>
+    <polygon class="dg-arrow" points="276,132 284,132 280,140"/>
+    <path class="dg-edge-muted" d="M244,158 H48 V100"/>
+    <polygon class="dg-arrow" points="48,92 44,100 52,100"/>
+  </svg>
+</section>
+      <figcaption>The state diagram keeps the normal approval path on one axis and routes the rework loop back to Draft outside it.</figcaption>
+    </figure>
+  </section>
+</main>
+
+<footer>
+Generated with <a href="https://github.com/iCyris/Hue" target="_blank" rel="noopener noreferrer">Hue</a>.
+</footer>
+
+</div>
+</body>
+</html>

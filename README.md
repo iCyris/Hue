@@ -39,11 +39,11 @@ baseline — open the HTML files to try the interactive demos.
   <img src="assets/screenshots/requirement-en.png" alt="English requirement document" width="49%">
 </p>
 
-**Syntax showcase** — every content form a Hue document can render, [zh](examples/syntax-zh.html) · [en](examples/syntax-en.html)
+**Showcase** — every content form and all sixteen demo blocks in one document, [zh](examples/showcase-zh.html) · [en](examples/showcase-en.html)
 
 <p align="center">
-  <img src="assets/screenshots/syntax-zh.png" alt="Chinese syntax showcase" width="49%">
-  <img src="assets/screenshots/syntax-en.png" alt="English syntax showcase" width="49%">
+  <img src="assets/screenshots/showcase-zh.png" alt="Chinese syntax and demo showcase" width="49%">
+  <img src="assets/screenshots/showcase-en.png" alt="English syntax and demo showcase" width="49%">
 </p>
 
 ## Install

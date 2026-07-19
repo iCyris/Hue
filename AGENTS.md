@@ -16,6 +16,8 @@ installable as-is into agentskills-compatible hosts (`~/.kimi-code/skills/hue/`,
   system. Fill slots, never edit its `<style>`.
 - `templates/demos/*.html` — self-contained interactive blocks, one file per demo.
 - `scripts/check.py` / `check.sh` — the quality gate (Python stdlib only).
+- `scripts/sync-template.py` / `sync-template.sh` — re-syncs the template's base
+  `<style>` block into generated documents.
 - `examples/` — generated documents kept as the visual acceptance baseline.
 - `assets/` — the logo plus `screenshots/` (README previews of the examples);
   generated documents never reference it.
@@ -27,6 +29,12 @@ installable as-is into agentskills-compatible hosts (`~/.kimi-code/skills/hue/`,
 - All skill files are written in English. Generated documents use the reader's language.
 - The gate must pass before any commit touching `templates/` or `examples/`:
   `bash scripts/check.sh templates/demos/*.html examples/*.html`
+- After changing the `<style>` block in `templates/document.html`, re-sync every
+  generated document with `bash scripts/sync-template.sh` (defaults to
+  `examples/*.html`; pass explicit files to sync others). It rewrites only the
+  first line-anchored `<style>` block of each file — prose and embedded demo
+  blocks are untouched, so re-run the gate afterwards. Demo blocks are
+  translated on insert and always sync by hand.
 - `scripts/` stays stdlib-only and self-contained. No new dependencies, no build step,
   no package manager.
 - New demos follow the contract in `references/demos.md` (scoped selectors, prefixed

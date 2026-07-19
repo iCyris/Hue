@@ -22,6 +22,10 @@
       box-shadow: 0 0 0 1px var(--border);
     }
     [data-demo="form-validation"] .input::placeholder { color: var(--ink-3); }
+    [data-demo="form-validation"] .input:focus {
+      outline: none;
+      box-shadow: 0 0 0 1px var(--accent);
+    }
     [data-demo="form-validation"] .input.is-error { box-shadow: 0 0 0 1px var(--danger); }
     [data-demo="form-validation"] .input.is-success { box-shadow: 0 0 0 1px var(--accent); }
     [data-demo="form-validation"] .hint {

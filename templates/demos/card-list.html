@@ -7,7 +7,6 @@
       gap: var(--s2);
     }
     [data-demo="card-list"] .card {
-      position: relative;
       display: flex;
       align-items: center;
       width: 100%;
@@ -19,7 +18,7 @@
       cursor: pointer;
       text-align: left;
       font-family: var(--serif);
-      transition: transform var(--dur-1) var(--ease-out);
+      transition: transform var(--dur-1) var(--ease-out), box-shadow var(--dur-1) var(--ease-out), background-color var(--dur-1) var(--ease-out);
     }
     [data-demo="card-list"] .card:hover {
       transform: translateY(-1px);
@@ -60,22 +59,6 @@
       text-align: right;
       font-variant-numeric: tabular-nums;
     }
-    [data-demo="card-list"] .card-dot {
-      position: absolute;
-      top: var(--s2);
-      right: var(--s2);
-      width: 6px;
-      height: 6px;
-      border-radius: var(--r1);
-      background: var(--accent);
-      opacity: 0;
-      transform: scale(0.5);
-      transition: transform var(--dur-1) var(--ease-out), opacity var(--dur-1) var(--ease-out);
-    }
-    [data-demo="card-list"] .card.is-selected .card-dot {
-      opacity: 1;
-      transform: none;
-    }
   </style>
   <div class="stage">
     <div class="list">
@@ -85,7 +68,6 @@
           <span class="card-desc">Revenue summary and open questions.</span>
         </span>
         <span class="card-meta">2h ago</span>
-        <span class="card-dot" aria-hidden="true"></span>
       </button>
       <button class="card" type="button" aria-pressed="false">
         <span class="card-main">
@@ -93,7 +75,6 @@
           <span class="card-desc">Notes from the latest walkthrough.</span>
         </span>
         <span class="card-meta">Yesterday</span>
-        <span class="card-dot" aria-hidden="true"></span>
       </button>
       <button class="card" type="button" aria-pressed="false">
         <span class="card-main">
@@ -101,7 +82,6 @@
           <span class="card-desc">Milestones for the next cycle.</span>
         </span>
         <span class="card-meta">Mar 4</span>
-        <span class="card-dot" aria-hidden="true"></span>
       </button>
     </div>
   </div>

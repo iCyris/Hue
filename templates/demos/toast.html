@@ -2,7 +2,7 @@
   <style>
     [data-demo="toast"] { margin: 0; position: relative; }
     [data-demo="toast"] .stage {
-      min-height: 200px;
+      min-height: 168px;
       display: flex;
       align-items: flex-start;
       justify-content: center;
@@ -32,7 +32,7 @@
     [data-demo="toast"] .toasts {
       position: absolute;
       left: 50%;
-      bottom: var(--s4);
+      bottom: var(--s2);
       transform: translateX(-50%);
       display: flex;
       flex-direction: column-reverse;
@@ -105,6 +105,7 @@
 
       showSuccess.addEventListener('click', function () { spawn('success'); });
       showError.addEventListener('click', function () { spawn('error'); });
+      spawn('success');
     })();
   </script>
 </section>

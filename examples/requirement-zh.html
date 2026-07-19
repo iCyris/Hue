@@ -243,13 +243,20 @@ footer a:hover { color: var(--ink-2); text-decoration-color: currentColor; }
     [data-demo="stepper"] [hidden] { display: none !important; }
     [data-demo="stepper"] .steps {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: var(--s2);
-      max-width: 240px;
+      max-width: 360px;
       margin: 0 auto;
     }
-    [data-demo="stepper"] .step {
+    [data-demo="stepper"] .cell {
       flex: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--s1);
+      min-width: var(--s6);
+    }
+    [data-demo="stepper"] .step {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -264,11 +271,11 @@ footer a:hover { color: var(--ink-2); text-decoration-color: currentColor; }
       line-height: 1.05;
       font-variant-numeric: tabular-nums;
     }
-    [data-demo="stepper"] .step.is-current {
+    [data-demo="stepper"] .cell.is-current .step {
       box-shadow: 0 0 0 1px var(--accent);
       color: var(--accent);
     }
-    [data-demo="stepper"] .step.is-done {
+    [data-demo="stepper"] .cell.is-done .step {
       background: var(--accent);
       box-shadow: 0 0 0 1px var(--accent);
       color: var(--surface);
@@ -282,32 +289,42 @@ footer a:hover { color: var(--ink-2); text-decoration-color: currentColor; }
       border-bottom: 1.5px solid currentColor;
       transform: rotate(-45deg) translateY(-1px);
     }
-    [data-demo="stepper"] .step.is-done .num { display: none; }
-    [data-demo="stepper"] .step.is-done .check { display: block; }
+    [data-demo="stepper"] .cell.is-done .num { display: none; }
+    [data-demo="stepper"] .cell.is-done .check { display: block; }
+    [data-demo="stepper"] .step-label {
+      font-size: 12.5px;
+      line-height: 1.4;
+      color: var(--ink-3);
+      white-space: nowrap;
+    }
+    [data-demo="stepper"] .cell.is-current .step-label {
+      color: var(--ink);
+      font-weight: 500;
+    }
     [data-demo="stepper"] .line {
       flex: 1;
       height: 1px;
+      margin-top: var(--s3);
       background: var(--border);
     }
-    [data-demo="stepper"] .panel { margin-top: var(--s5); }
+    [data-demo="stepper"] .foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--s3);
+      margin-top: var(--s5);
+    }
     [data-demo="stepper"] .status-count {
-      margin: 0 0 var(--s1);
+      margin: 0;
       font-size: 12.5px;
       line-height: 1.5;
       color: var(--ink-3);
       font-variant-numeric: tabular-nums;
     }
-    [data-demo="stepper"] .status-name {
-      margin: 0;
-      font-size: 15px;
-      font-weight: 500;
-      line-height: 1.5;
-      color: var(--ink);
-    }
     [data-demo="stepper"] .actions {
+      flex: none;
       display: flex;
-      justify-content: space-between;
-      margin-top: var(--s5);
+      gap: var(--s2);
     }
     [data-demo="stepper"] .btn {
       height: 32px;
@@ -345,27 +362,42 @@ footer a:hover { color: var(--ink-2); text-decoration-color: currentColor; }
       line-height: 1.65;
       color: var(--ink-3);
     }
-    [data-demo="stepper"] .restart { color: var(--accent); }
+    [data-demo="stepper"] .restart {
+      color: var(--accent);
+      text-decoration-line: underline;
+      text-decoration-color: transparent;
+      text-decoration-thickness: 1px;
+      text-underline-offset: var(--s1);
+      transition: color var(--dur-1) var(--ease-out), text-decoration-color var(--dur-1) var(--ease-out);
+    }
     [data-demo="stepper"] .restart:hover {
       color: var(--accent-strong);
-      text-decoration: underline;
+      text-decoration-color: currentColor;
     }
   </style>
   <div class="stage">
     <div class="steps" aria-hidden="true">
-      <span class="step is-current"><span class="num">1</span><span class="check"></span></span>
+      <div class="cell is-current">
+        <span class="step"><span class="num">1</span><span class="check"></span></span>
+        <span class="step-label">已揽收</span>
+      </div>
       <span class="line"></span>
-      <span class="step"><span class="num">2</span><span class="check"></span></span>
+      <div class="cell">
+        <span class="step"><span class="num">2</span><span class="check"></span></span>
+        <span class="step-label">运输中</span>
+      </div>
       <span class="line"></span>
-      <span class="step"><span class="num">3</span><span class="check"></span></span>
+      <div class="cell">
+        <span class="step"><span class="num">3</span><span class="check"></span></span>
+        <span class="step-label">已签收</span>
+      </div>
     </div>
-    <div class="panel">
+    <div class="foot">
       <p class="status-count">第 1 步，共 3 步</p>
-      <p class="status-name">已揽收</p>
-    </div>
-    <div class="actions">
-      <button class="btn back" type="button" disabled>上一步</button>
-      <button class="btn next" type="button">下一步</button>
+      <div class="actions">
+        <button class="btn back" type="button" disabled>上一步</button>
+        <button class="btn next" type="button">下一步</button>
+      </div>
     </div>
     <div class="done" hidden>
       <p class="done-text">全部节点已完成。</p>
@@ -375,41 +407,36 @@ footer a:hover { color: var(--ink-2); text-decoration-color: currentColor; }
   <script>
     (function () {
       var root = document.currentScript.closest('[data-demo="stepper"]');
-      var steps = Array.prototype.slice.call(root.querySelectorAll('.step'));
+      var cells = Array.prototype.slice.call(root.querySelectorAll('.cell'));
       var count = root.querySelector('.status-count');
-      var name = root.querySelector('.status-name');
-      var panel = root.querySelector('.panel');
-      var actions = root.querySelector('.actions');
+      var foot = root.querySelector('.foot');
       var done = root.querySelector('.done');
       var back = root.querySelector('.back');
       var next = root.querySelector('.next');
       var restart = root.querySelector('.restart');
-      var names = ['已揽收', '运输中', '已签收'];
       var current = 0;
 
       function render() {
-        steps.forEach(function (step, i) {
-          step.classList.toggle('is-done', i < current);
-          step.classList.toggle('is-current', i === current);
+        cells.forEach(function (cell, i) {
+          cell.classList.toggle('is-done', i < current);
+          cell.classList.toggle('is-current', i === current);
         });
-        count.textContent = '第 ' + (current + 1) + ' 步，共 ' + steps.length + ' 步';
-        name.textContent = names[current];
+        count.textContent = '第 ' + (current + 1) + ' 步，共 ' + cells.length + ' 步';
         back.disabled = current === 0;
-        next.textContent = current === steps.length - 1 ? '完成' : '下一步';
+        next.textContent = current === cells.length - 1 ? '完成' : '下一步';
       }
 
       next.addEventListener('click', function () {
-        if (current < steps.length - 1) {
+        if (current < cells.length - 1) {
           current += 1;
           render();
           return;
         }
-        steps.forEach(function (step) {
-          step.classList.add('is-done');
-          step.classList.remove('is-current');
+        cells.forEach(function (cell) {
+          cell.classList.add('is-done');
+          cell.classList.remove('is-current');
         });
-        panel.hidden = true;
-        actions.hidden = true;
+        foot.hidden = true;
         done.hidden = false;
         restart.focus();
       });
@@ -424,8 +451,7 @@ footer a:hover { color: var(--ink-2); text-decoration-color: currentColor; }
       restart.addEventListener('click', function () {
         current = 0;
         done.hidden = true;
-        panel.hidden = false;
-        actions.hidden = false;
+        foot.hidden = false;
         render();
         next.focus();
       });
@@ -596,7 +622,7 @@ footer a:hover { color: var(--ink-2); text-decoration-color: currentColor; }
   <style>
     [data-demo="toast"] { margin: 0; position: relative; }
     [data-demo="toast"] .stage {
-      min-height: 200px;
+      min-height: 168px;
       display: flex;
       align-items: flex-start;
       justify-content: center;
@@ -626,7 +652,7 @@ footer a:hover { color: var(--ink-2); text-decoration-color: currentColor; }
     [data-demo="toast"] .toasts {
       position: absolute;
       left: 50%;
-      bottom: var(--s4);
+      bottom: var(--s2);
       transform: translateX(-50%);
       display: flex;
       flex-direction: column-reverse;
@@ -699,6 +725,7 @@ footer a:hover { color: var(--ink-2); text-decoration-color: currentColor; }
 
       showSuccess.addEventListener('click', function () { spawn('success'); });
       showError.addEventListener('click', function () { spawn('error'); });
+      spawn('success');
     })();
   </script>
 </section>
