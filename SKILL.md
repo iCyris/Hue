@@ -45,7 +45,8 @@ documents.
    English.
 3. **Demos.** If the user named positions or components, follow exactly. Otherwise
    choose at most 3 from the catalog in `references/demos.md`, placed where behavior is
-   hardest to imagine in words; report your choices in the final reply.
+   hardest to imagine in words; report your choices in the final reply. If the user
+   supplied screenshots or mockups, plan one `image` block per image (see Demo System).
 
 ## Workflow
 
@@ -87,9 +88,9 @@ no duplicate ids).
 
 ## Demo System
 
-Sixteen blocks live in `templates/demos/` (button-states, form-validation, toggle,
+Seventeen blocks live in `templates/demos/` (button-states, form-validation, toggle,
 slider, segmented-control, tabs, accordion, stepper, dialog, toast, progress, skeleton,
-card-list, spring-motion, wireframe, diagram). The contract and per-block guidance:
+card-list, spring-motion, wireframe, diagram, image). The contract and per-block guidance:
 `references/demos.md`.
 
 - Use blocks verbatim. If a needed component is not in the catalog, compose it from
@@ -109,9 +110,16 @@ card-list, spring-motion, wireframe, diagram). The contract and per-block guidan
   flows, dependencies, communication, conditions, or state changes. When a short
   paragraph or list already expresses the relationship clearly, add no diagram.
   Diagrams count toward the default cap of 3 demos per document.
+- `image` is the screenshot block. When the user supplies screenshots or mockups,
+  paste one block per image, then swap in each file with
+  `python3 scripts/embed-image.py <image> <doc.html> --block N --alt "描述或 description"`.
+  The script writes the base64 data URI directly into the document; never paste
+  base64 by hand. Image blocks are visual evidence and do not count toward the
+  demo cap.
 - Quick mapping: screen or region layout → `wireframe`; ordered business flow →
   `diagram` (flowchart); messages between actors or systems → `diagram` (sequence);
-  lifecycle and transitions → `diagram` (state); interactive control behavior → the
+  lifecycle and transitions → `diagram` (state); user-supplied screenshot or
+  mockup → `image` plus `scripts/embed-image.py`; interactive control behavior → the
   matching interactive demo.
 - The same block may be pasted multiple times; it is scoped to its own root.
 

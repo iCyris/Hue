@@ -83,6 +83,30 @@ Quality bar (judgment, not gated):
 | `spring-motion.html` | Same element animated with ease-out vs spring on click | Motion specs, transition feel, animation vocabulary |
 | `wireframe.html` | Static SVG schematic of an interface layout; no interaction | Showing a screen's structure, region layout, or before/after arrangement |
 | `diagram.html` | Static SVG relationship diagram using Hue primitives; no interaction | Showing flows, system messages, dependencies, or state changes |
+| `image.html` | Framed image with a click-to-enlarge lightbox (Esc/click to close) | User-supplied screenshots, reference mockups, visual evidence |
+
+## Image block: embedding screenshots
+
+`image` frames one image in a consistent bordered card and opens it full-viewport on
+click. It ships with a sample image; swap in the user's screenshot with the embedding
+script, never by pasting base64 by hand:
+
+```bash
+python3 scripts/embed-image.py <image> <document.html> [--block N] [--alt "text"]
+```
+
+- One block per image. `--block N` targets the Nth image block in the document
+  (1-based, default 1); `--alt` rewrites the thumbnail's alt text into the document
+  language.
+- The script accepts PNG, JPEG, GIF, and WebP, writes the data URI straight into the
+  file (keeping base64 out of the conversation), and warns when the image exceeds
+  512 KB; downscale large screenshots before embedding.
+- The thumbnail's visible strings (hint, aria-labels) are translated on insert like
+  any other block. Image blocks are evidence, not demos of behavior; they do not
+  count toward the 3-demo cap.
+- Unlike `dialog`, the lightbox overlay is viewport-fixed (the one sanctioned case):
+  enlarging only makes sense across the full window. The script still scopes itself
+  to the block root.
 
 ## Toggle sizing rules
 

@@ -19,9 +19,10 @@ many hues; one design system, many documents.
 - **A real design system, not generated styling.** Warm paper canvas, serif-led
   typography (Chinese and English stacks), one hydrangea-blue accent, tokenized
   spacing and motion. The AI fills a template; it never writes CSS.
-- **Sixteen demo blocks.** Buttons, forms, toggles, sliders, tabs, dialogs,
+- **Seventeen demo blocks.** Buttons, forms, toggles, sliders, tabs, dialogs,
   toasts, steppers, skeletons, spring-motion comparisons, static wireframe
-  schematics, static relationship diagrams (flow, sequence, and state) and
+  schematics, static relationship diagrams (flow, sequence, and state),
+  user-supplied screenshots with a click-to-enlarge lightbox, and
   more — each a self-contained block that matches the page and can be placed
   anywhere.
 - **Bilingual by design.** Chinese and English documents each get their own font
@@ -39,7 +40,7 @@ baseline — open the HTML files to try the interactive demos.
   <img src="assets/screenshots/requirement-en.png" alt="English requirement document" width="49%">
 </p>
 
-**Showcase** — every content form and all sixteen demo blocks in one document, [zh](examples/showcase-zh.html) · [en](examples/showcase-en.html)
+**Showcase** — every content form and all seventeen demo blocks in one document, [zh](examples/showcase-zh.html) · [en](examples/showcase-en.html)
 
 <p align="center">
   <img src="assets/screenshots/showcase-zh.png" alt="Chinese syntax and demo showcase" width="49%">
@@ -82,8 +83,8 @@ until it prints `check: ok`.
 
 - `SKILL.md` — agent entrypoint: contract, workflow, language routing
 - `references/` — design system, demo contract, per-language writing rules
-- `templates/` — `document.html` plus the sixteen demo blocks
-- `scripts/` — the stdlib-only quality gate
+- `templates/` — `document.html` plus the seventeen demo blocks
+- `scripts/` — the stdlib-only quality gate and screenshot embedder
 - `examples/` — generated documents kept as the visual baseline
 
 Typography and editorial discipline are informed by

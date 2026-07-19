@@ -18,6 +18,9 @@ installable as-is into agentskills-compatible hosts (`~/.kimi-code/skills/hue/`,
 - `scripts/check.py` / `check.sh` — the quality gate (Python stdlib only).
 - `scripts/sync-template.py` / `sync-template.sh` — re-syncs the template's base
   `<style>` block into generated documents.
+- `scripts/embed-image.py` / `embed-image.sh` — embeds a user-supplied image into a
+  document's `image` demo block as a base64 data URI (stdlib only; base64 never
+  touches stdout).
 - `examples/` — generated documents kept as the visual acceptance baseline.
 - `assets/` — the logo plus `screenshots/` (README previews of the examples);
   generated documents never reference it.
@@ -39,5 +42,9 @@ installable as-is into agentskills-compatible hosts (`~/.kimi-code/skills/hue/`,
   no package manager.
 - New demos follow the contract in `references/demos.md` (scoped selectors, prefixed
   keyframes, `currentScript` IIFE, no ids) and add exactly one row to its catalog.
+- A demo or example update is not done when the gate passes: check whether the same
+  change must be reflected in `SKILL.md` (block count, demo list, workflow),
+  `README.md` (block counts, feature bullets, screenshots), and `examples/` (the
+  showcase is the visual baseline — new blocks appear there, in both languages).
 - Catalogs consolidate: fold new banned phrases into the existing lists in the writing
   references instead of appending near-synonyms.
