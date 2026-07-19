@@ -65,7 +65,7 @@ def main():
         print("embed-image: %s is not a PNG, JPEG, GIF, or WebP image" % args.image, file=sys.stderr)
         return 1
     if len(data) > WARN_BYTES:
-        print("embed-image: warning: %s is %.0f KB; downscale large screenshots before embedding"
+        print("embed-image: warning: %s is %.0f KB; it is embedded as-is (lossless), so the document grows with it"
               % (args.image, len(data) / 1024), file=sys.stderr)
 
     try:

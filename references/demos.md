@@ -83,12 +83,14 @@ Quality bar (judgment, not gated):
 | `spring-motion.html` | Same element animated with ease-out vs spring on click | Motion specs, transition feel, animation vocabulary |
 | `wireframe.html` | Static SVG schematic of an interface layout; no interaction | Showing a screen's structure, region layout, or before/after arrangement |
 | `diagram.html` | Static SVG relationship diagram using Hue primitives; no interaction | Showing flows, system messages, dependencies, or state changes |
-| `image.html` | Framed image with a click-to-enlarge lightbox (Esc/click to close) | User-supplied screenshots, reference mockups, visual evidence |
+| `image.html` | Framed image with caption, at natural size (capped at card width), and a click-to-enlarge lightbox (Esc/click to close) | User-supplied screenshots, reference mockups, visual evidence |
 
 ## Image block: embedding screenshots
 
 `image` frames one image in a consistent bordered card and opens it full-viewport on
-click. It ships with a sample image; swap in the user's screenshot with the embedding
+click. The thumbnail renders at the image's natural size, capped only by the card
+width — wide screenshots fill the card, narrow ones keep their own width. The block
+ships with a sample image; swap in the user's screenshot with the embedding
 script, never by pasting base64 by hand:
 
 ```bash
@@ -100,10 +102,15 @@ python3 scripts/embed-image.py <image> <document.html> [--block N] [--alt "text"
   language.
 - The script accepts PNG, JPEG, GIF, and WebP, writes the data URI straight into the
   file (keeping base64 out of the conversation), and warns when the image exceeds
-  512 KB; downscale large screenshots before embedding.
-- The thumbnail's visible strings (hint, aria-labels) are translated on insert like
-  any other block. Image blocks are evidence, not demos of behavior; they do not
-  count toward the 3-demo cap.
+  512 KB. Embedding is lossless — the original bytes are preserved, so screenshots
+  stay sharp on high-DPI displays. Downscale only to trim file weight, and never
+  below ~2x the width the thumbnail renders at.
+- The caption (`p.caption`) is written per image on insert: one sentence in the
+  document language saying what the image shows — never boilerplate like "click
+  to enlarge"; the zoom affordance is already conveyed by the cursor. The other
+  visible strings (aria-labels) are translated on insert like any other block.
+  Image blocks are evidence, not demos of behavior; they do not count toward the
+  3-demo cap.
 - Unlike `dialog`, the lightbox overlay is viewport-fixed (the one sanctioned case):
   enlarging only makes sense across the full window. The script still scopes itself
   to the block root.

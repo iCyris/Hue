@@ -114,8 +114,9 @@ card-list, spring-motion, wireframe, diagram, image). The contract and per-block
   paste one block per image, then swap in each file with
   `python3 scripts/embed-image.py <image> <doc.html> --block N --alt "描述或 description"`.
   The script writes the base64 data URI directly into the document; never paste
-  base64 by hand. Image blocks are visual evidence and do not count toward the
-  demo cap.
+  base64 by hand. Rewrite the caption to say what the image actually shows — one
+  sentence in the document language, never boilerplate like "click to enlarge".
+  Image blocks are visual evidence and do not count toward the demo cap.
 - Quick mapping: screen or region layout → `wireframe`; ordered business flow →
   `diagram` (flowchart); messages between actors or systems → `diagram` (sequence);
   lifecycle and transitions → `diagram` (state); user-supplied screenshot or
